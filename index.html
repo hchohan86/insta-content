@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 Carousels — @haseebwrites</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:ital,wght@1,700;1,900&family=Poppins:wght@800;900&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0A0907;font-family:'DM Sans',sans-serif;min-height:100vh;}
+
+/* ===== INDEX ===== */
+#idx{padding:40px 32px 60px;}
+.idx-hd{text-align:center;margin-bottom:40px;}
+.idx-hd h1{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;color:#F2E8D5;}
+.idx-hd p{font-family:'Space Mono',monospace;font-size:11px;color:#5A4E40;margin-top:6px;letter-spacing:.1em;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;max-width:1200px;margin:0 auto;}
+.card{background:#0F0C08;border:1px solid rgba(242,232,213,.07);padding:20px;cursor:pointer;transition:all .18s;border-radius:2px;}
+.card:hover{border-color:rgba(242,232,213,.25);background:#141108;transform:translateY(-2px);}
+.card-day{font-family:'Space Mono',monospace;font-size:10px;color:#3D3020;margin-bottom:10px;letter-spacing:.1em;}
+.card-hl{font-family:'Poppins',sans-serif;font-weight:900;font-size:12px;color:#F2E8D5;line-height:1.4;margin-bottom:10px;}
+.card-sub{font-family:'DM Sans',sans-serif;font-size:11px;color:#5A4E40;line-height:1.4;}
+.card-pal{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+.pal-b{background:#0A0907;border:1px solid #3D3020;}
+.pal-c{background:#F2E8D5;}
+
+/* ===== VIEWER ===== */
+#vwr{display:none;flex-direction:column;align-items:center;padding:28px 20px 50px;min-height:100vh;}
+.vwr-top{display:flex;align-items:center;gap:12px;margin-bottom:22px;width:540px;max-width:100%;}
+.btn-back{font-family:'Space Mono',monospace;font-size:10px;color:#5A4E40;cursor:pointer;background:none;border:1px solid rgba(242,232,213,.1);padding:7px 14px;letter-spacing:.08em;transition:all .15s;}
+.btn-back:hover{color:#F2E8D5;border-color:rgba(242,232,213,.3);}
+.vwr-day{font-family:'Space Mono',monospace;font-size:10px;color:#3D3020;letter-spacing:.1em;}
+.vwr-title{font-family:'Poppins',sans-serif;font-weight:800;font-size:12px;color:#C4B49A;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pal-tog{display:flex;gap:6px;}
+.ptbtn{font-family:'Space Mono',monospace;font-size:9px;padding:6px 12px;cursor:pointer;border:1px solid rgba(242,232,213,.12);background:none;color:#5A4E40;letter-spacing:.08em;transition:all .15s;}
+.ptbtn:hover{color:#C4B49A;border-color:rgba(242,232,213,.25);}
+.ptbtn.on{background:rgba(242,232,213,.08);color:#F2E8D5;border-color:rgba(242,232,213,.35);}
+
+/* ===== SLIDE WRAPPER ===== */
+.sw{position:relative;width:540px;height:540px;max-width:100%;}
+@media(max-width:580px){.sw{width:calc(100vw - 40px);height:calc(100vw - 40px);}}
+
+/* ===== SLIDE BASE ===== */
+.slide{display:none;position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;flex-direction:column;}
+.slide.on{display:flex;}
+
+/* CREAM */
+.cr{background:#F2E8D5;}
+.cr .tp{color:#0F0C08;}
+.cr .ts{color:#3D3020;}
+.cr .tm{color:#7A6A55;}
+.cr .pill{background:rgba(15,12,8,.07);border:1.5px solid rgba(15,12,8,.18);color:#0F0C08;}
+.cr .bgn{color:#0F0C08;opacity:.045;}
+.cr .stripe{background:#0F0C08;opacity:.07;}
+.cr .cmk{stroke:#0F0C08;stroke-opacity:.18;}
+.cr .arc{stroke:#0F0C08;}
+.cr .lbar{background:#0F0C08;opacity:.45;}
+.cr .hline{background:rgba(15,12,8,.1);}
+
+/* BLACK */
+.bk{background:#0A0907;}
+.bk .tp{color:#F2E8D5;}
+.bk .ts{color:#C4B49A;}
+.bk .tm{color:#5A4E40;}
+.bk .pill{background:rgba(242,232,213,.08);border:1.5px solid rgba(242,232,213,.2);color:#F2E8D5;}
+.bk .bgn{color:#F2E8D5;opacity:.04;}
+.bk .stripe{background:#F2E8D5;opacity:.06;}
+.bk .cmk{stroke:#F2E8D5;stroke-opacity:.16;}
+.bk .arc{stroke:#F2E8D5;}
+.bk .lbar{background:#F2E8D5;opacity:.4;}
+.bk .hline{background:rgba(242,232,213,.08);}
+
+/* COVER */
+.s-cover{padding:28px 30px 30px;justify-content:space-between;}
+.cv-top{text-align:center;}
+.cv-handle{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;opacity:.5;}
+.cv-mid{flex:1;display:flex;flex-direction:column;justify-content:center;padding:10px 0;}
+.cv-script{font-family:'Playfair Display',serif;font-style:italic;font-weight:900;line-height:.93;letter-spacing:-.02em;}
+.cv-bebas{font-family:'Bebas Neue',sans-serif;line-height:.9;letter-spacing:.02em;}
+.cv-bot{display:flex;justify-content:space-between;align-items:flex-end;min-height:32px;}
+.cv-tag{font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px;}
+.pill{position:absolute;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;padding:5px 11px;border-radius:100px;pointer-events:none;z-index:6;white-space:nowrap;}
+
+/* INTERIOR BASE */
+.s-int{padding:44px;justify-content:center;}
+.sn{position:absolute;top:18px;right:26px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;z-index:3;}
+.bh{position:absolute;bottom:22px;left:32px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;opacity:.45;z-index:3;}
+.slabel{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;opacity:.55;margin-bottom:14px;display:block;}
+
+/* SETUP */
+.setup-body{font-family:'DM Sans',sans-serif;font-size:17px;line-height:1.65;position:relative;z-index:2;}
+
+/* PROBLEM */
+.prob-head{font-family:'Bebas Neue',sans-serif;font-size:52px;line-height:.92;letter-spacing:.01em;position:relative;z-index:2;margin-bottom:14px;}
+.prob-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;position:relative;z-index:2;}
+
+/* STAT */
+.s-stat{position:relative;}
+.stat-bgn{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:220px;line-height:1;right:-15px;bottom:-35px;pointer-events:none;z-index:1;}
+.stat-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;display:block;position:relative;z-index:2;opacity:.55;}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:100px;line-height:.88;position:relative;z-index:2;letter-spacing:.01em;}
+.stat-ctx{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.6;margin-top:18px;position:relative;z-index:2;}
+
+/* SHIFT */
+.shift-line{height:1px;width:48px;margin-bottom:18px;position:relative;z-index:2;}
+.shift-head{font-family:'Bebas Neue',sans-serif;font-size:46px;line-height:.92;letter-spacing:.01em;position:relative;z-index:2;margin-bottom:16px;}
+.shift-body{font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;position:relative;z-index:2;}
+
+/* CLOSE */
+.s-close{position:relative;}
+.close-prin{font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:24px;line-height:1.42;margin-bottom:24px;position:relative;z-index:2;}
+.close-cta{font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.05em;opacity:.5;position:relative;z-index:2;}
+
+/* ===== CONTROLS ===== */
+.ctrl{display:flex;align-items:center;justify-content:space-between;margin-top:18px;width:540px;max-width:100%;}
+.cbtn{font-family:'Space Mono',monospace;font-size:10px;cursor:pointer;background:none;border:1px solid rgba(242,232,213,.12);padding:8px 18px;color:#5A4E40;letter-spacing:.08em;transition:all .15s;}
+.cbtn:hover:not(:disabled){border-color:rgba(242,232,213,.3);color:#C4B49A;}
+.cbtn:disabled{opacity:.2;cursor:default;}
+.dots{display:flex;gap:7px;align-items:center;}
+.dot{width:5px;height:5px;border-radius:50%;background:#2a2828;cursor:pointer;transition:all .15s;}
+.dot.on{background:#C4B49A;width:18px;border-radius:3px;}
+
+/* ===== CAROUSEL NAV STRIP ===== */
+.cnav{display:flex;gap:10px;margin-top:20px;align-items:center;font-family:'Space Mono',monospace;font-size:10px;color:#3D3020;letter-spacing:.08em;}
+.cnav-btn{cursor:pointer;border:1px solid rgba(242,232,213,.1);padding:6px 14px;background:none;color:#5A4E40;font-family:'Space Mono',monospace;font-size:10px;transition:all .15s;letter-spacing:.08em;}
+.cnav-btn:hover{color:#C4B49A;border-color:rgba(242,232,213,.25);}
+.cnav-btn:disabled{opacity:.2;cursor:default;}
+/* ===== CAPTION PANEL ===== */
+.cap-panel{width:540px;max-width:100%;margin-top:28px;background:#0F0C08;border:1px solid rgba(242,232,213,.08);padding:24px;}
+.cap-label{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#3D3020;margin-bottom:14px;display:block;}
+.cap-text{font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.75;color:#C4B49A;white-space:pre-wrap;word-break:break-word;}
+.cap-actions{display:flex;gap:8px;margin-top:16px;align-items:center;}
+.cap-copy{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:8px 18px;background:none;border:1px solid rgba(242,232,213,.18);color:#C4B49A;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.cap-copy:hover{border-color:#F2E8D5;color:#F2E8D5;}
+.cap-copied{font-family:'Space Mono',monospace;font-size:9px;color:#5A4E40;letter-spacing:.08em;opacity:0;transition:opacity .3s;}
+.cap-copied.show{opacity:1;}
+
+/* ===== IMAGE TOOLBAR ===== */
+.img-toolbar{width:540px;max-width:100%;display:flex;gap:8px;margin-top:10px;align-items:center;}
+.img-btn{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:9px 18px;background:none;border:1px solid rgba(242,232,213,.15);color:#C4B49A;cursor:pointer;transition:all .15s;text-transform:uppercase;display:flex;align-items:center;gap:7px;white-space:nowrap;}
+.img-btn:hover{border-color:#F2E8D5;color:#F2E8D5;}
+.img-btn:disabled{opacity:.25;cursor:default;}
+.img-btn svg{flex-shrink:0;}
+.img-feedback{font-family:'Space Mono',monospace;font-size:9px;color:#5A4E40;letter-spacing:.08em;opacity:0;transition:opacity .3s;margin-left:4px;}
+.img-feedback.show{opacity:1;}
+.img-filename{font-family:'Space Mono',monospace;font-size:9px;color:#3D3020;letter-spacing:.06em;margin-left:auto;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px;}
+</style>
+</head>
+<body>
+
+<!-- INDEX -->
+<div id="idx">
+  <div class="idx-hd">
+    <h1>30 CAROUSELS</h1>
+    <p>@HASEEBCH49 · BUSINESS GROWTH THROUGH NUMBERS & POSITIONING</p>
+  </div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<!-- VIEWER -->
+<div id="vwr">
+  <div class="vwr-top">
+    <button class="btn-back" onclick="showIdx()">← ALL</button>
+    <span class="vwr-day" id="vday"></span>
+    <span class="vwr-title" id="vtitle"></span>
+    <div class="pal-tog">
+      <button class="ptbtn" id="pbk" onclick="setPal('bk')">BLACK</button>
+      <button class="ptbtn" id="pcr" onclick="setPal('cr')">CREAM</button>
+    </div>
+  </div>
+  <div class="sw" id="sw"></div>
+  <div class="img-toolbar">
+    <button class="img-btn" id="btn-copy-img" onclick="copySlideImage()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.4"/></svg>
+      COPY IMAGE
+    </button>
+    <button class="img-btn" id="btn-dl-img" onclick="downloadSlideImage()">
+      <svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      DOWNLOAD
+    </button>
+    <span class="img-feedback" id="img-feedback">✓ COPIED</span>
+    <span class="img-filename" id="img-filename"></span>
+  </div>
+  <div class="ctrl">
+    <button class="cbtn" id="bp" onclick="prevS()">← PREV</button>
+    <div class="dots" id="dots"></div>
+    <button class="cbtn" id="bn" onclick="nextS()">NEXT →</button>
+  </div>
+  <div class="cnav">
+    <button class="cnav-btn" id="cpb" onclick="prevC()">← PREV CAROUSEL</button>
+    <span id="ccount"></span>
+    <button class="cnav-btn" id="cnb" onclick="nextC()">NEXT CAROUSEL →</button>
+  </div>
+  <div class="cap-panel">
+    <span class="cap-label">INSTAGRAM CAPTION — COPY & PASTE</span>
+    <div class="cap-text" id="captext"></div>
+    <div class="cap-actions">
+      <button class="cap-copy" onclick="copyCaption()">COPY CAPTION</button>
+      <span class="cap-copied" id="capcopied">✓ COPIED</span>
+    </div>
+  </div>
+  <div class="cap-panel">
+    <span class="cap-label">INSTAGRAM CAPTION — COPY &amp; PASTE</span>
+    <div class="cap-text" id="captext"></div>
+    <div class="cap-actions">
+      <button class="cap-copy" onclick="copyCaption()">COPY CAPTION</button>
+      <span class="cap-copied" id="capcopied">✓ COPIED</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const H = '@haseebch49';
+let curC = 0, curS = 0, curPal = null;
+
+const DATA = [
+{day:1,defPal:'bk',pills:['AI IN MARKETING','AD COPY'],
+ cvScript:'Your ad',cvBebas:"DIDN'T FAIL.",cvTag:'Your copy did.',subniche:'AI in Marketing · Why Marketing Fails',
+ setup:{label:'THE SITUATION',body:'Most founders write one ad copy version and run it for weeks. When it underperforms, the creative gets blamed. The budget gets pulled. The test never happened.'},
+ prob:{head:'NO VARIANT. NO DATA. NO LEARNING.',body:"A single copy version is not a campaign. It's a guess. And guesses don't scale. You can't learn from one data point."},
+ stat:{num:'2HRS',label:'AI GENERATION TIME',ctx:"AI can generate 10 copy variants in under 2 hours. Manual effort for the same output: 2 days minimum. Generate variants, score them, deploy top 2, run 72 hours."},
+ shift:{head:'THE WINNING FORMULA IS THE FASTEST TEST.',body:"Generate variants. Score them against clarity, CTA strength, and emotional pull. Deploy top 2. Let the data tell you what your opinion can't."},
+ close:{prin:'Test more. Guess less.',cta:'Follow if you like thinking like this.'},
+ caption:`Your ad didn't fail. Your copy did.
+
+Most founders write one version, run it for weeks, and blame the creative when the numbers don't move. The problem is upstream — no variant means no data, and no data means no learning.
+
+AI can generate 10 copy variants in under 2 hours. Deploy the top 2. Run 72 hours. Let the result tell you what your opinion can't.
+
+The winning formula isn't the best line. It's the fastest test.
+
+#marketingstrategy #digitalmarketing #adcopy #foundermarketing #growthmindset #marketingtips #businessgrowth`},
+
+{day:2,defPal:'cr',pills:['LEAD SCORING','GTM'],
+ cvScript:"You're sending",cvBebas:'EVERY LEAD',cvTag:'to sales. That\'s the problem.',subniche:'Strategy vs. Activity',
+ setup:{label:'THE SITUATION',body:"Your sales team treats a pricing page visit the same as a newsletter open. Both are contacts. Only one is ready to buy. And your reps are spending equal time on both."},
+ prob:{head:'UNSCORED LEADS WASTE SALES CAPACITY.',body:"When everything looks urgent, nothing is prioritised. The buyer who's ready gets the same attention as the one who opened an email by accident."},
+ stat:{num:'50',label:'SCORE THRESHOLD',ctx:"Email opened = +5 pts. Pricing page = +15. Form filled = +25. Alert fires at 50. Below that — marketing's problem to nurture, not sales' problem to chase."},
+ shift:{head:'SALES SHOULD ONLY SEE LEADS ABOVE THRESHOLD.',body:"Everything else is marketing's job. Lead scoring isn't a CRM feature. It's a capacity decision that determines how your team spends its day."},
+ close:{prin:'The lead worth calling already told you.',cta:'Follow if you like thinking like this.'},
+ caption:`You're sending every lead to sales. That's the problem.
+
+A pricing page visit and a newsletter open are not the same signal. When your sales team treats them equally, capacity gets wasted on the wrong people — and the buyers who are ready get lost in the queue.
+
+Simple scoring model: email opened = +5 pts, pricing page = +15, form filled = +25. Alert fires at 50. Below that, it's marketing's job to nurture — not sales' job to chase.
+
+Lead scoring isn't a CRM feature. It's a capacity decision.
+
+#salesstrategy #leadgeneration #b2bmarketing #marketingautomation #founderlessons #gtm #businessgrowth`},
+
+{day:3,defPal:'bk',pills:['BUDGET MANAGEMENT','NUMBERS'],
+ cvScript:'Budget exists.',cvBebas:"TRACKER DOESN'T.",cvTag:'',subniche:'Numbers Marketing Ignores',
+ setup:{label:'THE SITUATION',body:"Most marketing budgets live in a PDF or a verbal agreement. Planned spend is an estimate. Actual spend is a surprise. Nobody compares the two until it's month-end."},
+ prob:{head:'YOU ONLY KNOW YOU\'RE OVER BUDGET WHEN IT\'S TOO LATE.',body:'Overruns compound. A 10% overspend in paid social funds an agency fee that funds an event. By quarter-end, the math is broken and the explanations are creative.'},
+ stat:{num:'10%',label:'OVERRUN FLAG THRESHOLD',ctx:"Variance formula: (Actual − Planned) ÷ Planned. Anything over 10% gets flagged. Rs. 50,000 in untracked overruns is a strategy problem, not an accounting one."},
+ shift:{head:'THE CHANNEL GOING OVER IS THE ONE YOU HAVEN\'T QUESTIONED.',body:"Budget tracking isn't accounting. It's a weekly decision tool. The red flag tells you where to look, before the spend becomes a post-mortem."},
+ close:{prin:'Variance is the conversation you avoid until it becomes unavoidable.',cta:'Follow if you like thinking like this.'},
+ caption:`You have a marketing budget. You don't have a marketing tracker.
+
+Most budgets live in a PDF or a verbal agreement. Planned spend is an estimate. Actual spend is a surprise. And by the time someone notices the overrun, the quarter is already broken.
+
+Variance formula: (Actual − Planned) ÷ Planned. Anything over 10% gets flagged. Rs. 50,000 in untracked overruns is a strategy problem, not an accounting one.
+
+The channel that keeps going over is the channel you haven't questioned yet.
+
+#marketingbudget #financialplanning #marketingops #foundermarketing #businessnumbers #marketingstrategy #startupgrowth`},
+
+{day:4,defPal:'cr',pills:['MQL / SQL','GTM'],
+ cvScript:'Marketing says 200.',cvBebas:'SALES SAYS 3.',cvTag:'Neither is lying.',subniche:'Agency Reality · GTM',
+ setup:{label:'THE SITUATION',body:"The handoff between marketing and sales is where revenue dies. Not because teams are incompetent — because they're measuring different things against definitions nobody agreed on."},
+ prob:{head:'NO SHARED DEFINITION. NO ACCOUNTABILITY.',body:"Marketing counts form fills. Sales counts qualified conversations. Until those definitions are written and signed, both teams are right and nothing improves."},
+ stat:{num:'36%',label:'HIGHER CLOSE RATES WITH A SIGNED SLA',ctx:"Companies with a formal Sales & Marketing SLA see up to 36% higher lead-to-close rates. Most SMBs have never written one. The document forces the conversation."},
+ shift:{head:'MQL/SQL ISN\'T A CRM CATEGORY. IT\'S A BUSINESS AGREEMENT.',body:"The SLA doesn't create alignment. It creates accountability. That's why most companies resist writing it — and why the ones that do outperform."},
+ close:{prin:'The argument about lead quality is always an argument about definitions.',cta:'Follow if you like thinking like this.'},
+ caption:`Marketing says 200 leads. Sales says 3 were real. Neither is lying.
+
+The conflict between marketing and sales is almost always a definitions problem. Both teams are measuring output against criteria the other team never agreed to. That's not a performance problem — it's a structural one.
+
+Companies with a formal Sales & Marketing SLA see up to 36% higher lead-to-close rates. Most SMBs have never written one. The document forces the conversation both sides have been avoiding.
+
+MQL/SQL isn't a CRM category. It's a business agreement.
+
+#salesmarketing #gtm #leadqualification #b2bsales #revenueoperations #founderlessons #marketingstrategy`},
+
+{day:5,defPal:'bk',pills:['AI ANALYSIS','CUSTOMER DATA'],
+ cvScript:'50 reviews.',cvBebas:'3-MONTH STUDY.',cvTag:'Which would you choose?',subniche:'AI in Marketing · Strategy',
+ setup:{label:'THE SITUATION',body:"Your customers have already told you what's wrong. The reviews exist. The problem is that founders read them one at a time, form opinions from outliers, and miss the patterns."},
+ prob:{head:'ANECDOTES ARE NOT STRATEGY.',body:'One negative review is a data point. Ten with the same theme is a signal. Without pattern recognition at scale, you manage impressions — not reality.'},
+ stat:{num:'90M',label:'MINUTES TO ANALYSE 50 REVIEWS WITH AI',ctx:"Batch 10 reviews through AI. Ask for sentiment, primary theme, and a key quote per review. Process all 50 in under 90 minutes. Same insight as a 3-month brand study."},
+ shift:{head:'THE TOP 3 NEGATIVE THEMES ARE YOUR NEXT SPRINT.',body:"Not your next brand campaign. The review section is the cheapest market research you're ignoring. And your customers wrote it without being asked."},
+ close:{prin:'Your customers already wrote the brief. You just haven\'t read it systematically.',cta:'Follow if you like thinking like this.'},
+ caption:`50 reviews contain more insight than a 3-month brand study.
+
+Your customers have already told you what's wrong. The reviews exist. The problem is that founders read them one at a time, form opinions from outliers, and miss the patterns that actually matter.
+
+Batch 10 reviews through AI. Ask for sentiment, primary theme, and a key quote per review. Process all 50 in under 90 minutes. The top 3 negative themes are your next product sprint — not your next brand campaign.
+
+The review section is the cheapest market research you're ignoring.
+
+#customerinsights #aimarketing #productmarketing #voiceofcustomer #startupmarketing #marketingdata #businessgrowth`},
+
+{day:6,defPal:'cr',pills:['COMPETITIVE INTEL','STRATEGY'],
+ cvScript:'Your competitor',cvBebas:'MOVED LAST WEEK.',cvTag:'Did you know?',subniche:'Startup Blind Spots',
+ setup:{label:'THE SITUATION',body:"Most founders do competitive research once a year. At strategy time. Then they forget. The market doesn't work on that schedule. Your competitors don't either."},
+ prob:{head:'3 MONTHS LATE IS TOO LATE.',body:'Pricing changes, new features, job postings — each signals what\'s coming. By the time it appears in your feed, the competitor is three moves ahead of where your analysis left them.'},
+ stat:{num:'25',label:'ALERTS TO SET UP A MONITORING SYSTEM',ctx:"5 competitors × 5 monitoring topics = 25 Google Alerts. One automated workflow aggregates them every Monday into a decision-ready brief. Setup time: under 3 hours."},
+ shift:{head:'COMPETITIVE ADVANTAGE IS ABOUT SEEING MOVES EARLIER.',body:"Not having better ideas. The brief is automated. The decision still needs you. But you can't decide on intelligence you don't have."},
+ close:{prin:'By the time it hits your timeline, it\'s already old news.',cta:'Follow if you like thinking like this.'},
+ caption:`Your competitor launched something last week. Did you know?
+
+Most founders do competitive research once a year — at strategy time — then forget. Pricing changes, new feature launches, hiring signals — these are moves you should be seeing in real time, not months later.
+
+25 Google Alerts + one automated workflow = a competitive intelligence brief in your inbox every Monday. Setup time: under 3 hours. Running cost: zero.
+
+Competitive advantage isn't about better ideas. It's about seeing moves earlier.
+
+#competitiveintelligence #marketingstrategy #startupstrategy #businessgrowth #founderlessons #gtm #marketingops`},
+
+{day:7,defPal:'bk',pills:['CONTENT REPURPOSING','WORKFLOW'],
+ cvScript:'One article.',cvBebas:'ONE POST.',cvTag:'That math is wrong.',subniche:'Strategy vs. Activity',
+ setup:{label:'THE SITUATION',body:"One long-form piece contains a LinkedIn article, a carousel outline, an email section, a video script, and a tweet thread. Most brands extract exactly zero of those."},
+ prob:{head:'IT\'S NOT A CONTENT VOLUME PROBLEM.',body:"It's a workflow problem. The asset already exists. The distribution system doesn't. So the same ideas get rewritten from scratch every month at full production cost."},
+ stat:{num:'5×',label:'CONTENT OUTPUT FROM ONE SOURCE PIECE',ctx:"One 1,500-word blog post → 5 derivative pieces in under 3 hours with a structured AI repurposing workflow. Same insight. Five distribution channels. One system."},
+ shift:{head:'CONTENT STRATEGY ISN\'T ABOUT WRITING MORE.',body:"It's about using what you already wrote. Build the repurposing SOP once. Run it every time you publish. The leverage compounds with every new piece."},
+ close:{prin:'The asset exists. The workflow is what\'s missing.',cta:'Follow if you like thinking like this.'},
+ caption:`You wrote one article. You got one post out of it.
+
+One long-form piece already contains a LinkedIn article, a carousel outline, an email section, a video script, and a tweet thread. Most brands extract exactly zero of those. Not because they don't know — because the workflow doesn't exist.
+
+One 1,500-word blog post → 5 derivative pieces in under 3 hours with a structured AI repurposing system. Same insight. Five distribution channels.
+
+Content strategy isn't about writing more. It's about using what you already wrote.
+
+#contentmarketing #contentstrategy #contentrepurposing #aimarketing #digitalmarketing #foundermarketing #marketingtips`},
+
+{day:8,defPal:'cr',pills:['PIPELINE COVERAGE','SALES NUMBERS'],
+ cvScript:'Rs. 8M pipeline.',cvBebas:'Rs. 10M QUOTA.',cvTag:"You're not fine.",subniche:'Numbers Marketing Ignores',
+ setup:{label:'THE SITUATION',body:"Sales managers look at total pipeline and feel covered. But raw total is not the number that matters. It's what that total looks like against remaining quota — and how many of those deals are real."},
+ prob:{head:'PIPELINE COVERAGE RATIO IS WHAT YOU\'RE MISSING.',body:'Open pipeline ÷ remaining quota. At 0.8× you\'re already underpowered. Most teams discover this at month-end, when it\'s too late to build.'},
+ stat:{num:'3×',label:'MINIMUM PIPELINE COVERAGE RATIO',ctx:"Industry standard: 3–4× coverage. Below 3×: new deals need to be created, not just closed. Above 4×: the forecast is probably padded. Both are problems."},
+ shift:{head:'PIPELINE COVERAGE IS A LEADING INDICATOR.',body:"Closed deals are a lagging one. Track the one that's early. The dashboard showing last month's wins is telling you about last quarter's decisions."},
+ close:{prin:'The number that matters most is the one you can still change.',cta:'Follow if you like thinking like this.'},
+ caption:`Your quota is Rs. 10M. Your pipeline is Rs. 8M. You're not fine.
+
+Sales managers look at total pipeline and feel covered. But raw total isn't the number that matters. Pipeline coverage = open pipeline ÷ remaining quota. At 0.8× you're already underpowered — and most teams discover this at month-end when it's too late to build.
+
+Industry target is 3–4× coverage. Below 3×: you need new deals, not just closes. Above 4×: the forecast is padded.
+
+Pipeline coverage is a leading indicator. Closed deals are a lagging one. Track the one that's early.
+
+#salespipeline #salesmanagement #revenueoperations #b2bsales #salesstrategy #businessnumbers #founderlessons`},
+
+{day:9,defPal:'bk',pills:['EMAIL PERSONALISATION','SEGMENTATION'],
+ cvScript:'Everyone got',cvBebas:'THE SAME EMAIL.',cvTag:"That's why the rate is 12%.",subniche:'Why Marketing Fails',
+ setup:{label:'THE SITUATION',body:"A SaaS buyer and a retail buyer have different problems. The same email addresses neither of them well. Generic content is efficient to produce and expensive in the attention it fails to earn."},
+ prob:{head:'GENERIC EMAILS ARE A SEGMENTATION FAILURE.',body:"Not a design failure. Not a copy failure. The message was wrong before it was written because the audience wasn't defined. One brief, three different people."},
+ stat:{num:'35%',label:'HIGHER OPEN RATES WITH SEGMENTED COPY',ctx:"3 industry segments. 3 AI-written variants. Same send time. Open rates 20–35% higher per segment vs. generic baseline. One prompt per segment. Three emails."},
+ shift:{head:'PERSONALISATION AT SCALE IS NO LONGER AN ENTERPRISE FEATURE.',body:"It's a CRM field and a prompt. The segment you're ignoring is the one your competitor is writing to directly."},
+ close:{prin:"You can't write a good email to everyone. You can write a great one to someone.",cta:'Follow if you like thinking like this.'},
+ caption:`Everyone got the same email. That's why the open rate is 12%.
+
+A SaaS buyer and a retail buyer have different problems. The same email addresses neither of them well. Generic content is efficient to produce and expensive in the attention it fails to earn.
+
+3 industry segments. 3 AI-written variants. Same send time. Open rates 20–35% higher per segment vs. generic baseline. One prompt per segment. Three emails. No extra budget.
+
+Personalisation at scale is no longer an enterprise feature. It's a CRM field and a prompt.
+
+#emailmarketing #marketingpersonalisation #aimarketing #emailstrategy #b2bmarketing #marketingautomation #foundermarketing`},
+
+{day:10,defPal:'cr',pills:['CONTENT STRATEGY','6-MONTH PLANNING'],
+ cvScript:'A calendar is',cvBebas:'NOT STRATEGY.',cvTag:'',subniche:'Strategy vs. Activity',
+ setup:{label:'THE SITUATION',body:"Most brands have a calendar. Few have pillars, keyword clusters, KPIs per pillar, and a governance process. The calendar is the output. Those four things are the inputs."},
+ prob:{head:'WITHOUT A PILLAR STRUCTURE, YOU\'RE PUBLISHING, NOT BUILDING.',body:'Authority is built through consistency in a defined space. A random assortment of topics, posted on schedule, is noise with a calendar. Not content marketing.'},
+ stat:{num:'52',label:'TOPICS IN A STRUCTURED 6-MONTH PLAN',ctx:"3–4 content pillars. Topic clusters per pillar. 52-topic editorial calendar. KPIs per pillar. Each piece earns its place before it's written. Not after it's published."},
+ shift:{head:'THE DIFFERENCE IS INTENT VS. URGENCY.',body:"Publishing without a cluster map is just noise. The brands that dominate a niche build topic authority, not just publishing frequency. The calendar is the last thing you build."},
+ close:{prin:'The calendar tells you what to post. The strategy tells you why it matters.',cta:'Follow if you like thinking like this.'},
+ caption:`A content calendar is not a content strategy.
+
+Most brands have a calendar. Few have content pillars, keyword clusters, KPIs per pillar, and a governance process. The calendar is the output. The strategy is what makes the output matter.
+
+Without a pillar structure, you're publishing — not building authority. A 6-month content strategy: 3–4 pillars, topic clusters per pillar, 52-topic editorial calendar, KPIs tied to business objectives. Each piece earns its place before it's written.
+
+Publishing without intent is just noise with a schedule.
+
+#contentstrategy #contentmarketing #seostrategy #digitalmarketing #contentplanning #foundermarketing #marketingstrategy`},
+
+{day:11,defPal:'bk',pills:['SEO','PRODUCT PAGES'],
+ cvScript:'Traffic potential',cvBebas:"YOU'VE NEVER TOUCHED.",cvTag:'',subniche:'Startup Blind Spots · 4Ps',
+ setup:{label:'THE SITUATION',body:"Most e-commerce brands write product descriptions for the customer. That's correct. But Google reads them first. And if Google doesn't rank the page, the customer never finds it."},
+ prob:{head:'A DESCRIPTION WITHOUT SEO STRUCTURE IS INVISIBLE.',body:'No primary keyword in the opening line. No secondary terms woven through. No benefit-led structure. The page exists. The traffic doesn\'t arrive.'},
+ stat:{num:'50',label:'PRODUCT DESCRIPTIONS IN ONE AI WORKFLOW',ctx:"50 AI-generated, SEO-optimised descriptions — reviewed, edited, bulk-uploaded. 30-day GSC check: impressions rising per product URL without a single additional paid click."},
+ shift:{head:'PRODUCT PAGES ARE SEARCH REAL ESTATE.',body:"Not just sales assets. If your pages don't rank, your paid ads are carrying a job your content should be doing for free. Build both."},
+ close:{prin:"The traffic your competitors earn on organic — your pages could earn that.",cta:'Follow if you like thinking like this.'},
+ caption:`Your product pages have traffic potential you've never touched.
+
+Most e-commerce brands write product descriptions for the customer. That's correct. But Google reads them first. A description without a primary keyword, benefit-led opening, and secondary terms woven through is invisible to search — no matter how good the product is.
+
+50 AI-generated, SEO-optimised product descriptions. Reviewed, edited, bulk-uploaded. 30-day GSC check: impressions rising per product URL without a single additional paid click.
+
+If your pages don't rank, your paid ads are carrying a job your content should be doing for free.
+
+#ecommerce #seo #productmarketing #ecommercemarketing #seotips #digitalmarketing #businessgrowth`},
+
+{day:12,defPal:'cr',pills:['CHURN PREDICTION','CAC / LTV'],
+ cvScript:"They didn't",cvBebas:'LEAVE SUDDENLY.',cvTag:"You just weren't watching.",subniche:'Numbers Marketing Ignores · CAC/LTV',
+ setup:{label:'THE SITUATION',body:"Churn doesn't happen on cancellation day. It happens 60 days earlier — in the behaviour that precedes it. No login. Rising tickets. Low NPS. The signals exist. Most companies never look."},
+ prob:{head:'FIVE VARIABLES MOST TEAMS IGNORE.',body:'No login in 60 days. Support tickets above threshold. NPS below 5. Low contract value. High-churn industry. Each is a risk point. Invisible without a model.'},
+ stat:{num:'10',label:'MAX CHURN RISK SCORE PER ACCOUNT',ctx:"5 variables scored per account. 0–10 risk score. Top 25% flagged for CS intervention. A simple scoring model in a spreadsheet — no machine learning required. Just pattern recognition."},
+ shift:{head:'CHURN PREDICTION ISN\'T MACHINE LEARNING.',body:"It's pattern recognition you can do with a CSV export and two hours of setup. The account you lose next month already has a score. You just haven't built the model."},
+ close:{prin:"The most expensive customer to replace is the one you could have kept.",cta:'Follow if you like thinking like this.'},
+ caption:`They didn't leave suddenly. You just weren't watching.
+
+Churn doesn't happen on cancellation day. It happens 60 days earlier — in behaviour patterns most companies never track. No login in 60 days. Support tickets above threshold. NPS below 5. Each is a risk point. Invisible without a model.
+
+5 variables scored per account. 0–10 risk score. Top 25% flagged for CS intervention before they cancel. A simple scoring model you can build in a spreadsheet — no machine learning required.
+
+The account you lose next month already has a score. You just haven't built the model yet.
+
+#churnreduction #customerretention #saasmarketing #cltv #customersuccess #businessgrowth #founderlessons`},
+
+{day:13,defPal:'bk',pills:['QBR','PIPELINE REVIEW'],
+ cvScript:'22 slides.',cvBebas:'19 ARE NOISE.',cvTag:'',subniche:'Consulting Lessons · Agency Reality',
+ setup:{label:'THE SITUATION',body:"Most QBR decks open with last quarter's wins. That's the least useful thing in the room. Everyone already knows the result. The question is what to do about the deals at risk right now."},
+ prob:{head:'A QBR WITHOUT AN AT-RISK LIST IS A RETROSPECTIVE.',body:"Without deal health scoring, the QBR is a performance review. Not a decision session. The decisions need to happen before the quarter ends, not after."},
+ stat:{num:'6',label:'DEAL HEALTH CRITERIA',ctx:"Last activity date, close date alignment, decision maker engaged, competitor mentioned, proposal sent, next step defined. Score 0–6. Below 2 = At Risk. Above 4 = Healthy."},
+ shift:{head:'THE QBR SHOULD ANSWER ONE QUESTION.',body:"What are we doing about the 10 deals most likely to slip? Every slide before that answer is context. Every slide after it should be an intervention plan."},
+ close:{prin:'A review without an intervention plan is just a record of what happened.',cta:'Follow if you like thinking like this.'},
+ caption:`Your QBR deck has 22 slides. 19 of them are noise.
+
+Most QBR decks open with last quarter's wins — the least useful thing in the room. Everyone already knows the result. The QBR should answer one question: what are we doing about the deals most likely to slip?
+
+A 6-criteria deal health scorecard takes 20 minutes to run. Last activity date, close date alignment, decision maker engaged, competitor mentioned, proposal sent, next step defined. Below 2 out of 6 = at risk. Flag it before the quarter ends.
+
+A QBR without an intervention plan is just a retrospective with slides.
+
+#salesleadership #qbr #pipelinemanagement #b2bsales #salesstrategy #revenueoperations #businessgrowth`},
+
+{day:14,defPal:'cr',pills:['MARKETING ROI','BUDGET MODEL'],
+ cvScript:"What's the ROI?",cvBebas:'IT DEPENDS.',cvTag:'Wrong answer.',subniche:'Numbers Marketing Ignores · Consulting Lessons',
+ setup:{label:'THE SITUATION',body:"Most marketing budgets are built on last year's spend. Not this year's outcomes. The question a board asks isn't 'what did you spend?' It's 'what did we get — and what will we get next year?'"},
+ prob:{head:'NO SCENARIO MODEL. NO CREDIBILITY IN THE ROOM.',body:"A flat budget allocation with no ROI projection is a request for trust. Not a business case. The board approved it once. This time they want the math."},
+ stat:{num:'3',label:'SCENARIOS IN EVERY MARKETING BUDGET',ctx:"Bear (−20% budget), Base, Bull (+20%). ROI formula per channel: (Revenue − Spend) ÷ Spend. Any channel under 1.0× gets questioned before the year starts — not after."},
+ shift:{head:'A BUDGET\'S PURPOSE IS TO FLAG WHAT ISN\'T WORKING BEFORE YOU SPEND IT.',body:"Not to allocate evenly. Not to look like last year. The 3-scenario model makes the conversation honest before the money moves."},
+ close:{prin:"If you can't model three outcomes, you're not managing a budget. You're hoping.",cta:'Follow if you like thinking like this.'},
+ caption:`Your board asked "what's the ROI?" You said "it depends." Wrong answer.
+
+Most marketing budgets are built on last year's spend — not this year's outcomes. A flat allocation with no ROI projection isn't a business case. It's a request for trust.
+
+3-scenario model: Bear (−20% budget), Base, Bull (+20%). ROI formula per channel: (Revenue − Spend) ÷ Spend. Any channel under 1.0× gets questioned before the year starts — not after it ends. That's what makes the conversation credible.
+
+The purpose of a budget isn't allocation. It's discipline.
+
+#marketingbudget #marketingroi #businessstrategy #foundermarketing #marketingplanning #b2bmarketing #businessgrowth`},
+
+{day:15,defPal:'bk',pills:['SOCIAL COMMERCE','2026'],
+ cvScript:'The checkout is',cvBebas:'INSIDE THE SCROLL.',cvTag:'',subniche:'2026 Concepts · GTM',
+ setup:{label:'THE SITUATION',body:"For most of the last decade, social media drove traffic to a website. That handoff — tap ad, open browser, visit store, add to cart, checkout — is getting shorter with every platform update."},
+ prob:{head:'BRANDS STILL THINK SOCIAL IS FOR AWARENESS.',body:"The consumer doesn't think that anymore. The purchase decision and the purchase itself now happen in the same session — often without leaving the platform that showed the ad."},
+ stat:{num:'Rs.7T',label:'PROJECTED GLOBAL SOCIAL COMMERCE GMV',ctx:"Social commerce GMV projected to surpass Rs. 7 trillion globally by 2026. Fastest-growing segment: impulse purchases under Rs. 5,000. The funnel compressed into one screen."},
+ shift:{head:'IF YOUR CONVERSION REQUIRES LEAVING THE PLATFORM, YOU\'RE ADDING FRICTION.',body:"Your competitor isn't. The funnel didn't disappear. It compressed. The brand that removes the most steps between attention and purchase wins."},
+ close:{prin:"The store is wherever the customer's attention is. Is yours there?",cta:'Follow if you like thinking like this.'},
+ caption:`The checkout is now inside the scroll.
+
+For most of the last decade, social media drove traffic to a website. That handoff is compressing. The purchase decision and the purchase itself now happen in the same session — often without leaving the platform that showed the ad.
+
+Social commerce GMV is projected to surpass Rs. 7 trillion globally by 2026. Fastest-growing segment: impulse purchases under Rs. 5,000. If your conversion still requires leaving the platform, you're adding friction your competitor isn't.
+
+The funnel didn't disappear. It just lives in one screen now.
+
+#socialcommerce #ecommerce #instagramshopping #digitalmarketing #2026trends #foundermarketing #businessgrowth`},
+
+{day:16,defPal:'cr',pills:['BRAND VOICE','CONTENT OPS'],
+ cvScript:'4 writers.',cvBebas:'6 VOICES.',cvTag:'',subniche:'Why Marketing Fails',
+ setup:{label:'THE SITUATION',body:"Brand inconsistency isn't a tone problem. It's a process problem. Every writer interprets the brief differently because the brief was never specific enough to begin with."},
+ prob:{head:'WITHOUT A SCORING SYSTEM, EVERY EDITOR IS GUESSING.',body:"Approved, rejected, approved with edits — the feedback loop is subjective. New writers can't calibrate. Senior editors burn time on the same corrections every cycle."},
+ stat:{num:'40%',label:'REVIEW TIME REDUCTION WITH AI VOICE CHECK',ctx:"5 brand voice attributes. AI scores each piece before it reaches a human editor. Output: overall score, flagged phrases, and rewrite alternatives. Review time drops 40%."},
+ shift:{head:'BRAND VOICE ISN\'T A VIBE. IT\'S A SPEC.',body:"And specs can be checked automatically. The brands that sound consistent don't have better writers. They have clearer rules and a system for enforcing them."},
+ close:{prin:"Consistency isn't a talent. It's a system.",cta:'Follow if you like thinking like this.'},
+ caption:`Your content team has 4 writers. Your brand has 6 voices.
+
+Brand inconsistency isn't a tone problem — it's a process problem. Every writer interprets the brief differently because the brief was never specific enough to begin with. The feedback is subjective, the corrections repeat, and the brand drifts post by post.
+
+5 brand voice attributes. AI scores each piece before it reaches a human editor. Output: overall score, flagged phrases, rewrite alternatives. Review time drops 40%. New writers calibrate faster. Senior editors stop correcting the same things.
+
+The brands that sound consistent don't have better writers. They have clearer rules.
+
+#brandvoice #contentmarketing #contentoperations #brandstrategy #aimarketing #marketingops #foundermarketing`},
+
+{day:17,defPal:'bk',pills:['PRICING STRATEGY','POSITIONING'],
+ cvScript:'Cost + margin.',cvBebas:'THEIR PRICE.',cvTag:'Different conversations.',subniche:'GTM · Pricing',
+ setup:{label:'THE SITUATION',body:"Cost-plus pricing is the default. You add margin to cost, set a price, and call it done. It's logical. It's transparent. It's also the floor of what you could be charging."},
+ prob:{head:'YOUR MARGIN IS FIXED. THEIR POSITIONING ISN\'T.',body:"When a competitor prices on value, they're not just capturing more money. They're creating a buyer perception that makes your cost-plus price look like a discount — or worse, a commodity."},
+ stat:{num:'Rs.2L',label:'THE VALUE FRAMING THAT CHANGES THE CONVERSATION',ctx:"Value-based pricing starts with the outcome: 'This saves you Rs. 2,00,000 per year.' Price at Rs. 30,000 against that context — the conversation changes entirely."},
+ shift:{head:'THE GAP BETWEEN WHAT YOU CHARGE AND WHAT IT\'S WORTH IS A POSITIONING GAP.',body:"Not a product gap. The product can be identical. The frame determines the price the market accepts. Build the frame first."},
+ close:{prin:"Price is the story you tell about value before they try it.",cta:'Follow if you like thinking like this.'},
+ caption:`You priced it at cost + margin. Your competitor priced it at willingness to pay.
+
+Cost-plus pricing is the default. It's logical, transparent, and also the floor of what you could be charging. When a competitor prices on value, they're not just capturing more money — they're building a buyer perception that makes your number look like a commodity.
+
+Value-based pricing starts with one question: what outcome does this deliver? Rs. 30,000 is a number. "This saves you Rs. 2,00,000 per year" is a pricing conversation. The product can be identical. The frame determines the price the market accepts.
+
+The gap between what you charge and what it's worth is a positioning gap — not a product gap.
+
+#pricingstrategy #valuebasedpricing #productmarketing #founderlessons #businessstrategy #gtm #marketingstrategy`},
+
+{day:18,defPal:'cr',pills:['FREEMIUM','CONVERSION'],
+ cvScript:'10,000 free users.',cvBebas:'90 PAYING.',cvTag:'',subniche:'CAC/LTV · SaaS',
+ setup:{label:'THE SITUATION',body:"Most SaaS founders treat low free-to-paid conversion as a product problem. Build more features. Improve onboarding. Add nudges. The product is usually fine. The architecture isn't."},
+ prob:{head:'IF THE FREE TIER SOLVES THE PROBLEM, THERE\'S NO UPGRADE.',body:"The paywall is in the wrong place. Freemium only works when the free tier creates the habit and the paid tier creates the outcome. Most products give too much free."},
+ stat:{num:'2–5%',label:'INDUSTRY BENCHMARK FREEMIUM CONVERSION',ctx:"Below 1%: the product needs to be redesigned around the upgrade trigger. At 2–5%: benchmark performance. Above 5%: the pricing architecture is working. Which are you?"},
+ shift:{head:'THE UPGRADE DECISION ISN\'T MADE AT THE PAYWALL.',body:"It's made the moment a free user hits their limit. Design the limit intentionally. Not the gate. The gate is just a consequence of the limit."},
+ close:{prin:"A free user is a bet. The feature that converts is the one solving the next problem.",cta:'Follow if you like thinking like this.'},
+ caption:`You have 10,000 free users. 90 are paying. That's not a growth story.
+
+Most founders treat low free-to-paid conversion as a product problem — build more features, improve onboarding, add nudges. The product is usually fine. The architecture isn't. If the free tier fully solves the problem, there's no upgrade trigger.
+
+Industry benchmark: 2–5% freemium-to-paid conversion. Below 1% means the pricing architecture needs rethinking — not the product. The upgrade decision isn't made at the paywall. It's made the moment a free user hits their limit.
+
+Design the limit intentionally. The paywall is just a consequence of it.
+
+#saas #freemium #pricingstrategy #productled #saasmarketing #startupgrowth #founderlessons`},
+
+{day:19,defPal:'bk',pills:['INFLUENCER MARKETING','ENGAGEMENT'],
+ cvScript:'1M followers.',cvBebas:'0.1% ENGAGEMENT.',cvTag:"That's not influence.",subniche:'Why Marketing Fails',
+ setup:{label:'THE SITUATION',body:"Brands pay for reach. A million followers looks impressive on a pitch deck. Until you calculate how many of them actually see the post — and how many of those act on it."},
+ prob:{head:'FOLLOWER COUNT IS COSMETIC BELOW 1% ENGAGEMENT.',body:"An audience that doesn't respond to the creator's own content won't respond to a brand collaboration. The number is cosmetic. The rate is structural."},
+ stat:{num:'3–6%',label:'MICRO-INFLUENCER ENGAGEMENT BENCHMARK',ctx:"5K–50K followers, 3–6% engagement rate — that's an audience that acts. Micro-influencer campaign conversion rates consistently outperform macro across every category."},
+ shift:{head:'REACH IS RENTED ATTENTION. ENGAGEMENT IS EARNED.',body:"You want the second one. The influencer who converts your customer isn't the one your competitor uses. It's the one your customer actually trusts."},
+ close:{prin:"The size of the audience matters less than its willingness to move.",cta:'Follow if you like thinking like this.'},
+ caption:`1 million followers. 0.1% engagement. That's not influence.
+
+Brands pay for reach. A million followers looks impressive on a pitch deck — until you calculate how many actually see the post and how many of those act on it. Below 1% engagement, the audience isn't listening. The number is cosmetic.
+
+Micro-influencer benchmark: 5K–50K followers, 3–6% engagement rate. That's an audience that acts. Micro-influencer conversion rates consistently outperform macro across every category — not because the content is better, but because the trust is earned.
+
+Reach is rented attention. Engagement is earned attention. You want the second one.
+
+#influencermarketing #creatoreconomy #microinfluencer #instagrammarketing #brandmarketing #foundermarketing #marketingstrategy`},
+
+{day:20,defPal:'cr',pills:['FIRST-PARTY DATA','2026'],
+ cvScript:'Cookies are gone.',cvBebas:'DID YOU NOTICE?',cvTag:'',subniche:'2026 Concepts · Startup Blind Spots',
+ setup:{label:'THE SITUATION',body:"For years, ad platforms tracked your customers across the web and fed that data back into your campaigns. That infrastructure is breaking down. Attribution is degrading. CAC is rising."},
+ prob:{head:'BRANDS RELYING ON PIXEL RETARGETING ARE FLYING BLIND.',body:"Their targeting accuracy is falling. Their platform costs are rising. And the changes haven't stopped. Waiting for stability is a strategy — but it's not a good one."},
+ stat:{num:'0%',label:'DEPRECATION RATE OF YOUR OWN DATA',ctx:"First-party data: emails, purchase history, preferences, survey responses. It's yours. It doesn't deprecate with a browser update or a platform policy change. Build it now."},
+ shift:{head:'THE QUESTION ISN\'T HOW TO REPLACE THIRD-PARTY DATA.',body:"It's why you outsourced customer knowledge to a platform in the first place. Your CRM is the most valuable data asset in your business. Most are half-empty."},
+ close:{prin:"Own the data. Rent the distribution. Not the other way around.",cta:'Follow if you like thinking like this.'},
+ caption:`Third-party cookies are gone. Did you notice?
+
+For years, ad platforms tracked your customers and fed that data back into your campaigns. That infrastructure is breaking down. Attribution is degrading. CAC is rising. And the brands that relied on pixel-based retargeting are flying blind — targeting accuracy falling, costs climbing.
+
+First-party data doesn't deprecate with a browser update or a platform policy change. It's yours: emails, purchase history, preferences, survey responses. The most valuable data asset in your business is sitting in your CRM, half-empty.
+
+The question isn't how to replace third-party data. It's why you outsourced customer knowledge to a platform in the first place.
+
+#firstpartydata #digitalmarketing #marketingstrategy #privacymarketing #2026trends #datadriven #foundermarketing`},
+
+{day:21,defPal:'bk',pills:['SALES COMPENSATION','COST MODEL'],
+ cvScript:'80% of quota.',cvBebas:'THE REAL COST.',cvTag:'',subniche:'Numbers Marketing Ignores',
+ setup:{label:'THE SITUATION',body:"Most sales comp plans are modelled at 100% attainment. Clean, theoretical, boardroom-ready. Nobody asks what the cost looks like at 80%. Or what happens to margin at 120%."},
+ prob:{head:'THE PLAN THAT LOOKS GOOD AT 100% CAN BREAK AT 120%.',body:"Accelerator tiers, SPIFs, new logo bonuses — they compound fast at overperformance. Without a stress-tested model, the quarter you overperform is the one that blows the comp budget."},
+ stat:{num:'8–15%',label:'TARGET COMP-TO-REVENUE RATIO AT 100%',ctx:"Above 15%: the quota is underbuilt or the plan overpays. Below 8%: you're likely underpricing talent and losing people. Model it before you announce it."},
+ shift:{head:'A COMPENSATION PLAN IS A FINANCIAL MODEL.',body:"If you haven't stress-tested it at 80%, 100%, and 120% attainment, you haven't finished it. The plan that motivates your best rep may also be the one that breaks margin."},
+ close:{prin:"Don't announce a comp plan you haven't modelled at all three attainment levels.",cta:'Follow if you like thinking like this.'},
+ caption:`Your rep hit 80% of quota. Here's what that actually costs you.
+
+Most sales comp plans are modelled at 100% attainment. Clean, theoretical, boardroom-ready. Nobody asks what the cost looks like at 80% — or what happens to margin when someone hits 120% with accelerators, SPIFs, and new logo bonuses all firing at once.
+
+Target comp-to-revenue ratio: 8–15% at 100% attainment. Above 15%: the quota is underbuilt or the plan overpays. Below 8%: you're underpricing talent. Model it at all three levels before you announce it.
+
+A compensation plan is a financial model. If you haven't stress-tested it, you haven't finished it.
+
+#salesleadership #salescompensation #revenueoperations #salesmanagement #b2bsales #founderlessons #businessgrowth`},
+
+{day:22,defPal:'cr',pills:['COMMUNITY-LED GROWTH','RETENTION'],
+ cvScript:'Your customers',cvBebas:'ARE TALKING.',cvTag:'Just not to you.',subniche:'2026 Concepts · GTM',
+ setup:{label:'THE SITUATION',body:"Community-led growth isn't a Slack group. It's a deliberate strategy where customers become the distribution, retention, and acquisition engine simultaneously."},
+ prob:{head:'BRANDS INVEST IN ACQUISITION. NOT IN RETENTION INFRASTRUCTURE.',body:"The cost of acquiring a customer is rising. The cost of making them stay through community is comparatively tiny. Most brands are funding both poorly and one intentionally."},
+ stat:{num:'26%',label:'LOWER CHURN WITH ACTIVE CUSTOMER COMMUNITY',ctx:"Companies with active customer communities see 26% lower churn and 5× higher NPS. The mechanism: customers with community ties have more to lose by leaving."},
+ shift:{head:'THE PRODUCT DOESN\'T CREATE RETENTION. THE NETWORK DOES.',body:"Community isn't a feature. It's a moat. Unlike features, it can't be copied with a product update. The brand that connects its customers to each other is harder to leave."},
+ close:{prin:"The brand that connects its customers to each other is harder to leave than the one that connects to them alone.",cta:'Follow if you like thinking like this.'},
+ caption:`Your customers are talking. Just not to you.
+
+Community-led growth isn't a Slack group. It's a deliberate strategy where customers become the distribution, retention, and acquisition engine simultaneously. Most brands invest heavily in acquisition and almost nothing in making customers stay through belonging.
+
+Companies with active customer communities see 26% lower churn and 5× higher NPS. The mechanism is simple: customers with community ties have more to lose by leaving. The product can be copied. The network can't.
+
+Community isn't a feature. It's a moat.
+
+#communityledgrowth #customerretention #brandstrategy #startupgrowth #marketingstrategy #founderlessons #businessgrowth`},
+
+{day:23,defPal:'bk',pills:['NPS','CUSTOMER FEEDBACK'],
+ cvScript:'NPS is 42.',cvBebas:'WHAT ABOUT THE 6s?',cvTag:'',subniche:'Numbers Marketing Ignores · Consulting Lessons',
+ setup:{label:'THE SITUATION',body:"Most companies calculate NPS once a quarter and present it in a board deck. The slide shows a number. Someone says 'good' or 'concerning'. Then nothing changes until next quarter."},
+ prob:{head:'THE NPS NUMBER IS NOT THE INSIGHT. THE SEGMENTS ARE.',body:"Promoters, passives, detractors — each requires a different action. The aggregate score tells you the average. The breakdown tells you who to call."},
+ stat:{num:'30%',label:'DETRACTOR-TO-PASSIVE RATE WITH A 48HR CALL',ctx:"A detractor who receives a personal follow-up call within 48 hours converts to passive 30% of the time. Most brands never make the call. They update the slide deck instead."},
+ shift:{head:'NPS IS A TRIGGER SYSTEM, NOT A SCORE.',body:"The score tells you something is wrong. The action is what fixes it. The 6-out-of-10 customer is the most valuable signal in your business. Read it."},
+ close:{prin:"The customers leaving a 6 are the ones most likely to leave — and the most likely to come back if you call.",cta:'Follow if you like thinking like this.'},
+ caption:`Your NPS is 42. Cool. What are you doing about the 6s?
+
+Most companies calculate NPS once a quarter, present it in a board deck, and move on. The slide shows a number. Someone says "concerning." Nothing changes until next quarter. The number isn't the insight — the segment breakdown is.
+
+A detractor who receives a personal follow-up call within 48 hours converts to passive 30% of the time. Most brands never make the call. They update the slide instead.
+
+NPS is a trigger system, not a score. The score tells you something is wrong. The action is what fixes it.
+
+#nps #customerexperience #customerretention #cx #businessgrowth #founderlessons #marketingstrategy`},
+
+{day:24,defPal:'cr',pills:['ABANDONED CART','E-COMMERCE'],
+ cvScript:'70% of carts',cvBebas:'ABANDONED.',cvTag:'Most brands recover 5%.',subniche:'Retail/E-commerce · Numbers',
+ setup:{label:'THE SITUATION',body:"The customer found the product, added it, and left. That is not a traffic problem. The intent was there. The recovery system wasn't built."},
+ prob:{head:'ONE GENERIC EMAIL RECOVERS A FRACTION OF WHAT A SEQUENCE DOES.',body:"'You left something behind' — the most unread subject line in e-commerce. No urgency. No personalisation. No timeline. One email is not a recovery workflow."},
+ stat:{num:'15%',label:'RECOVERY RATE WITH A 3-EMAIL SEQUENCE',ctx:"Immediate (within 1 hour), reminder at 24 hours, final offer at 72 hours. Sequenced flow recovery rate: 8–15%. Single generic email: under 5%. The difference is three sends."},
+ shift:{head:'ABANDONED CART REVENUE ISN\'T LOST. IT\'S PENDING.',body:"The question is whether your workflow is patient enough to recover it. The easiest sale in e-commerce is the one the customer almost made."},
+ close:{prin:"The customer who almost bought is closer to yes than the one who hasn't found you yet.",cta:'Follow if you like thinking like this.'},
+ caption:`70% of carts are abandoned. Most brands recover 5%.
+
+The customer found the product, added it, and left. That is not a traffic problem — the intent was there. It's a recovery problem. One generic "you left something behind" email with no urgency and no timeline recovers a fraction of what a sequenced workflow can.
+
+3-email recovery sequence: immediate (within 1 hour), reminder at 24 hours, final offer at 72 hours. Sequenced recovery rate: 8–15% vs. under 5% for a single email. The difference is three sends and a bit of patience.
+
+Abandoned cart revenue isn't lost. It's pending.
+
+#ecommerce #abandonedcart #emailmarketing #conversionrateoptimisation #ecommercemarketing #shopify #businessgrowth`},
+
+{day:25,defPal:'bk',pills:['GTM PLAYBOOK','PRODUCT LAUNCH'],
+ cvScript:'Product launched.',cvBebas:"MARKET DIDN'T KNOW.",cvTag:'',subniche:'GTM · Startup Blind Spots',
+ setup:{label:'THE SITUATION',body:"Most product launches fail not because the product is bad. They fail because the go-to-market was retrofitted onto the build — designed in the final two weeks, not alongside the product."},
+ prob:{head:'A PUBLISH DATE IS NOT A LAUNCH.',body:"Without a messaging hierarchy, UTM taxonomy, email sequence, and conversion tracking confirmed before day one — the launch is just a notification. Sent to a list that doesn't know why it matters."},
+ stat:{num:'5+12',label:'EMAIL SEQUENCE + SOCIAL POSTS FOR A LAUNCH SYSTEM',ctx:"5-email sequence + 12 social posts over 14 days + GA4 conversion event confirmed + landing page live before day one. That's a launch system. Not just a launch date."},
+ shift:{head:'GO-TO-MARKET ISN\'T WHAT YOU DO AFTER YOU BUILD.',body:"It's what you design before you build. The gap between a launch and a successful launch is a system, not a budget. Build the system first."},
+ close:{prin:"The market doesn't reward the best product. It rewards the best-distributed one.",cta:'Follow if you like thinking like this.'},
+ caption:`The product launched. The market didn't know.
+
+Most product launches fail not because the product is bad — they fail because the go-to-market was retrofitted onto the build in the final two weeks. Without a messaging hierarchy, UTM structure, email sequence, and conversion tracking confirmed before day one, the launch is just a notification sent to a list that doesn't know why it matters.
+
+A launch system: messaging brief → landing page → 5-email sequence → 12 social posts over 14 days → GA4 conversion event confirmed before you go live. That's a launch. Not just a publish date.
+
+Go-to-market isn't what you do after you build. It's what you design before.
+
+#productlaunch #gtm #startupmarketing #productmarketing #founderlessons #marketingstrategy #businessgrowth`},
+
+{day:26,defPal:'cr',pills:['SHORT-FORM VIDEO','CONTENT SYSTEM'],
+ cvScript:'Reels don\'t go',cvBebas:'VIRAL.',cvTag:'Systems do.',subniche:'Strategy vs. Activity · 2026',
+ setup:{label:'THE SITUATION',body:"Most brands treat short-form video as an individual task. Shoot, edit, post, check views, repeat. Each video is a one-off. Each month starts from zero. No compounding."},
+ prob:{head:'WITHOUT A SYSTEM, EVERY VIDEO IS AN EVENT.',body:"No content pillars. No script template. No visual brief format. No production calendar. Volume is impossible to maintain without infrastructure. You can't hustle your way to consistency."},
+ stat:{num:'20',label:'POSTS PER MONTH WITH AN AI-ASSISTED SYSTEM',ctx:"3 pillars → trending topic ID → scripted in 10 minutes per video → visual brief generated → 20 posts per month vs. 8 manually in the same time. Infrastructure, not effort."},
+ shift:{head:'THE BRANDS WINNING ON SHORT-FORM PRODUCE ON A SYSTEM.',body:"Volume is a strategy. Inconsistency is a failure mode. The difference is infrastructure, not creativity. Build the system once. Let it run."},
+ close:{prin:"The platform rewards consistency. Consistency requires a system. Build the system first.",cta:'Follow if you like thinking like this.'},
+ caption:`Reels don't go viral. Systems do.
+
+Most brands treat short-form video as an individual task — shoot, edit, post, check views, repeat. Each video is a one-off. Each month starts from zero. Without content pillars, a script template, a visual brief format, and a production calendar, you can't maintain volume. And volume is the strategy.
+
+AI-assisted content system: 3 pillars → trending topic identification → scripted in 10 minutes → visual brief generated → 20 posts per month vs. 8 manually in the same time. Same effort. More than double the output.
+
+The brands winning on short-form don't produce better content. They produce on a system.
+
+#shortformvideo #instagramreels #contentmarketing #socialmediamarketing #contentstrategy #aimarketing #foundermarketing`},
+
+{day:27,defPal:'bk',pills:['B2B LINKEDIN','DEMAND GEN'],
+ cvScript:"You're posting.",cvBebas:'NOT MARKETING.',cvTag:'',subniche:'B2B · GTM',
+ setup:{label:'THE SITUATION',body:"Posting on LinkedIn and running a B2B LinkedIn strategy produce different outputs. One builds impressions. The other builds pipeline. Most founders confuse the activity for the result."},
+ prob:{head:'POSTING BUILDS AWARENESS. NOT PIPELINE ALONE.',body:"Demand generation requires a content-to-connection-to-DM-to-call sequence. Most founders only run the first step and wonder why the platform doesn't convert."},
+ stat:{num:'5',label:'STAGES IN A B2B LINKEDIN SYSTEM',ctx:"Profile optimised → content pillars (thought leadership + client results + POV) → targeted connection strategy → engaged comment flows → DM follow-up sequence. Each stage is a system, not a habit."},
+ shift:{head:'LINKEDIN IS A PIPELINE TOOL THAT LOOKS LIKE A SOCIAL PLATFORM.',body:"The question isn't whether you're on LinkedIn. It's whether your CRM has entries from it. If the answer is no, the posting isn't the problem."},
+ close:{prin:"The platform is free. The system is what most people don't build.",cta:'Follow if you like thinking like this.'},
+ caption:`You're posting on LinkedIn. You're not doing LinkedIn marketing.
+
+Posting on LinkedIn and running a B2B LinkedIn strategy produce different outputs. One builds impressions. The other builds pipeline. Most founders run the first step — publish content, get some likes — and wonder why the platform doesn't convert.
+
+Demand generation on LinkedIn is a sequence: profile optimised → content pillars (thought leadership, client results, POV) → targeted connection strategy → engaged comment flows → DM follow-up sequence. Each stage feeds the next. Remove one and the pipeline stalls.
+
+LinkedIn isn't a social media platform for B2B. It's a pipeline tool that looks like one.
+
+#linkedinmarketing #b2bmarketing #demandgeneration #linkedinstrategy #b2bleadgeneration #foundermarketing #businessgrowth`},
+
+{day:28,defPal:'cr',pills:['BATTLE CARDS','COMPETITIVE SALES'],
+ cvScript:'Lost to the same',cvBebas:'COMPETITOR. AGAIN.',cvTag:'Nobody wrote it down.',subniche:'Agency Reality · Sales Strategy',
+ setup:{label:'THE SITUATION',body:"Every lost deal is a data point. Most companies collect zero of it systematically. The loss reason in the CRM says 'price' or 'competition.' That's a category. Not intelligence."},
+ prob:{head:'WITHOUT A BATTLE CARD, EVERY REP IMPROVISES.',body:"The same objection kills the same deals every quarter. No one connects the pattern. No one documents the counter. The loss repeats across the team until someone notices."},
+ stat:{num:'20%',label:'FASTER CLOSE WITH COMPETITOR BATTLE CARDS',ctx:"A rep who knows the competitor's weakness in the first call closes 20% faster than one who figures it out in negotiation. The information already exists in your closed-lost notes."},
+ shift:{head:'THE INFORMATION TO BEAT YOUR COMPETITOR ALREADY EXISTS.',body:"It's sitting in your closed-lost data. One page per competitor. Key objections with counters. Updated quarterly. That's a battle card. Build it once, use it every deal."},
+ close:{prin:"The loss you don't learn from is the one you repeat.",cta:'Follow if you like thinking like this.'},
+ caption:`Your rep lost to the same competitor for the third time. Nobody wrote it down.
+
+Every lost deal is a data point. Most companies collect none of it systematically. The CRM loss reason says "price" or "competition" — a category, not intelligence. Without a battle card, every rep improvises objection responses. The same counter-argument fails the same deal every quarter.
+
+A rep who knows the competitor's weakness in the first call closes 20% faster than one who figures it out in negotiation. The information to build that battle card already exists — it's sitting in your closed-lost notes.
+
+One page per competitor. Key objections, counters, win stories. Updated quarterly.
+
+#salesstrategy #competitivesales #battlecards #b2bsales #salesenablement #salestips #founderlessons`},
+
+{day:29,defPal:'bk',pills:['ATTRIBUTION','CHANNEL CREDIT'],
+ cvScript:'Paid social is',cvBebas:'TAKING CREDIT.',cvTag:'For sales email deserves.',subniche:'Numbers Marketing Ignores · 2026',
+ setup:{label:'THE SITUATION',body:"Last-click attribution assigns 100% of conversion credit to the last touchpoint. In a multi-channel buyer journey, that's almost always wrong. And the budget decisions that follow it are wrong too."},
+ prob:{head:'YOU CUT THE CHANNEL THAT STARTED THE JOURNEY.',body:"The one that wasn't last-click. The one that built intent, moved the buyer into consideration, and handed them off three weeks before the final conversion. You called it underperforming."},
+ stat:{num:'6',label:'TOUCHPOINTS IN AN AVERAGE B2B BUYER JOURNEY',ctx:"LinkedIn post → search → blog → email → retargeting → close. Last-click credits retargeting. The blog that started intent gets zero credit. Your budget reflects that misjudgement."},
+ shift:{head:'ATTRIBUTION IS ABOUT WHICH CHANNELS DESERVE MORE BUDGET.',body:"Not about credit. The channel you're about to cut is probably doing more than your model shows. Fix the model before you cut the channel."},
+ close:{prin:"The model you use to measure is the model you use to decide. Get the model right first.",cta:'Follow if you like thinking like this.'},
+ caption:`Paid social is taking credit for sales email deserves.
+
+Last-click attribution assigns 100% of conversion credit to the final touchpoint. In a multi-channel buyer journey, that's almost always wrong — and the budget decisions that follow it are wrong too. You cut the channel that built intent and double down on the one that happened to be last.
+
+A typical B2B journey: LinkedIn post → search → blog → email → retargeting → close. Last-click credits retargeting. The blog that started the whole journey gets zero. Your budget reflects that misjudgement every quarter.
+
+Attribution isn't about credit. It's about knowing which channels deserve more budget next cycle.
+
+#marketingattribution #digitalmarketing #marketinganalytics #b2bmarketing #marketingops #datadriven #foundermarketing`},
+
+{day:30,defPal:'cr',pills:['SALES & MARKETING SLA','ALIGNMENT'],
+ cvScript:'Good leads.',cvBebas:'BAD LEADS.',cvTag:'Neither is wrong.',subniche:'GTM · Execution Gaps',
+ setup:{label:'THE SITUATION',body:"The conflict between marketing and sales is almost always a definitions problem. Not a performance problem. Both teams are measuring output against criteria the other team didn't agree to."},
+ prob:{head:'WITHOUT A SIGNED SLA, BOTH TEAMS PLAY DIFFERENT GAMES.',body:"What is an MQL. What is an SQL. How fast must sales respond. What happens when volume drops. Without these defined, accountability doesn't exist — blame does."},
+ stat:{num:'34%',label:'HIGHER CLOSE RATES WITH A FORMAL SLA',ctx:"Companies with a formal Sales & Marketing SLA see 34% higher lead-to-close rates. Most SMBs have never written one. The document forces the conversation both teams have been avoiding."},
+ shift:{head:'THE SLA DOESN\'T CREATE ALIGNMENT. IT CREATES ACCOUNTABILITY.',body:"That's why most companies resist writing it. The conversation it forces is the one both teams have been avoiding. Write it anyway."},
+ close:{prin:"When marketing and sales argue, the real conversation is: who defined quality, and when.",cta:'Follow if you like thinking like this.'},
+ caption:`Marketing says leads are good. Sales says leads are bad. Neither is wrong.
+
+The conflict between marketing and sales is almost always a definitions problem — not a performance problem. Both teams are measuring output against criteria the other never agreed to. What's an MQL. What's an SQL. How fast must sales respond. What happens when volume drops. Without these defined in writing, accountability doesn't exist. Blame does.
+
+Companies with a formal Sales & Marketing SLA see 34% higher lead-to-close rates. Most SMBs have never written one. The document forces the conversation both sides have been avoiding — and that's exactly why they resist it.
+
+Write the SLA. It's the document that makes alignment real.
+
+#salesmarketing #marketingalignment #gtm #b2bmarketing #revenueoperations #founderlessons #businessgrowth`},
+];
+
+// ---- RENDERING ----
+function pal(c){ return curPal || c.defPal; }
+
+function arcSVG(p){
+  return `<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;" viewBox="0 0 540 540" fill="none"><circle cx="540" cy="0" r="300" stroke="${p==='cr'?'#0F0C08':'#F2E8D5'}" stroke-width="1" opacity="0.07"/><circle cx="540" cy="0" r="180" stroke="${p==='cr'?'#0F0C08':'#F2E8D5'}" stroke-width="0.75" opacity="0.04"/></svg>`;
+}
+function cornerSVG(p){
+  return `<svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;" viewBox="0 0 540 540" fill="none"><path d="M44 80 L44 44 L80 44" stroke="${p==='cr'?'#0F0C08':'#F2E8D5'}" stroke-width="2" opacity="0.2"/><path d="M496 460 L496 496 L460 496" stroke="${p==='cr'?'#0F0C08':'#F2E8D5'}" stroke-width="2" opacity="0.2"/></svg>`;
+}
+function lbarHTML(p){
+  return `<div style="position:absolute;top:0;left:0;width:5px;height:100%;background:${p==='cr'?'#0F0C08':'#F2E8D5'};opacity:${p==='cr'?'.45':'.35'};z-index:2;"></div>`;
+}
+function brandTop(p){ return `<div class="brand-top cv-handle ${p==='cr'?'tp':'tm'}" style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;opacity:.55;text-align:center;margin-bottom:14px;position:relative;z-index:3;">${H}</div>`; }
+function brandBtm(p){ return `<div style="position:absolute;bottom:22px;left:32px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;opacity:.45;z-index:3;" class="${p==='cr'?'tm':'tm'}">${H}</div>`; }
+function slideNum(n,total,p){ return `<div style="position:absolute;top:18px;right:26px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.1em;z-index:3;opacity:.4;" class="${p==='cr'?'ts':'ts'}">${n}/${total}</div>`; }
+
+function buildCover(c){
+  const p=pal(c);
+  const fs1 = c.cvScript.length > 12 ? 58 : 72;
+  const fs2 = c.cvBebas.length > 14 ? 74 : 96;
+  return `<div class="slide ${p} s-cover on" style="display:flex;">
+    ${arcSVG(p)}${lbarHTML(p)}
+    ${brandTop(p)}
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 4px 0 10px;position:relative;z-index:2;">
+      <span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:${fs1}px;line-height:.93;letter-spacing:-.02em;" class="tp">${c.cvScript}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;margin-top:6px;" class="tp">${c.cvBebas}</span>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;min-height:32px;position:relative;z-index:3;">
+      ${c.cvTag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px;" class="tm">${c.cvTag}</span>`:'<span></span>'}
+      <div style="display:flex;gap:8px;">
+        <span class="pill" style="position:relative;transform:rotate(-2deg);">${c.pills[0]}</span>
+        <span class="pill" style="position:relative;transform:rotate(2deg);">${c.pills[1]}</span>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildSetup(c,n,tot){
+  const p=pal(c);
+  return `<div class="slide ${p} s-int">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <span class="slabel ${p==='cr'?'tm':'tm'}">${c.setup.label}</span>
+    <p style="font-family:'DM Sans',sans-serif;font-size:17px;line-height:1.68;position:relative;z-index:2;" class="ts">${c.setup.body}</p>
+  </div>`;
+}
+
+function buildProb(c,n,tot){
+  const p=pal(c);
+  const fs = c.prob.head.length > 30 ? 42 : 52;
+  return `<div class="slide ${p} s-int">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <span class="pill" style="position:absolute;top:30px;left:44px;">${c.pills[0]}</span>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:${fs}px;line-height:.93;letter-spacing:.01em;position:relative;z-index:2;margin-bottom:16px;" class="tp">${c.prob.head}</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;position:relative;z-index:2;" class="ts">${c.prob.body}</p>
+  </div>`;
+}
+
+function buildStat(c,n,tot){
+  const p=pal(c);
+  const numLen = c.stat.num.length;
+  const numFS = numLen > 5 ? 64 : numLen > 3 ? 82 : 100;
+  return `<div class="slide ${p} s-int" style="position:relative;">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;line-height:1;right:-10px;bottom:-30px;pointer-events:none;z-index:1;" class="bgn">${c.stat.num}</div>
+    <span class="slabel ${p==='cr'?'tm':'tm'}">${c.stat.label}</span>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:${numFS}px;line-height:.88;position:relative;z-index:2;letter-spacing:.01em;" class="tp">${c.stat.num}</div>
+    <div style="height:1px;width:60px;margin:18px 0;position:relative;z-index:2;" class="hline"></div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.65;position:relative;z-index:2;" class="ts">${c.stat.ctx}</p>
+  </div>`;
+}
+
+function buildShift(c,n,tot){
+  const p=pal(c);
+  const fs = c.shift.head.length > 35 ? 38 : 46;
+  return `<div class="slide ${p} s-int">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <div style="height:1px;width:48px;margin-bottom:20px;position:relative;z-index:2;" class="hline"></div>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:${fs}px;line-height:.93;letter-spacing:.01em;position:relative;z-index:2;margin-bottom:18px;" class="tp">${c.shift.head}</h2>
+    <p style="font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;position:relative;z-index:2;" class="ts">${c.shift.body}</p>
+  </div>`;
+}
+
+function buildClose(c,n,tot){
+  const p=pal(c);
+  return `<div class="slide ${p} s-int" style="position:relative;">
+    ${cornerSVG(p)}${brandBtm(p)}
+    <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:23px;line-height:1.45;margin-bottom:26px;position:relative;z-index:2;" class="tp">${c.close.prin}</p>
+    <div style="height:1px;width:40px;margin-bottom:18px;position:relative;z-index:2;" class="hline"></div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.04em;position:relative;z-index:2;" class="tm">${c.close.cta}</p>
+  </div>`;
+}
+
+function buildSlides(c){
+  const slides = [
+    buildCover(c),
+    buildSetup(c,2,6),
+    buildProb(c,3,6),
+    buildStat(c,4,6),
+    buildShift(c,5,6),
+    buildClose(c,6,6)
+  ];
+  // Mark only first as active
+  return slides.map((s,i)=>{
+    if(i===0) return s; // already has 'on'
+    return s.replace('display:flex;','display:none;');
+  }).join('');
+}
+
+// ---- CAPTIONS ----
+const CAPTIONS = [
+`Most founders write one ad copy version and run it for weeks.
+
+When it underperforms — the creative gets blamed, the budget gets pulled, and the test never happened.
+
+AI can generate 10 variants in under 2 hours. Run the top 2. Let the data decide what your opinion can't.
+
+The winning formula isn't the best line. It's the fastest test.
+
+#marketingstrategy #digitalmarketing #adcopy #founderlessons #marketingtips`,
+
+`Your sales team is treating a pricing page visit the same as a newsletter open.
+
+Both are contacts. Only one is ready to buy.
+
+A basic lead score model: email opened = +5 pts, pricing page = +15, form filled = +25. Alert fires at 50. Below that — it stays in marketing.
+
+Lead scoring isn't a CRM feature. It's a revenue decision.
+
+#salesstrategy #leadgeneration #b2bmarketing #gtm #founderlessons`,
+
+`Most marketing budgets live in a PDF or a verbal agreement.
+
+Planned spend is an estimate. Actual spend is a surprise. Nobody compares the two until month-end — and by then the overrun has compounded.
+
+Variance formula: (Actual − Planned) ÷ Planned. Flag anything over 10%.
+
+The channel that keeps going over is the channel you haven't questioned yet.
+
+#marketingbudget #businessgrowth #marketingnumbers #startupmarketing #founderlessons`,
+
+`Marketing counts form fills. Sales counts qualified conversations.
+
+Both are right. Neither agrees. And the handoff between them is where revenue quietly dies.
+
+Companies with a signed Sales & Marketing SLA see up to 36% higher close rates. Most SMBs have never written one.
+
+The argument about lead quality is always an argument about definitions.
+
+#salesandmarketing #b2bmarketing #gtm #revenueoperations #marketingstrategy`,
+
+`Your customers have already told you what is wrong.
+
+The reviews exist. The problem is that most founders read them one at a time, form opinions from outliers, and miss the patterns entirely.
+
+Batch 50 reviews through AI — sentiment, primary theme, key quote per review — in under 90 minutes. The top 3 negative themes are your next product sprint.
+
+Your customers already wrote the brief. You just have not read it systematically.
+
+#customerinsights #aimarketing #productmarketing #startuplessons #marketingstrategy`,
+
+`Most founders do competitive research once a year. At strategy time. Then forget about it.
+
+Your competitors do not work on that schedule.
+
+5 competitors × 5 monitoring topics = 25 Google Alerts + one automated workflow = a decision-ready brief every Monday. Setup time: under 3 hours.
+
+Competitive advantage is not about having better ideas. It is about seeing moves earlier.
+
+#competitiveintelligence #marketingstrategy #startupmarketing #businessgrowth #founderlessons`,
+
+`One long-form piece contains a LinkedIn article, a carousel, an email section, a video script, and a tweet thread.
+
+Most brands extract exactly zero of them.
+
+One 1,500-word blog post → 5 derivative pieces in under 3 hours with a structured AI repurposing workflow. Same insight. Five channels.
+
+Content strategy is not about writing more. It is about using what you already wrote.
+
+#contentmarketing #contentrepurposing #marketingstrategy #aimarketing #founderlessons`,
+
+`Sales managers look at total pipeline and feel covered.
+
+That number is not the number.
+
+Pipeline coverage = open pipeline ÷ remaining quota. Industry standard is 3–4×. Below 3×: you need to create deals, not just close them. Most teams find out at month-end.
+
+Track the leading indicator, not the lagging one.
+
+#salespipeline #salesstrategy #revenueoperations #b2bsales #salesmanagement`,
+
+`A SaaS buyer and a retail buyer have different problems.
+
+The same email addresses neither of them well. Generic content is efficient to produce and expensive in the attention it fails to earn.
+
+3 segments. 3 AI-written variants. Same send time. Open rates 20–35% higher per segment vs. generic baseline.
+
+You cannot write a great email to everyone. You can write one to someone.
+
+#emailmarketing #marketingpersonalisation #aimarketing #marketingstrategy #b2bmarketing`,
+
+`Most brands have a content calendar.
+
+Few have pillars, keyword clusters, KPIs per pillar, and a governance process.
+
+The calendar is the output. Those four things are the inputs. Without a pillar structure, you are publishing — not building authority.
+
+The calendar tells you what to post. The strategy tells you why it matters.
+
+#contentstrategy #contentmarketing #marketingstrategy #seomarketing #founderlessons`,
+
+`Most e-commerce brands write product descriptions for the customer.
+
+Google reads them first.
+
+50 AI-generated, SEO-optimised descriptions — reviewed, edited, bulk-uploaded. 30-day GSC check: impressions rising per product URL without a single additional paid click.
+
+If your pages do not rank, your paid ads are carrying a job your content should be doing for free.
+
+#ecommercemarketing #seo #productmarketing #aimarketing #digitalmarketing`,
+
+`Churn does not happen on cancellation day.
+
+It happens 60 days earlier — in the behaviour that precedes it. No login. Rising tickets. Low NPS. The signals exist. Most companies never look.
+
+5 variables. 0–10 risk score per account. Top 25% flagged for intervention. No machine learning required — just a CSV export and a scoring formula.
+
+The account you lose next month already has a score. You just have not built the model.
+
+#customerretention #churnprevention #saasmarketing #businessgrowth #marketingstrategy`,
+
+`Most QBR decks open with last quarter's wins.
+
+That is the least useful thing in the room. Everyone already knows the result.
+
+6 deal health criteria. Scored 0–6. Below 2 = At Risk. The QBR should answer one question: what are we doing about the 10 deals most likely to slip?
+
+A review without an intervention plan is just a record of what happened.
+
+#salesstrategy #qbr #b2bsales #pipelinemanagement #salesmanagement`,
+
+`Most marketing budgets are built on last year's spend.
+
+Not this year's outcomes. The board does not want to know what you spent — they want to know what you will get.
+
+3 scenarios: Bear (−20%), Base, Bull (+20%). ROI per channel: (Revenue − Spend) ÷ Spend. Any channel under 1.0× gets questioned before the year starts.
+
+If you cannot model 3 outcomes from your budget, you are not managing it. You are guessing.
+
+#marketingROI #marketingbudget #businessstrategy #founderlessons #marketingnumbers`,
+
+`For most of the last decade, social media drove traffic to a website.
+
+That handoff is disappearing.
+
+Social commerce GMV is projected to surpass Rs. 7 trillion globally by 2026. Fastest-growing segment: impulse purchases under Rs. 5,000. The funnel compressed into one screen.
+
+If your conversion requires leaving the platform, you are adding friction your competitor is not.
+
+#socialcommerce #ecommercemarketing #digitalmarketing #2026marketing #marketingstrategy`,
+
+`Your content team has 4 writers. Your brand sounds like 6 different people.
+
+Not a talent problem. A process problem.
+
+5 brand voice attributes. AI scores each piece before it reaches a human editor. Flagged phrases, rewrite alternatives, overall score. Review time drops 40%.
+
+Consistency is not a talent. It is a system.
+
+#brandmarketing #contentmarketing #brandvoice #aimarketing #marketingstrategy`,
+
+`Cost-plus pricing is the default.
+
+You add margin to cost, set a price, and call it done. It is also the floor of what you could be charging.
+
+Value-based pricing starts with the outcome: this saves you Rs. 2,00,000 per year. Price at Rs. 30,000 against that context — the conversation changes entirely.
+
+The gap between what you charge and what it is worth is a positioning gap, not a product gap.
+
+#pricingstrategy #businessgrowth #marketingstrategy #founderlessons #gtm`,
+
+`10,000 free users. 90 paying.
+
+Most SaaS founders treat that as a product problem. The product is usually fine. The architecture is not.
+
+Freemium only works when the free tier creates the habit and the paid tier creates the outcome. Most products give too much free.
+
+The upgrade decision is not made at the paywall. It is made the moment a free user hits their limit.
+
+#saasmarketing #freemium #pricingstrategy #productmarketing #startuplessons`,
+
+`1 million followers. 0.1% engagement.
+
+Brands pay for reach. Until you calculate how many followers actually see the post — and act on it — the number is cosmetic.
+
+Micro-influencer benchmark: 5K–50K followers, 3–6% engagement. An audience that acts. Consistently outperforms macro across every category.
+
+The size of the audience matters less than its willingness to move.
+
+#influencermarketing #socialmediastrategy #marketingstrategy #brandmarketing #digitalmarketing`,
+
+`Third-party cookies are gone.
+
+Brands relying on pixel-based retargeting are seeing attribution degrade and CAC rise. The platform tracked your customers for you — and that infrastructure is breaking down.
+
+First-party data: emails, purchase history, preferences. It is yours. It does not deprecate with a browser update.
+
+Own the data. Rent the distribution. Not the other way around.
+
+#firstpartydata #digitalmarketing #marketingstrategy #2026marketing #founderlessons`,
+
+`Most sales comp plans are modelled at 100% attainment.
+
+Nobody asks what the cost looks like at 80%. Or what happens to margin when accelerators kick in at 120%.
+
+3-scenario model: 80%, 100%, 120% attainment. Target comp-to-revenue ratio: 8–15% at 100%. Above 15% — the quota is underbuilt.
+
+Do not announce a comp plan you have not modelled at all three attainment levels.
+
+#salesmanagement #salesstrategy #salescompensation #revenueoperations #businessgrowth`,
+
+`Community-led growth is not a Slack group.
+
+It is a deliberate strategy where customers become the distribution, retention, and acquisition engine simultaneously.
+
+Companies with active customer communities see 26% lower churn and 5× higher NPS. The mechanism: customers with community ties have more to lose by leaving.
+
+The brand that connects its customers to each other is harder to leave than the one that only connects to them alone.
+
+#communitymarketing #customerretention #brandmarketing #businessgrowth #marketingstrategy`,
+
+`Most companies calculate NPS once a quarter and present the number in a board deck.
+
+Then nothing changes.
+
+The number is not the insight — the segment breakdown is. A detractor who receives a personal follow-up call within 48 hours converts to passive 30% of the time. Most brands never make the call.
+
+NPS is a trigger system, not a score.
+
+#customerexperience #nps #customerretention #businessgrowth #marketingstrategy`,
+
+`70% of carts are abandoned. Most brands recover under 5%.
+
+The customer found the product, added it, and left. The intent was there. The recovery system was not built.
+
+3-email sequence: within 1 hour, 24 hours, 72 hours with a final offer. Sequenced flow recovery rate: 8–15% vs. under 5% for a single generic email.
+
+The customer who almost bought is closer to yes than the one who has not found you yet.
+
+#ecommercemarketing #abandonedcart #emailmarketing #conversionoptimisation #digitalmarketing`,
+
+`Most product launches fail not because the product is bad.
+
+They fail because go-to-market was retrofitted onto the build — designed in the final two weeks, not alongside it.
+
+A launch without a messaging hierarchy, UTM taxonomy, email sequence, and conversion tracking confirmed before day one is not a launch. It is a publish date.
+
+The market does not reward the best product. It rewards the best-distributed one.
+
+#productlaunch #gtm #marketingstrategy #startupmarketing #founderlessons`,
+
+`Most brands treat short-form video as an individual task.
+
+Shoot, edit, post, check views, repeat. Each video is a one-off. Each month starts from zero.
+
+AI-assisted system: 3 pillars → trending topic → scripted in 10 minutes → visual brief → 20 posts per month vs. 8 manually in the same time.
+
+The platform rewards consistency. Consistency requires a system.
+
+#shortformvideo #contentmarketing #instagrammarketing #contentcreation #marketingstrategy`,
+
+`Posting on LinkedIn and running a B2B LinkedIn strategy produce different outputs.
+
+One builds impressions. The other builds pipeline.
+
+5 stages: profile optimised → content pillars → targeted connection strategy → engaged comment flows → DM follow-up sequence. Each stage is a system, not a habit.
+
+LinkedIn is a pipeline tool that looks like a social media platform. Is your CRM getting entries from it?
+
+#linkedinmarketing #b2bmarketing #demandgeneration #socialselling #businessgrowth`,
+
+`Every lost deal is a data point.
+
+Most companies collect zero of it systematically. The loss reason in the CRM says price or competition. That is a category. Not intelligence.
+
+Battle card: competitor positioning, known weaknesses, standard objections, counter per objection, win stories. One page. Updated quarterly from closed-lost data.
+
+The loss you do not learn from is the one you repeat.
+
+#salesstrategy #competitiveintelligence #b2bsales #salesenablement #businessgrowth`,
+
+`Last-click attribution assigns 100% of conversion credit to the final touchpoint.
+
+In a multi-channel buyer journey, that is almost always wrong — and the budget decisions that follow are wrong too.
+
+6-touchpoint B2B journey: LinkedIn → search → blog → email → retargeting → close. Last-click credits retargeting. The blog that built intent gets zero.
+
+The model you use to measure is the model you use to decide. Get it right first.
+
+#marketingattribution #digitalmarketing #marketingnumbers #b2bmarketing #marketingstrategy`,
+
+`Marketing says leads are good. Sales says leads are bad.
+
+Neither is wrong. Both are measuring against criteria the other team did not agree to.
+
+Companies with a formal Sales and Marketing SLA see 34% higher lead-to-close rates. Most SMBs have never written one — because the conversation it forces is the one both teams have been avoiding.
+
+The SLA does not create alignment. It creates accountability.
+
+#salesandmarketing #revenueoperations #b2bmarketing #gtm #businessgrowth`
+];
+
+function showCaption(i){
+  const el = document.getElementById('captext');
+  if(el) el.textContent = CAPTIONS[i] || '';
+}
+
+function copyCaption(){
+  const txt = document.getElementById('captext').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const c = document.getElementById('capcopied');
+    c.classList.add('show');
+    setTimeout(()=>c.classList.remove('show'), 2000);
+  });
+}
+
+// ---- INDEX ----
+function buildIndex(){
+  const g=document.getElementById('grid');
+  g.innerHTML=DATA.map((c,i)=>{
+    const pCls = c.defPal==='bk'?'pal-b':'pal-c';
+    return `<div class="card" onclick="openCarousel(${i})">
+      <div class="card-day">DAY ${c.day < 10 ? '0'+c.day : c.day} / 30 &nbsp;<span class="card-pal ${pCls}"></span></div>
+      <div class="card-hl">${c.cvScript} ${c.cvBebas}${c.cvTag?' '+c.cvTag:''}</div>
+      <div class="card-sub">${c.subniche}</div>
+    </div>`;
+  }).join('');
+}
+
+// ---- OPEN / NAVIGATE ----
+function openCarousel(i){
+  curC=i; curS=0; curPal=null;
+  const c=DATA[i];
+  document.getElementById('idx').style.display='none';
+  const v=document.getElementById('vwr');
+  v.style.display='flex';
+
+  document.getElementById('vday').textContent=`DAY ${c.day < 10 ? '0'+c.day : c.day} / 30`;
+  document.getElementById('vtitle').textContent=`${c.cvScript} ${c.cvBebas}`;
+
+  // Set palette buttons
+  const p=c.defPal;
+  document.getElementById('pbk').classList.toggle('on',p==='bk');
+  document.getElementById('pcr').classList.toggle('on',p==='cr');
+
+  // Build slides
+  document.getElementById('sw').innerHTML=buildSlides(c);
+  buildDots(6);
+  updateCtrl();
+  renderCaption(i);
+  showCaption(i);
+}
+
+function setPal(p){
+  curPal=p;
+  document.getElementById('pbk').classList.toggle('on',p==='bk');
+  document.getElementById('pcr').classList.toggle('on',p==='cr');
+  const s=curS;
+  openCarousel(curC);
+  curPal=p;
+  goToSlide(s);
+}
+
+function goToSlide(n){
+  const sw=document.getElementById('sw');
+  const slides=sw.querySelectorAll('.slide');
+  slides.forEach((s,i)=>{
+    s.style.display=i===n?'flex':'none';
+    s.classList.toggle('on',i===n);
+  });
+  curS=n;
+  updateDots();
+  updateCtrl();
+}
+
+function nextS(){ if(curS<5) goToSlide(curS+1); }
+function prevS(){ if(curS>0) goToSlide(curS-1); }
+function updateCtrl(){
+  document.getElementById('bp').disabled=curS===0;
+  document.getElementById('bn').disabled=curS===5;
+  document.getElementById('cpb').disabled=curC===0;
+  document.getElementById('cnb').disabled=curC===DATA.length-1;
+  document.getElementById('ccount').textContent=`${curC+1} / ${DATA.length}`;
+  if(document.getElementById('img-filename')) updateFilename();
+}
+function buildDots(n){
+  document.getElementById('dots').innerHTML=[...Array(n)].map((_,i)=>`<div class="dot ${i===0?'on':''}" onclick="goToSlide(${i})"></div>`).join('');
+}
+function updateDots(){
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===curS));
+}
+function prevC(){ if(curC>0) openCarousel(curC-1); }
+function nextC(){ if(curC<DATA.length-1) openCarousel(curC+1); }
+function showIdx(){
+  document.getElementById('idx').style.display='block';
+  document.getElementById('vwr').style.display='none';
+  curPal=null;
+}
+
+function renderCaption(i){
+  const c=DATA[i];
+  document.getElementById('captext').textContent=c.caption||'';
+}
+
+function copyCaption(){
+  const c=DATA[curC];
+  if(!c.caption) return;
+  navigator.clipboard.writeText(c.caption).then(()=>{
+    const el=document.getElementById('capcopied');
+    el.classList.add('show');
+    setTimeout(()=>el.classList.remove('show'),2000);
+  });
+}
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(document.getElementById('vwr').style.display==='flex'){
+    if(e.key==='ArrowRight') nextS();
+    if(e.key==='ArrowLeft') prevS();
+    if(e.key==='Escape') showIdx();
+  }
+});
+
+// ===== SLIDE NAMES =====
+const SLIDE_NAMES = ['cover','setup','problem','stat','shift','close'];
+
+function getFilename(ext){
+  const c = DATA[curC];
+  const day = String(c.day).padStart(2,'0');
+  const slideNum = String(curS+1);
+  const slideName = SLIDE_NAMES[curS];
+  return `haseebch49_day${day}_slide${slideNum}_${slideName}.${ext}`;
+}
+
+function updateFilename(){
+  const el = document.getElementById('img-filename');
+  if(el) el.textContent = getFilename('png');
+}
+
+// Collect all local CSS text from the page
+function getAllCSS(){
+  let css = '';
+  for(const sheet of document.styleSheets){
+    try {
+      for(const rule of sheet.cssRules) css += rule.cssText + '\n';
+    } catch(e){}
+  }
+  return css;
+}
+
+async function captureSlide(){
+  const sw = document.getElementById('sw');
+  const activeSlide = sw.querySelector('.slide.on');
+  if(!activeSlide) return null;
+
+  // Wait for all fonts to be ready
+  await document.fonts.ready;
+
+  // Build an isolated render div positioned offscreen
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:540px;height:540px;overflow:hidden;pointer-events:none;z-index:-1;';
+  
+  // Clone the slide and reset positioning so html2canvas sees it as a normal block
+  const clone = activeSlide.cloneNode(true);
+  clone.style.cssText = [
+    'display:flex !important',
+    'position:relative !important',
+    'top:0 !important',
+    'left:0 !important',
+    'width:540px !important',
+    'height:540px !important',
+    'overflow:hidden !important',
+    'flex-direction:column !important'
+  ].join(';');
+
+  wrap.appendChild(clone);
+  document.body.appendChild(wrap);
+
+  // Short settle time for layout + fonts
+  await new Promise(r => setTimeout(r, 120));
+
+  let canvas;
+  try {
+    canvas = await html2canvas(clone, {
+      width: 540,
+      height: 540,
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      logging: false,
+      removeContainer: true
+    });
+  } finally {
+    document.body.removeChild(wrap);
+  }
+  return canvas;
+}
+
+function setBtn(id, html){ document.getElementById(id).innerHTML = html; document.getElementById(id).disabled = false; }
+
+const COPY_BTN_HTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M3 11H2a1 1 0 01-1-1V2a1 1 0 011-1h8a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.4"/></svg> COPY IMAGE`;
+const DL_BTN_HTML   = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 2v8M5 7l3 3 3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M2 12h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> DOWNLOAD`;
+
+function showFeedback(msg){
+  const fb = document.getElementById('img-feedback');
+  fb.textContent = msg;
+  fb.classList.add('show');
+  setTimeout(()=>fb.classList.remove('show'), 2500);
+}
+
+function triggerDownload(canvas){
+  const link = document.createElement('a');
+  link.download = getFilename('png');
+  link.href = canvas.toDataURL('image/png');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+async function copySlideImage(){
+  const btn = document.getElementById('btn-copy-img');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ RENDERING...';
+  try {
+    const canvas = await captureSlide();
+    if(!canvas){ setBtn('btn-copy-img', COPY_BTN_HTML); return; }
+
+    // Try native clipboard API first
+    let copied = false;
+    if(window.ClipboardItem){
+      try {
+        const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+        await navigator.clipboard.write([new ClipboardItem({'image/png': blob})]);
+        showFeedback('✓ COPIED TO CLIPBOARD');
+        copied = true;
+      } catch(e){ /* fall through to download */ }
+    }
+    // Fallback: download
+    if(!copied){
+      triggerDownload(canvas);
+      showFeedback('↓ SAVED — clipboard blocked by browser');
+    }
+  } catch(err){
+    showFeedback('✗ ERROR — try DOWNLOAD instead');
+    console.error(err);
+  }
+  setBtn('btn-copy-img', COPY_BTN_HTML);
+}
+
+async function downloadSlideImage(){
+  const btn = document.getElementById('btn-dl-img');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ RENDERING...';
+  try {
+    const canvas = await captureSlide();
+    if(canvas){
+      triggerDownload(canvas);
+      showFeedback('↓ DOWNLOADED');
+    }
+  } catch(err){
+    showFeedback('✗ ERROR — try again');
+    console.error(err);
+  }
+  setBtn('btn-dl-img', DL_BTN_HTML);
+}
+
+// Init
+buildIndex();
+</script>
+</body>
+</html>
