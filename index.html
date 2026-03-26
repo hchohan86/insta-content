@@ -1165,54 +1165,62 @@ function slideNum(n,total,p){ return `<div style="position:absolute;top:18px;rig
 
 function buildCover(c){
   const p=pal(c);
-  const fs1 = c.cvScript.length > 12 ? 58 : 72;
-  const fs2 = c.cvBebas.length > 14 ? 74 : 96;
-  return `<div class="slide ${p} s-cover on" style="display:flex;">
-    ${arcSVG(p)}${lbarHTML(p)}
-    ${brandTop(p)}
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 4px 0 10px;position:relative;z-index:2;">
-      <span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:${fs1}px;line-height:.93;letter-spacing:-.02em;" class="tp">${c.cvScript}</span>
-      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;margin-top:6px;" class="tp">${c.cvBebas}</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;min-height:32px;position:relative;z-index:3;">
-      ${c.cvTag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:12px;" class="tm">${c.cvTag}</span>`:'<span></span>'}
+  const tp = p==='cr'?'#0F0C08':'#F2E8D5';
+  const ts = p==='cr'?'#3D3020':'#C4B49A';
+  const tm = p==='cr'?'#7A6A55':'#5A4E40';
+  const pillBg = p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)';
+  const pillBd = p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
+  const fs1 = c.cvScript.length > 14 ? 54 : c.cvScript.length > 10 ? 64 : 76;
+  const fs2 = c.cvBebas.length  > 16 ? 70 : c.cvBebas.length  > 12 ? 82 : 96;
+  return `<div class="slide ${p} s-cover on" style="display:flex;flex-direction:column;position:relative;overflow:hidden;align-items:center;justify-content:center;text-align:center;">
+    ${arcSVG(p)}
+    <!-- top bar -->
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;z-index:4;">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.55;">${H}</span>
       <div style="display:flex;gap:8px;">
-        <span class="pill" style="position:relative;transform:rotate(-2deg);">${c.pills[0]}</span>
-        <span class="pill" style="position:relative;transform:rotate(2deg);">${c.pills[1]}</span>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};padding:5px 12px;border-radius:100px;transform:rotate(-2deg);display:inline-block;">${c.pills[0]}</span>
+        <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};padding:5px 12px;border-radius:100px;transform:rotate(2deg);display:inline-block;">${c.pills[1]}</span>
       </div>
     </div>
+    <!-- centered main text -->
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 44px;width:100%;box-sizing:border-box;">
+      <span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:${fs1}px;line-height:.93;letter-spacing:-.02em;color:${tp};display:block;word-break:break-word;width:100%;">${c.cvScript}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;margin-top:6px;color:${tp};display:block;word-break:break-word;width:100%;">${c.cvBebas}</span>
+      ${c.cvTag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-top:18px;display:block;">${c.cvTag}</span>`:''}
+    </div>
+    <!-- bottom -->
+    <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;white-space:nowrap;">DAY ${String(c.day).padStart(2,'0')} / ${ALL_DATA.length}</div>
   </div>`;
 }
 
 function buildCoverBleed(c){
   const p=pal(c);
-  // Ghost word = first meaningful word from cvBebas
   const ghost = c.cvBebas.replace(/[^A-Z0-9]/g,'').slice(0,6) || c.pills[0].split(' ')[0];
   const tp  = p==='cr' ? '#0F0C08' : '#F2E8D5';
   const ts  = p==='cr' ? '#3D3020' : '#C4B49A';
   const tm  = p==='cr' ? '#7A6A55' : '#5A4E40';
   const ghostOp = p==='cr' ? '0.05' : '0.04';
-  const lbarOp  = p==='cr' ? '0.45' : '0.35';
+  const pillBg = p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)';
+  const pillBd = p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
   const fs1 = c.cvScript.length > 14 ? 52 : c.cvScript.length > 10 ? 62 : 74;
   const fs2 = c.cvBebas.length  > 16 ? 68 : c.cvBebas.length  > 12 ? 80 : 96;
-  return `<div class="slide ${p} s-cover on" style="display:flex;position:relative;overflow:hidden;">
-    <!-- ghost word bleed -->
-    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:220px;line-height:1;opacity:${ghostOp};top:-18px;left:-8px;pointer-events:none;z-index:1;white-space:nowrap;color:${tp};">${ghost}</div>
-    <!-- left accent bar -->
-    <div style="position:absolute;top:0;left:0;width:5px;height:100%;background:${tp};opacity:${lbarOp};z-index:2;"></div>
-    <!-- handle top-left -->
-    <div style="position:absolute;top:22px;left:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.6;z-index:4;">${H}</div>
-    <!-- pill top-right -->
-    <div style="position:absolute;top:20px;right:20px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;z-index:5;color:${tp};background:${p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)'};border:1.5px solid ${p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)'};">${c.pills[0]}</div>
-    <!-- main type -->
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 28px 28px 22px;position:relative;z-index:3;">
+  return `<div class="slide ${p} s-cover on" style="display:flex;flex-direction:column;position:relative;overflow:hidden;align-items:center;justify-content:center;text-align:center;">
+    <!-- ghost word centered behind text -->
+    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:220px;line-height:1;opacity:${ghostOp};top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:1;white-space:nowrap;color:${tp};">${ghost}</div>
+    <!-- top bar -->
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:20px 24px;z-index:4;">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.6;">${H}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};">${c.pills[0]}</span>
+    </div>
+    <!-- centered main type -->
+    <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding:0 44px;width:100%;box-sizing:border-box;">
       <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:16px;display:block;">${c.subniche.split('·')[0].trim()}</span>
-      <span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:${fs1}px;line-height:.93;letter-spacing:-.02em;color:${tp};display:block;">${c.cvScript}</span>
-      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;margin-top:6px;color:${tp};display:block;">${c.cvBebas}</span>
+      <span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:${fs1}px;line-height:.93;letter-spacing:-.02em;color:${tp};display:block;word-break:break-word;width:100%;">${c.cvScript}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;margin-top:6px;color:${tp};display:block;word-break:break-word;width:100%;">${c.cvBebas}</span>
       ${c.cvTag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-top:16px;display:block;">${c.cvTag}</span>`:''}
     </div>
-    <!-- bottom: day label -->
-    <div style="position:absolute;bottom:22px;right:24px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.45;z-index:4;">DAY ${String(c.day).padStart(2,'0')} / 30</div>
+    <!-- bottom -->
+    <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;white-space:nowrap;">DAY ${String(c.day).padStart(2,'0')} / ${ALL_DATA.length}</div>
   </div>`;
 }
 
@@ -1295,13 +1303,13 @@ function buildCoverPullQuote(c){
     ${cornerSVG(p)}
     <div style="position:absolute;top:22px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.55;z-index:4;white-space:nowrap;">${H}</div>
     <div style="position:absolute;top:20px;right:20px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;z-index:5;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};transform:rotate(2deg);">${c.pills[1]}</div>
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 38px;">
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 44px;">
       <div style="width:36px;height:1px;background:${lineClr};margin-bottom:20px;"></div>
-      <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:${fs}px;line-height:1.52;color:${tp};margin-bottom:20px;">"${quoteText}"</p>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:${fs}px;line-height:1.52;color:${tp};margin-bottom:20px;word-break:break-word;">"${quoteText}"</p>
       <div style="width:36px;height:1px;background:${lineClr};margin-bottom:14px;"></div>
       <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:${tm};opacity:.6;">${c.subniche.split('·')[0].trim()}</span>
     </div>
-    <div style="position:absolute;bottom:22px;right:24px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;">DAY ${String(c.day).padStart(2,'0')} / 30</div>
+    <div style="position:absolute;bottom:22px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;white-space:nowrap;">DAY ${String(c.day).padStart(2,'0')} / ${ALL_DATA.length}</div>
   </div>`;
 }
 
@@ -1378,20 +1386,27 @@ function buildTaskCover(c){
   const p=pal(c);
   const tp=p==='cr'?'#0F0C08':'#F2E8D5', ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
   const pillBg=p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)', pillBd=p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
-  const ghost=c.cover.sub.replace(/[^A-Z0-9]/g,'').slice(0,5);
-  const fs2=c.cover.sub.length>20?66:88;
-  return `<div class="slide ${p} s-cover on" style="display:flex;position:relative;overflow:hidden;">
-    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;line-height:1;opacity:${p==='cr'?'0.04':'0.035'};top:-10px;right:-15px;pointer-events:none;z-index:1;color:${tp};">${ghost}</div>
-    <div style="position:absolute;top:0;left:0;width:5px;height:100%;background:${tp};opacity:${p==='cr'?'.45':'.35'};z-index:2;"></div>
-    <div style="position:absolute;top:16px;left:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.55;z-index:4;">${H}</div>
-    <div style="position:absolute;top:16px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;color:${tm};opacity:.6;background:${pillBg};border:1px solid ${pillBd};padding:3px 10px;border-radius:2px;z-index:4;white-space:nowrap;">TASK ${c.taskIds.join(' + ')}</div>
-    <div style="position:absolute;top:18px;right:18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;z-index:5;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};">${c.pills[0]}</div>
-    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 26px 28px 22px;position:relative;z-index:3;">
-      <span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-bottom:14px;display:block;opacity:.7;">${c.cover.hook}</span>
-      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;color:${tp};display:block;">${c.cover.sub}</span>
-      ${c.cover.tag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-top:16px;display:block;">${c.cover.tag}</span>`:''}
+  const fs2=c.cover.sub.length>20?62:84;
+  return `<div class="slide ${p} s-cover on" style="display:flex;flex-direction:column;position:relative;overflow:hidden;align-items:center;justify-content:center;text-align:center;">
+    <!-- ghost arc decoration -->
+    <svg style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;" viewBox="0 0 540 540" fill="none">
+      <circle cx="270" cy="270" r="260" stroke="${tp}" stroke-width="1" opacity="0.06"/>
+      <circle cx="270" cy="270" r="190" stroke="${tp}" stroke-width="0.75" opacity="0.04"/>
+    </svg>
+    <!-- top bar: handle left, task badge center, pill right -->
+    <div style="position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;z-index:4;">
+      <span style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.55;">${H}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;color:${tm};opacity:.6;background:${pillBg};border:1px solid ${pillBd};padding:3px 10px;border-radius:2px;white-space:nowrap;">TASK ${c.taskIds.join(' + ')}</span>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};">${c.pills[0]}</span>
     </div>
-    <div style="position:absolute;bottom:20px;right:22px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;">DAY ${String(c.day).padStart(2,'0')}</div>
+    <!-- centered main text -->
+    <div style="position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;padding:0 36px;">
+      <span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-bottom:16px;display:block;opacity:.7;">${c.cover.hook}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.9;letter-spacing:.02em;color:${tp};display:block;word-break:break-word;">${c.cover.sub}</span>
+      ${c.cover.tag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-top:18px;display:block;">${c.cover.tag}</span>`:''}
+    </div>
+    <!-- day bottom center -->
+    <div style="position:absolute;bottom:20px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;white-space:nowrap;">DAY ${String(c.day).padStart(2,'0')} / ${ALL_DATA.length}</div>
   </div>`;
 }
 function buildTaskWhy(c){
