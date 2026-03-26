@@ -11,17 +11,42 @@
 body{background:#0A0907;font-family:'DM Sans',sans-serif;min-height:100vh;}
 
 /* ===== INDEX ===== */
-#idx{padding:40px 32px 60px;}
+#idx{padding:40px 28px 60px;}
 .idx-hd{text-align:center;margin-bottom:40px;}
 .idx-hd h1{font-family:'Bebas Neue',sans-serif;font-size:52px;letter-spacing:3px;color:#F2E8D5;}
 .idx-hd p{font-family:'Space Mono',monospace;font-size:11px;color:#5A4E40;margin-top:6px;letter-spacing:.1em;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;max-width:1200px;margin:0 auto;}
-.card{background:#0F0C08;border:1px solid rgba(242,232,213,.07);padding:20px;cursor:pointer;transition:all .18s;border-radius:2px;}
-.card:hover{border-color:rgba(242,232,213,.25);background:#141108;transform:translateY(-2px);}
-.card-day{font-family:'Space Mono',monospace;font-size:10px;color:#3D3020;margin-bottom:10px;letter-spacing:.1em;}
-.card-hl{font-family:'Poppins',sans-serif;font-weight:900;font-size:12px;color:#F2E8D5;line-height:1.4;margin-bottom:10px;}
-.card-sub{font-family:'DM Sans',sans-serif;font-size:11px;color:#5A4E40;line-height:1.4;}
-.card-pal{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:5px;vertical-align:middle;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:3px;max-width:1200px;margin:0 auto;}
+
+/* Card = square thumbnail */
+.card{position:relative;cursor:pointer;overflow:hidden;aspect-ratio:1/1;background:#0A0907;}
+.card:hover .card-overlay{opacity:1;}
+.card:hover .thumb-inner{transform:scale(1.03);}
+
+/* Thumbnail: scale a 540×540 slide down to fill the card */
+.thumb-wrap{position:absolute;inset:0;overflow:hidden;}
+.thumb-sizer{
+  position:absolute;
+  top:0;left:0;
+  width:540px;height:540px;
+  transform-origin:top left;
+  pointer-events:none;
+}
+
+/* Hover overlay with metadata */
+.card-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.85) 0%, rgba(0,0,0,.2) 50%, transparent 100%);
+  opacity:0;transition:opacity .2s;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:12px 10px;z-index:10;
+}
+.card-day{font-family:'Space Mono',monospace;font-size:9px;color:rgba(242,232,213,.5);letter-spacing:.1em;margin-bottom:4px;}
+.card-hl{font-family:'Poppins',sans-serif;font-weight:900;font-size:11px;color:#F2E8D5;line-height:1.3;margin-bottom:6px;}
+.card-sub{font-family:'DM Sans',sans-serif;font-size:10px;color:rgba(196,180,154,.7);line-height:1.3;}
+.card-type{display:inline-block;font-family:'Space Mono',monospace;font-size:7px;letter-spacing:.1em;padding:2px 7px;border-radius:2px;margin-bottom:5px;}
+.ct-ins{background:rgba(242,232,213,.12);color:#C4B49A;}
+.ct-task{background:rgba(80,200,120,.15);color:#6DBF88;}
+.card-pal{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle;}
 .pal-b{background:#0A0907;border:1px solid #3D3020;}
 .pal-c{background:#F2E8D5;}
 
@@ -152,8 +177,8 @@ body{background:#0A0907;font-family:'DM Sans',sans-serif;min-height:100vh;}
 <!-- INDEX -->
 <div id="idx">
   <div class="idx-hd">
-    <h1>30 CAROUSELS</h1>
-    <p>@HASEEBCH49 · BUSINESS GROWTH THROUGH NUMBERS & POSITIONING</p>
+    <h1>45 CAROUSELS</h1>
+    <p>@HASEEBCH49 · 30 INSIGHT · 15 TASK · MONTH 1 OF 6</p>
   </div>
   <div class="grid" id="grid"></div>
 </div>
@@ -222,6 +247,10 @@ const DATA = [
  stat:{num:'2HRS',label:'AI GENERATION TIME',ctx:"AI can generate 10 copy variants in under 2 hours. Manual effort for the same output: 2 days minimum. Generate variants, score them, deploy top 2, run 72 hours."},
  shift:{head:'THE WINNING FORMULA IS THE FASTEST TEST.',body:"Generate variants. Score them against clarity, CTA strength, and emotional pull. Deploy top 2. Let the data tell you what your opinion can't."},
  close:{prin:'Test more. Guess less.',cta:'Follow if you like thinking like this.'},
+ reality:`A founder runs one Facebook ad for 6 weeks. CTR drops in week 3. They pull the budget, blame the creative, and move on. The real problem: they never tested a second version. There was no data to learn from — only a hunch that became a decision.`,
+ mistake:{head:'PICKING COPY BY GUT FEEL',body:`Founders choose the version that sounds clever to them. The customer doesn't care about clever. They respond to clarity, specificity, and a CTA that matches where they are in the decision. Your preference is not market data.`},
+ fix:{label:'THE 4-STEP PROCESS',steps:['Write a structured master prompt: product name, target audience, key benefit, tone, character limit, output = 10 numbered variants','Run a second prompt scoring each variant on clarity, CTA strength, and emotional pull (1–10). Let AI rank them.','Deploy top 2 variants in your email or ad platform — 50/50 split, identical everything except copy','Pull results after 72 hours. % lift = (Higher Rate − Lower Rate) ÷ Lower Rate. Save the winning formula.']},
+ action:{head:'DO THIS TODAY',body:`Open Claude or Gemini. Write your master prompt. Generate 10 variants in 20 minutes. Pick the top 2 and run them against each other on your next campaign. Don't launch another single-version ad.`},
  caption:`Your ad didn't fail. Your copy did.
 
 Most founders write one version, run it for weeks, and blame the creative when the numbers don't move. The problem is upstream — no variant means no data, and no data means no learning.
@@ -239,6 +268,10 @@ The winning formula isn't the best line. It's the fastest test.
  stat:{num:'50',label:'SCORE THRESHOLD',ctx:"Email opened = +5 pts. Pricing page = +15. Form filled = +25. Alert fires at 50. Below that — marketing's problem to nurture, not sales' problem to chase."},
  shift:{head:'SALES SHOULD ONLY SEE LEADS ABOVE THRESHOLD.',body:"Everything else is marketing's job. Lead scoring isn't a CRM feature. It's a capacity decision that determines how your team spends its day."},
  close:{prin:'The lead worth calling already told you.',cta:'Follow if you like thinking like this.'},
+ reality:`A SaaS team of 4 reps spends 6 hours a day on calls. 70% of those leads opened one email. The other 30% visited the pricing page three times and filled a contact form — and nobody called them first. The reps didn't know. The CRM didn't flag it.`,
+ mistake:{head:'LETTING REPS DECIDE WHO TO CALL',body:`Without a scoring system, reps follow instinct — the most recent lead, a familiar company name, whoever emailed twice. That's not a system. It's luck. And luck doesn't scale when your pipeline has 500 contacts.`},
+ fix:{label:'HOW TO BUILD IT',steps:['Define 5 key behaviours and assign point values: email open = +5, pricing page = +15, form fill = +25, blog visit = +3, unsubscribe = −20','Set a threshold — 50 is a standard starting point. Below it: marketing nurtures. Above it: sales calls.','In Mautic: Contacts > Points > Manage Actions. Build each rule with the exact URL or action.','Create a campaign: score ≥50 → send internal alert to sales rep with contact details and total score']},
+ action:{head:'THIS WEEK',body:`Map 5 behaviours to point values. Set a threshold. Even if it starts as a spreadsheet model — begin tracking who is actually showing buying intent versus who just opened an email.`},
  caption:`You're sending every lead to sales. That's the problem.
 
 A pricing page visit and a newsletter open are not the same signal. When your sales team treats them equally, capacity gets wasted on the wrong people — and the buyers who are ready get lost in the queue.
@@ -256,6 +289,11 @@ Lead scoring isn't a CRM feature. It's a capacity decision.
  stat:{num:'10%',label:'OVERRUN FLAG THRESHOLD',ctx:"Variance formula: (Actual − Planned) ÷ Planned. Anything over 10% gets flagged. Rs. 50,000 in untracked overruns is a strategy problem, not an accounting one."},
  shift:{head:'THE CHANNEL GOING OVER IS THE ONE YOU HAVEN\'T QUESTIONED.',body:"Budget tracking isn't accounting. It's a weekly decision tool. The red flag tells you where to look, before the spend becomes a post-mortem."},
  close:{prin:'Variance is the conversation you avoid until it becomes unavoidable.',cta:'Follow if you like thinking like this.'},
+ pullQuote:"We only found out we were Rs. 80,000 over budget when the invoice landed.",
+ reality:`A marketing team runs paid social, an agency retainer, and a content tool subscription. Each is tracked separately. At month-end: paid social ran Rs. 12,000 over. The agency invoice added Rs. 18,000 in scope creep. Nobody had a single view of total spend until the accounts team asked.`,
+ mistake:{head:'TRACKING SPEND IN YOUR HEAD',body:`Monthly budgets get split across tools, contractors, platforms, and subscriptions. Without a single tracker with variance formulas, you're managing four separate conversations that never add up to one number until it's too late to act.`},
+ fix:{label:'BUILD THE TRACKER',steps:['LibreOffice Calc: columns = Category, Channel, Planned Budget, Actual Spend, Variance (Rs.), Variance (%), Status','Add variance formulas: Column E = Actual − Planned. Column F = IF(Planned>0, (Actual−Planned)÷Planned, 0)','Status column: =IF(F>0.1,"OVER",IF(F>0,"AT RISK","ON TRACK")) with red/amber/green conditional formatting','Add a Summary tab with a bar chart: Planned vs Actual by channel. Protect formula cells.']},
+ action:{head:'DO THIS NOW',body:`Open a spreadsheet. List every active marketing spend line. Enter last month's planned and actual. Add the variance formula. That single column will tell you more than any dashboard report.`},
  caption:`You have a marketing budget. You don't have a marketing tracker.
 
 Most budgets live in a PDF or a verbal agreement. Planned spend is an estimate. Actual spend is a surprise. And by the time someone notices the overrun, the quarter is already broken.
@@ -273,6 +311,10 @@ The channel that keeps going over is the channel you haven't questioned yet.
  stat:{num:'36%',label:'HIGHER CLOSE RATES WITH A SIGNED SLA',ctx:"Companies with a formal Sales & Marketing SLA see up to 36% higher lead-to-close rates. Most SMBs have never written one. The document forces the conversation."},
  shift:{head:'MQL/SQL ISN\'T A CRM CATEGORY. IT\'S A BUSINESS AGREEMENT.',body:"The SLA doesn't create alignment. It creates accountability. That's why most companies resist writing it — and why the ones that do outperform."},
  close:{prin:'The argument about lead quality is always an argument about definitions.',cta:'Follow if you like thinking like this.'},
+ reality:`A B2B company has a monthly marketing review and a monthly sales review. Marketing reports 180 leads generated. Sales reports 12 qualified conversations. Both numbers are correct. Neither team is lying. They are measuring against criteria they each defined independently — and never agreed on together.`,
+ mistake:{head:'ASSUMING BOTH TEAMS MEAN THE SAME THING',body:`Marketing calls a form fill a lead. Sales calls a booked discovery call a lead. Nobody ever wrote down the difference. So marketing celebrates volume, sales complains about quality, and the pipeline stays broken.`},
+ fix:{label:'HOW TO BUILD THE SLA',steps:['Interview Marketing Manager and 2 sales reps: document current lead flow, loss points, average response time — before writing a single word of the SLA','Define MQL: lead score ≥50, source = inbound, company email address. Define SQL: rep confirms BANT (Budget, Authority, Need, Timeline) within 48 hours of receiving MQL','Document SLA terms: Marketing commits to lead volume and quality. Sales commits to response within 4 business hours and BANT confirmation within 48 hours.','Add CRM custom fields: MQL Received Date and First Response Date. Build a weekly compliance report from these two fields.']},
+ action:{head:'ONE CONVERSATION',body:`Book 30 minutes with your Sales Manager this week. Write down what an MQL means to marketing and what it means to sales. If they are different — that's your starting point. The SLA writes itself from that gap.`},
  caption:`Marketing says 200 leads. Sales says 3 were real. Neither is lying.
 
 The conflict between marketing and sales is almost always a definitions problem. Both teams are measuring output against criteria the other team never agreed to. That's not a performance problem — it's a structural one.
@@ -290,6 +332,10 @@ MQL/SQL isn't a CRM category. It's a business agreement.
  stat:{num:'90M',label:'MINUTES TO ANALYSE 50 REVIEWS WITH AI',ctx:"Batch 10 reviews through AI. Ask for sentiment, primary theme, and a key quote per review. Process all 50 in under 90 minutes. Same insight as a 3-month brand study."},
  shift:{head:'THE TOP 3 NEGATIVE THEMES ARE YOUR NEXT SPRINT.',body:"Not your next brand campaign. The review section is the cheapest market research you're ignoring. And your customers wrote it without being asked."},
  close:{prin:'Your customers already wrote the brief. You just haven\'t read it systematically.',cta:'Follow if you like thinking like this.'},
+ reality:`A software company has 340 Google Play reviews. The founder reads them occasionally, notices the negative ones, and files a mental note. Nobody has ever grouped them by theme. Three of the top five complaints are about the same onboarding step — a step the product team has been debating removing for two years.`,
+ mistake:{head:'READING REVIEWS AS STORIES NOT DATA',body:`One 1-star review is anecdote. Ten with the same language is a pattern. Without batch analysis across themes, you're making product and positioning decisions based on the loudest individual voice — not the actual distribution of what customers say.`},
+ fix:{label:'THE 90-MINUTE PROCESS',steps:['Collect 50–100 public reviews into LibreOffice Calc: Review ID, Platform, Date, Star Rating, Review Text','Batch 10 reviews at a time into Claude or Gemini with this prompt: "For each review output JSON: {review_id, sentiment (positive/neutral/negative), primary_theme, key_quote (≤10 words)}"','Paste each output back into the spreadsheet. Extract sentiment, theme, and key quote into separate columns.','Build a frequency table: Theme × Sentiment count. Top 3 negative themes = your next product or positioning sprint.']},
+ action:{head:'THIS WEEK',body:`Copy 50 reviews from Google Maps, G2, or Trustpilot into a spreadsheet. Run them through AI in batches of 10. Count the themes. The top negative theme will tell you more about your product roadmap than your last team meeting.`},
  caption:`50 reviews contain more insight than a 3-month brand study.
 
 Your customers have already told you what's wrong. The reviews exist. The problem is that founders read them one at a time, form opinions from outliers, and miss the patterns that actually matter.
@@ -307,6 +353,11 @@ The review section is the cheapest market research you're ignoring.
  stat:{num:'25',label:'ALERTS TO SET UP A MONITORING SYSTEM',ctx:"5 competitors × 5 monitoring topics = 25 Google Alerts. One automated workflow aggregates them every Monday into a decision-ready brief. Setup time: under 3 hours."},
  shift:{head:'COMPETITIVE ADVANTAGE IS ABOUT SEEING MOVES EARLIER.',body:"Not having better ideas. The brief is automated. The decision still needs you. But you can't decide on intelligence you don't have."},
  close:{prin:'By the time it hits your timeline, it\'s already old news.',cta:'Follow if you like thinking like this.'},
+ pullQuote:"I check what my competitors are doing maybe once a year — at strategy time. Then I forget.",
+ reality:`A brand discovers at their annual strategy session that a competitor launched a lower-priced tier 4 months ago. They've been losing deals to this competitor all quarter. Three sales reps mentioned it in their loss notes. Nobody connected the dots because nobody was watching.`,
+ mistake:{head:'DOING RESEARCH ONCE A YEAR',body:`Annual competitive reviews are comfort, not intelligence. By the time you update your battlecard in December, your competitor has already shipped three feature updates, hired into a new market, and repriced twice. You're responding to who they were, not who they are.`},
+ fix:{label:'THE MONITORING SYSTEM',steps:['List 5 competitors and 5 monitoring topics each: pricing changes, product launches, funding/M&A, job postings (signals growth direction), new ad campaigns','Create Google Alerts (alerts.google.com) for each combination — up to 25 alerts. Frequency: once a week. Deliver to a dedicated Gmail inbox.','Install n8n locally (free, self-hosted). Build workflow: Gmail trigger every Monday → aggregate all alert emails → POST to Claude API with a prompt to produce a 400-word structured brief → Gmail send to team.','Week 2: review brief quality, refine the AI prompt. By week 4, the system runs without your involvement.']},
+ action:{head:'START TODAY',body:`Create 5 Google Alerts for your top competitor — one for their brand name, one for their product, one for "[competitor] pricing", one for "[competitor] launch", one for "[competitor] jobs". That's a monitoring system in 10 minutes.`},
  caption:`Your competitor launched something last week. Did you know?
 
 Most founders do competitive research once a year — at strategy time — then forget. Pricing changes, new feature launches, hiring signals — these are moves you should be seeing in real time, not months later.
@@ -324,6 +375,10 @@ Competitive advantage isn't about better ideas. It's about seeing moves earlier.
  stat:{num:'5×',label:'CONTENT OUTPUT FROM ONE SOURCE PIECE',ctx:"One 1,500-word blog post → 5 derivative pieces in under 3 hours with a structured AI repurposing workflow. Same insight. Five distribution channels. One system."},
  shift:{head:'CONTENT STRATEGY ISN\'T ABOUT WRITING MORE.',body:"It's about using what you already wrote. Build the repurposing SOP once. Run it every time you publish. The leverage compounds with every new piece."},
  close:{prin:'The asset exists. The workflow is what\'s missing.',cta:'Follow if you like thinking like this.'},
+ reality:`A B2B consultant publishes one detailed blog post per week. Each takes 4 hours to research and write. The post gets shared once on LinkedIn, pulls modest traffic, and is forgotten by Thursday. The same insight — reformatted — could have reached three different audiences on three different platforms that week.`,
+ mistake:{head:'TREATING EVERY FORMAT AS A SEPARATE BRIEF',body:`Each derivative piece gets briefed, written, and produced from scratch. A LinkedIn post is not a blog post with a character limit. It's the same insight, reframed for a different context. The reframing takes 20 minutes with a structured prompt — not 4 hours.`},
+ fix:{label:'THE REPURPOSING WORKFLOW',steps:['Select a published blog post (≥1,500 words) as source. Define 5 output formats: LinkedIn article (~600 words), Twitter/X thread (8 tweets), email section (200 words), carousel outline (5–7 slides), 60-second video script.','Write a separate AI prompt for each format. LinkedIn example: "Rewrite as a LinkedIn article. Conversational, use subheadings, end with a thought-provoking question. 500–700 words."','Run all 5 prompts. Paste each output into separate tabs. Edit for brand voice — verify accuracy, add company-specific examples, confirm all claims.','Document this as a Content Repurposing SOP: source requirements, 5 prompt templates, editing checklist, distribution channel per format. Any team member should be able to run it.']},
+ action:{head:'THIS WEEK',body:`Take one published post from the last 3 months. Run it through the 5 prompts above. Time yourself. If it takes under 3 hours start to finish — including editing — you have a repeatable system. Build the SOP from that session.`},
  caption:`You wrote one article. You got one post out of it.
 
 One long-form piece already contains a LinkedIn article, a carousel outline, an email section, a video script, and a tweet thread. Most brands extract exactly zero of those. Not because they don't know — because the workflow doesn't exist.
@@ -341,6 +396,10 @@ Content strategy isn't about writing more. It's about using what you already wro
  stat:{num:'3×',label:'MINIMUM PIPELINE COVERAGE RATIO',ctx:"Industry standard: 3–4× coverage. Below 3×: new deals need to be created, not just closed. Above 4×: the forecast is probably padded. Both are problems."},
  shift:{head:'PIPELINE COVERAGE IS A LEADING INDICATOR.',body:"Closed deals are a lagging one. Track the one that's early. The dashboard showing last month's wins is telling you about last quarter's decisions."},
  close:{prin:'The number that matters most is the one you can still change.',cta:'Follow if you like thinking like this.'},
+ reality:`A sales team enters Q3 with Rs. 28M in open pipeline against a Rs. 12M quarterly quota. The manager feels comfortable. Coverage looks like 2.3×. But Rs. 10M of that pipeline hasn't had a touch in over 90 days, Rs. 6M has a close date that's already passed, and Rs. 4M is stuck in a stage it's been in for 45 days. Real active coverage: under 1×.`,
+ mistake:{head:'COUNTING TOTAL PIPELINE AS REAL PIPELINE',body:`Stale deals, overdue close dates, and orphaned opportunities all inflate the number. A pipeline report without health filtering is not a forecast — it's a list. And lists don't tell you whether you'll hit your number.`},
+ fix:{label:'HOW TO CALCULATE REAL COVERAGE',steps:['Export SuiteCRM open pipeline: Deal Name, Amount, Stage, Expected Close Date, Assigned Rep, Last Modified Date','In LibreOffice Calc add: Days Since Last Activity = =TODAY()−Last_Modified. Flag >90 days as Stale. Flag overdue open deals as Past Due.','Remove stale and overdue deals from your coverage calculation. Real Coverage = Healthy Open Pipeline ÷ Remaining Quota.','Build a stage conversion rate table to estimate what percentage of current-stage deals typically close. Weight your forecast by stage probability.']},
+ action:{head:'THIS WEEK',body:`Pull your open pipeline right now. Filter for deals with no activity in 90+ days. Mark them stale. Recalculate your coverage ratio without them. If it drops below 3×, you have a pipeline problem — not a closing problem.`},
  caption:`Your quota is Rs. 10M. Your pipeline is Rs. 8M. You're not fine.
 
 Sales managers look at total pipeline and feel covered. But raw total isn't the number that matters. Pipeline coverage = open pipeline ÷ remaining quota. At 0.8× you're already underpowered — and most teams discover this at month-end when it's too late to build.
@@ -358,6 +417,11 @@ Pipeline coverage is a leading indicator. Closed deals are a lagging one. Track 
  stat:{num:'35%',label:'HIGHER OPEN RATES WITH SEGMENTED COPY',ctx:"3 industry segments. 3 AI-written variants. Same send time. Open rates 20–35% higher per segment vs. generic baseline. One prompt per segment. Three emails."},
  shift:{head:'PERSONALISATION AT SCALE IS NO LONGER AN ENTERPRISE FEATURE.',body:"It's a CRM field and a prompt. The segment you're ignoring is the one your competitor is writing to directly."},
  close:{prin:"You can't write a good email to everyone. You can write a great one to someone.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"We sent the same email to 4,000 contacts and got 11 replies. The content was fine. The audience wasn't.",
+ reality:`An agency sends a monthly newsletter to a list of 4,200 contacts — designers, startup founders, and enterprise procurement managers all in the same send. The email references product integrations. Designers don't care. Procurement managers want compliance documentation. Founders want ROI data. All three groups received messaging optimised for none of them.`,
+ mistake:{head:'TREATING ALL CONTACTS AS ONE AUDIENCE',body:`Segmentation isn't just a nice-to-have for large lists. It's the difference between an email that earns a response and one that trains your audience to ignore you. Every unsegmented send is a small withdrawal from your sender reputation.`},
+ fix:{label:'3-SEGMENT PERSONALISATION SYSTEM',steps:['In your CRM, identify 3 industry or role-based segments using an existing custom field. If the field doesn\'t exist — create it and populate it from company name or signup source.','Open Claude or Gemini. Prompt: "Write 3 versions of a [product] email. Version 1 for [Segment A] focusing on [pain], Version 2 for [Segment B] focusing on [pain], Version 3 for [Segment C] focusing on [pain]. 150–200 words each, same subject line structure, same CTA." Output as JSON.','Review and edit each version for brand voice accuracy. Create 3 email templates in Mautic.','Build campaign with Decision nodes: Is contact in Segment A? → Send Email A. Else Segment B? → Send Email B. Else → Send Email C. Send internal test to 3 addresses to verify routing.']},
+ action:{head:'NEXT SEND',body:`Before you write your next email, answer: who exactly is on this list, and what does each group actually care about? If the answer is "a mix of different people" — that's your cue to split the send before you write a single word.`},
  caption:`Everyone got the same email. That's why the open rate is 12%.
 
 A SaaS buyer and a retail buyer have different problems. The same email addresses neither of them well. Generic content is efficient to produce and expensive in the attention it fails to earn.
@@ -375,6 +439,10 @@ Personalisation at scale is no longer an enterprise feature. It's a CRM field an
  stat:{num:'52',label:'TOPICS IN A STRUCTURED 6-MONTH PLAN',ctx:"3–4 content pillars. Topic clusters per pillar. 52-topic editorial calendar. KPIs per pillar. Each piece earns its place before it's written. Not after it's published."},
  shift:{head:'THE DIFFERENCE IS INTENT VS. URGENCY.',body:"Publishing without a cluster map is just noise. The brands that dominate a niche build topic authority, not just publishing frequency. The calendar is the last thing you build."},
  close:{prin:'The calendar tells you what to post. The strategy tells you why it matters.',cta:'Follow if you like thinking like this.'},
+ reality:`A brand has been publishing 3 blog posts a week for 18 months. They have 230 published posts. Organic traffic is flat. When they audit with Google Search Console, they find: 80% of posts have under 10 organic clicks per month, 40 posts compete for the same 6 keywords, and their top 3 traffic-driving posts are from 14 months ago — nothing since has come close.`,
+ mistake:{head:'PUBLISHING FREQUENCY WITHOUT CLUSTER LOGIC',body:`Volume without architecture is noise. Writing about 12 different topics across 230 posts builds authority in nothing. Google rewards depth and topical coherence — a cluster of 8 articles around one core keyword outranks a catalogue of unrelated posts every time.`},
+ fix:{label:'HOW TO BUILD A 6-MONTH STRATEGY',steps:['Export Google Search Console data (all pages, last 6 months). Identify your top 10 traffic-driving posts. These are your proof of concept — build clusters around the same topic families.','Define 3–4 content pillars from business objectives and audience pain points. Each pillar needs 1 cornerstone piece (2,000+ words) + 5–8 supporting articles built around near-miss keywords.','Build a 52-topic editorial calendar: Publish Date, Pillar, Topic/Title, Target Keyword, Format, Writer, Status, Organic Traffic Target. 2 posts per week = 52 topics in 6 months.','Define KPIs per pillar: organic traffic target, average time on page, backlink acquisition goal, lead gen attribution. Without pillar-level KPIs, you measure publishing rate — not business impact.']},
+ action:{head:'AUDIT FIRST',body:`Before writing another post — export your last 90 days of GSC data. Find your top 10 pages by clicks. That's your first pillar. Every new article for the next 4 weeks should support one of those top 10 topics. That's a cluster.`},
  caption:`A content calendar is not a content strategy.
 
 Most brands have a calendar. Few have content pillars, keyword clusters, KPIs per pillar, and a governance process. The calendar is the output. The strategy is what makes the output matter.
@@ -392,6 +460,10 @@ Publishing without intent is just noise with a schedule.
  stat:{num:'50',label:'PRODUCT DESCRIPTIONS IN ONE AI WORKFLOW',ctx:"50 AI-generated, SEO-optimised descriptions — reviewed, edited, bulk-uploaded. 30-day GSC check: impressions rising per product URL without a single additional paid click."},
  shift:{head:'PRODUCT PAGES ARE SEARCH REAL ESTATE.',body:"Not just sales assets. If your pages don't rank, your paid ads are carrying a job your content should be doing for free. Build both."},
  close:{prin:"The traffic your competitors earn on organic — your pages could earn that.",cta:'Follow if you like thinking like this.'},
+ reality:`An e-commerce brand with 400 product SKUs has spent Rs. 3,00,000 on paid ads this quarter. Organic traffic to product pages: near zero. GSC shows 0 impressions for 310 of their products. Their descriptions are copy-pasted from the manufacturer spec sheet — no primary keyword, no benefit opening, no secondary terms. The paid ads are funding a job organic should be doing.`,
+ mistake:{head:'WRITING DESCRIPTIONS FOR HUMANS ONLY',body:`The customer reads it after Google ranks it. Google ranks it based on structure, keyword relevance, and semantic depth — none of which a spec sheet copy-paste provides. A description that works for both needs a benefit-led opening line, a primary keyword in the first 25 words, and secondary terms placed naturally.`},
+ fix:{label:'BULK DESCRIPTION SYSTEM',steps:['Build a product input template in LibreOffice Calc: Product ID, Name, Category, Key Features (3–5), Target Customer, Key Benefit, Primary Keyword, Secondary Keywords (2–3), Length (short/standard/long).','Write master AI prompt: "Write a product description for [product]. Requirements: [length] words, benefit-led opening sentence, primary keyword [keyword] in first 25 words, 2–3 secondary keywords placed naturally, subtle CTA at end."','Process in batches of 10. QC-check all outputs for hallucinated features, off-brand tone, keyword stuffing. Flag ~10–20% for manual editing.','Export approved descriptions as CSV. Import to WooCommerce via bulk product importer (free). After 30 days: GSC check on product page impressions vs. pre-upload baseline.']},
+ action:{head:'START WITH 10',body:`Pick your 10 best-selling products. Write a proper description for each using the master prompt above. Upload. Check GSC impressions in 30 days. If they move — you have your business case for doing all 400.`},
  caption:`Your product pages have traffic potential you've never touched.
 
 Most e-commerce brands write product descriptions for the customer. That's correct. But Google reads them first. A description without a primary keyword, benefit-led opening, and secondary terms woven through is invisible to search — no matter how good the product is.
@@ -409,6 +481,11 @@ If your pages don't rank, your paid ads are carrying a job your content should b
  stat:{num:'10',label:'MAX CHURN RISK SCORE PER ACCOUNT',ctx:"5 variables scored per account. 0–10 risk score. Top 25% flagged for CS intervention. A simple scoring model in a spreadsheet — no machine learning required. Just pattern recognition."},
  shift:{head:'CHURN PREDICTION ISN\'T MACHINE LEARNING.',body:"It's pattern recognition you can do with a CSV export and two hours of setup. The account you lose next month already has a score. You just haven't built the model."},
  close:{prin:"The most expensive customer to replace is the one you could have kept.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"We had no idea they were unhappy. They just cancelled one day. No warning. No complaint. Nothing.",
+ reality:`A SaaS company's customer success manager reviews the month's churned accounts. Account #1: last login was 74 days before cancellation. Account #2: 7 support tickets in the final 60 days. Account #3: NPS score of 4 submitted 3 months ago — no follow-up was ever scheduled. Every signal was there. Nobody was reading them.`,
+ mistake:{head:'WAITING FOR THE CANCELLATION EMAIL',body:`Churn is treated as an event — the moment someone clicks cancel. In reality it's a process that started weeks or months earlier through small, visible behavioural shifts. Companies that wait for the event miss every opportunity to intervene during the process.`},
+ fix:{label:'BUILD THE SCORING MODEL',steps:['Export from CRM: all accounts (active + churned) last 24 months — Account ID, Industry, Company Size, Contract Value, Support Tickets Count, Last Login Date, NPS Score, Status (Active/Churned).','Ask Claude: "Based on these patterns between churned and retained customers, identify the top 5 variables that differ most between the two groups. Suggest a simple 0–10 risk scoring formula."','Build the formula in LibreOffice Calc: assign risk points per variable triggered (no login >60d = +3, tickets >5 = +2, NPS ≤5 = +3, low-tier contract = +1, high-churn industry = +1).','Sort active accounts by Total Risk Score. Top 25% = High Risk (red). Email the list to your CS Manager with 3 recommended intervention actions per risk level.']},
+ action:{head:'THIS WEEK',body:`Export your active accounts. Add one column: Days Since Last Login. Sort descending. Any account over 60 days with an active subscription — send a personal email from the account owner today. Not a template. A real email.`},
  caption:`They didn't leave suddenly. You just weren't watching.
 
 Churn doesn't happen on cancellation day. It happens 60 days earlier — in behaviour patterns most companies never track. No login in 60 days. Support tickets above threshold. NPS below 5. Each is a risk point. Invisible without a model.
@@ -426,6 +503,10 @@ The account you lose next month already has a score. You just haven't built the 
  stat:{num:'6',label:'DEAL HEALTH CRITERIA',ctx:"Last activity date, close date alignment, decision maker engaged, competitor mentioned, proposal sent, next step defined. Score 0–6. Below 2 = At Risk. Above 4 = Healthy."},
  shift:{head:'THE QBR SHOULD ANSWER ONE QUESTION.',body:"What are we doing about the 10 deals most likely to slip? Every slide before that answer is context. Every slide after it should be an intervention plan."},
  close:{prin:'A review without an intervention plan is just a record of what happened.',cta:'Follow if you like thinking like this.'},
+ reality:`A sales director runs a 90-minute QBR with their team every quarter. Slide 1: revenue achieved. Slides 2–8: win highlights. Slide 9: pipeline overview. Slide 10: targets for next quarter. The top 10 at-risk deals — the ones that will determine whether the team hits quota — are never discussed. Because nobody scored them.`,
+ mistake:{head:'REVIEWING WINS WHEN YOU SHOULD BE REVIEWING RISK',body:`A QBR structured around last quarter's wins is backward-looking. Every minute spent celebrating closed deals is a minute not spent on the deals that are about to slip. The QBR's only useful function is deciding what to do about the deals still in play.`},
+ fix:{label:'THE DEAL HEALTH SCORECARD',steps:['Export full open pipeline: Deal Name, Account, Rep, Stage, Amount, Close Date, Last Activity Date, Next Step.','Score each deal on 6 criteria (0 or 1 each): Last activity >14 days ago, Close date <30 days, Stage matches timeline, Decision maker engaged, Competitor mentioned, Proposal sent. Total: 0–2 = At Risk, 3–4 = Uncertain, 5–6 = Healthy.','Apply health multiplier to weighted forecast: At Risk ×0.5, Uncertain ×0.75, Healthy ×1.0. Sum for your real EoQ forecast.','Identify top 10 at-risk deals by (Amount × Base Probability) where health score ≤2. Assign one intervention action per deal before the QBR ends.']},
+ action:{head:'BEFORE YOUR NEXT QBR',body:`Run the 6-criteria scorecard on your top 20 open deals. Spend the first 45 minutes of your next QBR on the bottom 10 by health score — not the top 10 by size. The decisions that happen in that conversation will determine the quarter.`},
  caption:`Your QBR deck has 22 slides. 19 of them are noise.
 
 Most QBR decks open with last quarter's wins — the least useful thing in the room. Everyone already knows the result. The QBR should answer one question: what are we doing about the deals most likely to slip?
@@ -443,6 +524,10 @@ A QBR without an intervention plan is just a retrospective with slides.
  stat:{num:'3',label:'SCENARIOS IN EVERY MARKETING BUDGET',ctx:"Bear (−20% budget), Base, Bull (+20%). ROI formula per channel: (Revenue − Spend) ÷ Spend. Any channel under 1.0× gets questioned before the year starts — not after."},
  shift:{head:'A BUDGET\'S PURPOSE IS TO FLAG WHAT ISN\'T WORKING BEFORE YOU SPEND IT.',body:"Not to allocate evenly. Not to look like last year. The 3-scenario model makes the conversation honest before the money moves."},
  close:{prin:"If you can't model three outcomes, you're not managing a budget. You're hoping.",cta:'Follow if you like thinking like this.'},
+ reality:`A marketing team submits an Rs. 85,00,000 annual budget. Line items: paid social, agency fees, events, tools. ROI column: blank. When the CFO asks what the business gets back from the Rs. 22,00,000 agency retainer, the answer is "brand awareness and content output." The budget is approved. The retainer is renewed. Nobody runs the number.`,
+ mistake:{head:'PRESENTING SPEND WITHOUT ROI MODELLING',body:`A budget without projected return is a wish list. It tells leadership what you plan to spend but nothing about what the business should expect in return. And when cuts come — as they always do — the channels with no ROI justification go first, regardless of whether they're actually working.`},
+ fix:{label:'HOW TO BUILD THE 3-SCENARIO MODEL',steps:['LibreOffice Calc "Budget Allocation" tab: rows = channels, columns = Allocated Budget, Est. Leads, Est. CPL, Est. Conversion to Customer, Est. Revenue Contribution.','Build 3 scenarios using input cell multipliers: Bear = Base Budget × 0.8, Base = current plan, Bull = Base Budget × 1.2. Each scenario recalculates all downstream estimates automatically.','ROI formula per channel: = (Revenue Contribution − Channel Spend) ÷ Channel Spend. Highlight any channel under 1.0× in red. This becomes your renegotiation or reallocation agenda.','LibreOffice Impress: 8-slide board deck — Cover, Objectives, Budget Summary, Channel Allocation (pie chart), ROI by Channel, 3 Scenarios, Risks & Assumptions, Recommended Approval.']},
+ action:{head:'THIS MONTH',body:`Add one column to your current budget spreadsheet: "Estimated Revenue Contribution." Make your best estimate for each channel based on historical conversion rates. The channels where you can't even estimate a number — those are the ones that need justification first.`},
  caption:`Your board asked "what's the ROI?" You said "it depends." Wrong answer.
 
 Most marketing budgets are built on last year's spend — not this year's outcomes. A flat allocation with no ROI projection isn't a business case. It's a request for trust.
@@ -460,6 +545,7 @@ The purpose of a budget isn't allocation. It's discipline.
  stat:{num:'Rs.7T',label:'PROJECTED GLOBAL SOCIAL COMMERCE GMV',ctx:"Social commerce GMV projected to surpass Rs. 7 trillion globally by 2026. Fastest-growing segment: impulse purchases under Rs. 5,000. The funnel compressed into one screen."},
  shift:{head:'IF YOUR CONVERSION REQUIRES LEAVING THE PLATFORM, YOU\'RE ADDING FRICTION.',body:"Your competitor isn't. The funnel didn't disappear. It compressed. The brand that removes the most steps between attention and purchase wins."},
  close:{prin:"The store is wherever the customer's attention is. Is yours there?",cta:'Follow if you like thinking like this.'},
+ pullQuote:"We still send people from Instagram to our website to buy. Maybe that's why we keep losing them.",
  caption:`The checkout is now inside the scroll.
 
 For most of the last decade, social media drove traffic to a website. That handoff is compressing. The purchase decision and the purchase itself now happen in the same session — often without leaving the platform that showed the ad.
@@ -511,6 +597,7 @@ The gap between what you charge and what it's worth is a positioning gap — not
  stat:{num:'2–5%',label:'INDUSTRY BENCHMARK FREEMIUM CONVERSION',ctx:"Below 1%: the product needs to be redesigned around the upgrade trigger. At 2–5%: benchmark performance. Above 5%: the pricing architecture is working. Which are you?"},
  shift:{head:'THE UPGRADE DECISION ISN\'T MADE AT THE PAYWALL.',body:"It's made the moment a free user hits their limit. Design the limit intentionally. Not the gate. The gate is just a consequence of the limit."},
  close:{prin:"A free user is a bet. The feature that converts is the one solving the next problem.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"We have 8,000 free users. Less than 1% ever upgrade. I keep adding features and nothing moves.",
  caption:`You have 10,000 free users. 90 are paying. That's not a growth story.
 
 Most founders treat low free-to-paid conversion as a product problem — build more features, improve onboarding, add nudges. The product is usually fine. The architecture isn't. If the free tier fully solves the problem, there's no upgrade trigger.
@@ -562,6 +649,7 @@ The question isn't how to replace third-party data. It's why you outsourced cust
  stat:{num:'8–15%',label:'TARGET COMP-TO-REVENUE RATIO AT 100%',ctx:"Above 15%: the quota is underbuilt or the plan overpays. Below 8%: you're likely underpricing talent and losing people. Model it before you announce it."},
  shift:{head:'A COMPENSATION PLAN IS A FINANCIAL MODEL.',body:"If you haven't stress-tested it at 80%, 100%, and 120% attainment, you haven't finished it. The plan that motivates your best rep may also be the one that breaks margin."},
  close:{prin:"Don't announce a comp plan you haven't modelled at all three attainment levels.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"Our best rep hit 120% and we realised halfway through the quarter we hadn't budgeted for the accelerators.",
  caption:`Your rep hit 80% of quota. Here's what that actually costs you.
 
 Most sales comp plans are modelled at 100% attainment. Clean, theoretical, boardroom-ready. Nobody asks what the cost looks like at 80% — or what happens to margin when someone hits 120% with accelerators, SPIFs, and new logo bonuses all firing at once.
@@ -613,6 +701,7 @@ NPS is a trigger system, not a score. The score tells you something is wrong. Th
  stat:{num:'15%',label:'RECOVERY RATE WITH A 3-EMAIL SEQUENCE',ctx:"Immediate (within 1 hour), reminder at 24 hours, final offer at 72 hours. Sequenced flow recovery rate: 8–15%. Single generic email: under 5%. The difference is three sends."},
  shift:{head:'ABANDONED CART REVENUE ISN\'T LOST. IT\'S PENDING.',body:"The question is whether your workflow is patient enough to recover it. The easiest sale in e-commerce is the one the customer almost made."},
  close:{prin:"The customer who almost bought is closer to yes than the one who hasn't found you yet.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"We get 2,000 add-to-carts a month. We recover maybe 3% of them. I know it's a problem. I just haven't fixed it.",
  caption:`70% of carts are abandoned. Most brands recover 5%.
 
 The customer found the product, added it, and left. That is not a traffic problem — the intent was there. It's a recovery problem. One generic "you left something behind" email with no urgency and no timeline recovers a fraction of what a sequenced workflow can.
@@ -664,6 +753,7 @@ The brands winning on short-form don't produce better content. They produce on a
  stat:{num:'5',label:'STAGES IN A B2B LINKEDIN SYSTEM',ctx:"Profile optimised → content pillars (thought leadership + client results + POV) → targeted connection strategy → engaged comment flows → DM follow-up sequence. Each stage is a system, not a habit."},
  shift:{head:'LINKEDIN IS A PIPELINE TOOL THAT LOOKS LIKE A SOCIAL PLATFORM.',body:"The question isn't whether you're on LinkedIn. It's whether your CRM has entries from it. If the answer is no, the posting isn't the problem."},
  close:{prin:"The platform is free. The system is what most people don't build.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"I post on LinkedIn every single day. I've never gotten a single inbound lead from it. Not one.",
  caption:`You're posting on LinkedIn. You're not doing LinkedIn marketing.
 
 Posting on LinkedIn and running a B2B LinkedIn strategy produce different outputs. One builds impressions. The other builds pipeline. Most founders run the first step — publish content, get some likes — and wonder why the platform doesn't convert.
@@ -715,6 +805,7 @@ Attribution isn't about credit. It's about knowing which channels deserve more b
  stat:{num:'34%',label:'HIGHER CLOSE RATES WITH A FORMAL SLA',ctx:"Companies with a formal Sales & Marketing SLA see 34% higher lead-to-close rates. Most SMBs have never written one. The document forces the conversation both teams have been avoiding."},
  shift:{head:'THE SLA DOESN\'T CREATE ALIGNMENT. IT CREATES ACCOUNTABILITY.',body:"That's why most companies resist writing it. The conversation it forces is the one both teams have been avoiding. Write it anyway."},
  close:{prin:"When marketing and sales argue, the real conversation is: who defined quality, and when.",cta:'Follow if you like thinking like this.'},
+ pullQuote:"Sales says the leads are bad. Marketing says sales doesn't follow up. Both have been saying this for two years.",
  caption:`Marketing says leads are good. Sales says leads are bad. Neither is wrong.
 
 The conflict between marketing and sales is almost always a definitions problem — not a performance problem. Both teams are measuring output against criteria the other never agreed to. What's an MQL. What's an SQL. How fast must sales respond. What happens when volume drops. Without these defined in writing, accountability doesn't exist. Blame does.
@@ -726,7 +817,337 @@ Write the SLA. It's the document that makes alignment real.
 #salesmarketing #marketingalignment #gtm #b2bmarketing #revenueoperations #founderlessons #businessgrowth`},
 ];
 
-// ---- RENDERING ----
+// ---- TASK CAROUSELS (Month 1 — Days 2,4,6...30) ----
+const TASK_DATA = [
+{day:2, type:'task', defPal:'bk', taskIds:[1,7], pills:['MAUTIC','EMAIL AUTOMATION'],
+ cover:{hook:'You built a landing page.',sub:'NOBODY FOLLOWED UP.',tag:'Here\'s how to fix that.'},
+ why:'Every lead that hits your landing page and goes cold is money left on the table. A 5-email drip sequence + a lead scoring model means your pipeline nurtures itself — and sales only sees leads that have already proven intent.',
+ stepsA:[{n:'01',head:'Set up your lead segment',body:'In Mautic → Contacts → Segments. Create "New Landing Page Leads" filtered by source tag. This is your entry trigger.'},
+          {n:'02',head:'Build 5 email templates',body:'Day 0 (Welcome), Day 3 (Value), Day 7 (FAQ), Day 14 (Social proof), Day 21 (Last call). Each email uses UTM-tagged CTAs.'},
+          {n:'03',head:'Configure lead scoring',body:'Email opened = +5 pts. Pricing page visit = +15. Contact form filled = +25. Unsubscribe = −20. Alert fires at 50 pts.'}],
+ stepsB:[{n:'04',head:'Build the automation workflow',body:'Campaigns → New. Add source segment. Action: Send Email 1 on entry. Decision: Wait 3 days → Send Email 2. Repeat for all 5.'},
+          {n:'05',head:'Set goal + scoring alert',body:'Goal: contact visits pricing page. Scoring campaign: when pts ≥ 50 → email sales rep with contact details + score + add to "Sales-Ready" segment.'},
+          {n:'06',head:'Test and activate',body:'Send test emails to internal address. Verify mobile rendering. Activate campaign. Monitor statistics — first email should queue within 10 mins of contact entry.'}],
+ tools:'Mautic (self-hosted, free) · Web browser · Text editor · Brand logo + colour hex codes · Copy for 5 emails · Landing page URL',
+ output:'Active 5-step drip in Mautic with correct intervals. Lead scoring model live — sales alert fires at 50 pts. Test emails verified. First email queuing within 10 minutes of lead entry.',
+ close:'A lead that goes cold wasn\'t the wrong lead. It was the wrong follow-up.',
+ caption:`You built a landing page. Nobody followed up.
+
+The lead landed, warmed up, and went cold — because there was no system waiting for them.
+
+A 5-email Mautic drip (Day 0, 3, 7, 14, 21) + a lead scoring model means every lead gets nurtured automatically. Email opened = +5 pts. Pricing page = +15. Form filled = +25. Alert to sales fires at 50 pts.
+
+The pipeline nurtures itself. Sales only sees the ones who are ready.
+
+#emailmarketing #marketingautomation #mautic #leadnurturing #b2bmarketing #marketingstrategy #digitalmarketing`},
+
+{day:4, type:'task', defPal:'cr', taskIds:[2,8], pills:['BUFFER','CONTENT OPS'],
+ cover:{hook:'You have content to post.',sub:'NO SYSTEM TO POST IT.',tag:''},
+ why:'Most marketing teams produce content reactively. A 4-week social calendar + a structured blog pipeline means your team works to a brief, not a blank page — and nothing gets published without SEO metadata.',
+ stepsA:[{n:'01',head:'Build the content mix',body:'40% educational, 30% social proof, 20% promotional, 10% engagement. 20 social posts across 4 weeks. Map to LibreOffice Calc: Date, Platform, Format, Caption, Hashtags, Link, Asset.'},
+          {n:'02',head:'Schedule in Buffer',body:'Connect LinkedIn + Twitter/X. Create Post → paste caption → set schedule. LinkedIn ≤ 1,300 chars, Twitter/X ≤ 280. Repeat for all 20. Review Buffer Queue view.'},
+          {n:'03',head:'Create Trello board for blog',body:'Lists: Brief Ready → In Progress → In Review → SEO Optimised → Published. One card per topic with target keyword, word count, outline, deadline.'}],
+ stepsB:[{n:'04',head:'Brief 4 writers',body:'Each card: target keyword, word count, outline, 3 internal link suggestions, deadline. Assign to writer. Add Google Doc link when draft arrives.'},
+          {n:'05',head:'Review + add SEO metadata',body:'In WordPress → Yoast/SEOPress: set Focus Keyword, SEO Title (≤60 chars), Meta Description (≤155 chars). Add Featured Image. Set 2 internal links.'},
+          {n:'06',head:'Publish on schedule',body:'Schedule via WP scheduler. Move Trello card to "Published". Export Buffer calendar as PDF. All 4 posts should be indexed in GSC within 72 hours.'}],
+ tools:'Buffer (free, 3 channels) · LibreOffice Calc · WordPress + Yoast/SEOPress · Trello (free) · Google Search Console',
+ output:'Buffer queue: 20 posts scheduled over 4 weeks. 4 blog posts published with SEO metadata. All 4 Trello cards in "Published". GSC confirms indexing within 72 hours.',
+ close:'Content that isn\'t scheduled doesn\'t exist.',
+ caption:`You have content to post. You just don't have a system to post it.
+
+A 4-week social calendar + blog pipeline removes the blank-page problem. 20 social posts mapped by format and mix (40% educational, 30% proof, 20% promo, 10% engagement), scheduled in Buffer. 4 blog posts flowing through a Trello pipeline from brief to published — each with target keyword, SEO title, and meta description before it goes live.
+
+The tools: Buffer (free), LibreOffice Calc, Trello, WordPress + Yoast. Total setup time: under a day.
+
+Content that isn't scheduled doesn't exist.
+
+#contentmarketing #socialmediamarketing #contentplanning #buffer #wordpress #marketingops #digitalmarketing`},
+
+{day:6, type:'task', defPal:'bk', taskIds:[3], pills:['GOOGLE ANALYTICS 4','REPORTING'],
+ cover:{hook:'Your campaigns ran all month.',sub:'YOU DON\'T KNOW WHICH ONES WORKED.',tag:''},
+ why:'A GA4 monthly performance report answers the only three questions that matter: which channels drove traffic, which converted, and where you\'re losing ground month-on-month. Without it, you\'re making budget decisions based on gut feel.',
+ stepsA:[{n:'01',head:'Pull traffic acquisition data',body:'GA4 → Reports → Acquisition → Traffic Acquisition. Set current vs. prior month date range. Export CSV. Columns: Channel, Sessions, Bounce Rate, Avg Duration, Conversions, Conv. Rate.'},
+          {n:'02',head:'Add MoM % change formulas',body:'In LibreOffice Calc: add % change column per metric. Formula: =(This Month − Prior Month) / Prior Month. Conditional format: red = decline, green = growth.'},
+          {n:'03',head:'Export campaign-level data',body:'Pull Conversions and Campaigns reports from GA4. Add to separate tabs. Map campaigns to UTM sources so you know exactly which sends, ads, and posts drove results.'}],
+ stepsB:[{n:'04',head:'Build the summary tab',body:'Top 3 channels by conversion rate. Bottom 2 campaigns by CVR. Month-on-month variance for total sessions, conversions, and revenue (if tracked).'},
+          {n:'05',head:'Write 5-bullet insight section',body:'Format: what grew and why, what dropped and what caused it, any anomaly worth investigating, one channel recommendation, one content recommendation.'},
+          {n:'06',head:'Export PDF + share',body:'Format the Calc file. Export as PDF. Deliver same day as month-end. File in shared drive. Send to Marketing Manager and relevant stakeholders.'}],
+ tools:'Google Analytics 4 (free) · LibreOffice Calc (free) · Web browser · Active UTM parameters list · Prior month benchmarks',
+ output:'PDF report (4–6 pages): MoM channel table, campaign conversion table, top/bottom highlights, 5-bullet insight summary. Delivered same day as month-end.',
+ close:'Data doesn\'t make decisions. But decisions without data are just opinions.',
+ caption:`Your campaigns ran all month. You don't know which ones worked.
+
+A GA4 monthly report built properly tells you exactly which channels drove traffic, which converted, and where you're bleeding — before the budget decisions happen, not after.
+
+Pull Traffic Acquisition → export → build MoM comparison table → add CVR per channel → write 5-bullet insight summary. Deliver same day as month-end. Every time.
+
+The brands winning on marketing budget aren't spending more. They're measuring better.
+
+#googleanalytics #marketinganalytics #ga4 #marketingreporting #digitalmarketing #datadriven #marketingstrategy`},
+
+{day:8, type:'task', defPal:'cr', taskIds:[4,5], pills:['SEO AUDIT','CONTENT STRATEGY'],
+ cover:{hook:'You have 200 blog posts.',sub:'180 DRIVE ZERO TRAFFIC.',tag:''},
+ why:'A blog content audit reveals which posts deserve investment and which are dragging down your domain. Paired with an SEO keyword gap analysis, it tells you exactly where to publish next to capture traffic your competitors already own.',
+ stepsA:[{n:'01',head:'Export all blog posts',body:'WordPress Admin → Tools → Export or WP All Export. Columns: Post ID, Title, URL, Date, Category, Word Count. This is your starting inventory.'},
+          {n:'02',head:'Pull GSC performance data',body:'Google Search Console → Performance → export last 90 days. Columns: URL, Clicks, Impressions, CTR, Avg Position. VLOOKUP to join with blog export on URL.'},
+          {n:'03',head:'Score and flag each post',body:'>100 clicks = 3pts, 10–99 = 2pts, <10 = 1pt. Position <10 = 3pts, 10–20 = 2pts, >20 = 1pt. Score ≤3 + older than 18 months = Update. 0 clicks + 0 impressions + no internal links = Delete.'}],
+ stepsB:[{n:'04',head:'Run Screaming Frog crawl',body:'Enter domain. Export All URLs, Page Titles, Meta Descriptions, H1, Word Count. Filter GSC queries at Position 11–30 — these are near-miss keywords, quick-win opportunities.'},
+          {n:'05',head:'Build keyword gap table',body:'Search site:competitor.com. Note top-ranking URLs and their primary keywords. For each: check if your site appears in top 20. Build gap table: Keyword, Competitor URL, Competitor Position, Your Position.'},
+          {n:'06',head:'Output: two priority lists',body:'List 1: top 10 posts to update first (by score). List 2: top 20 keyword gaps to target next (by relevance and difficulty). Export XLSX + PDF for editorial calendar.'}],
+ tools:'WordPress Admin (free) · Google Search Console (free) · Screaming Frog (free ≤500 URLs) · LibreOffice Calc',
+ output:'XLSX: all posts scored and categorised. PDF: total posts, count by action, top 10 to update first. Keyword gap XLSX: 20 priority opportunities, each with competitor data.',
+ close:'The best performing post you haven\'t written yet is already ranking — just not for you.',
+ caption:`You have 200 blog posts. 180 of them drive zero traffic.
+
+A content audit tells you what to update, what to kill, and what to merge. An SEO keyword gap analysis tells you what to write next. Run them together and you have a full editorial direction in one day.
+
+Blog export → GSC join → score each post → flag Update/Consolidate/Delete. Then Screaming Frog + competitor search → 20 keyword gaps where someone else is ranking and you're not.
+
+The content is either working or it isn't. Now you know which.
+
+#seo #contentmarketing #seostrategy #wordpress #googleSearchConsole #contentaudit #digitalmarketing`},
+
+{day:10, type:'task', defPal:'bk', taskIds:[6], pills:['BUDGET TRACKER','MARKETING OPS'],
+ cover:{hook:'Your budget was approved in January.',sub:'IT\'S APRIL. CHECK THE MATH.',tag:''},
+ why:'Most marketing budgets are planned once and never tracked properly. A variance tracker with conditional formatting means overruns are visible the week they happen — not when invoices land at quarter-end.',
+ stepsA:[{n:'01',head:'Set up the tracker structure',body:'LibreOffice Calc. Sheet 1 "Budget Tracker": Category · Channel · Planned Budget · Actual Spend · Variance (Rs.) · Variance (%) · Status. Rows: Paid Social, Search, Email, SEO/Content, Events, Tools, Agency Fees, Misc, TOTAL.'},
+          {n:'02',head:'Build the formulas',body:'Column E (Variance Rs.) = Actual − Planned. Column F (Variance %) = IF(Planned>0,(Actual−Planned)/Planned,0). Column G (Status) = IF(F>0.1,"OVER",IF(F>0,"AT RISK","ON TRACK")). TOTAL row: SUM formulas.'},
+          {n:'03',head:'Add conditional formatting',body:'Status = "OVER" → red fill. "AT RISK" → amber fill. "ON TRACK" → green fill. Protect formula cells (Format → Cells → Protection). This prevents accidental overwrites.'}],
+ stepsB:[{n:'04',head:'Build Sheet 2: Monthly Summary',body:'Pull totals from Sheet 1. Create bar chart: Planned vs Actual spend by channel. Add budget utilisation % row: =Actual Total / Planned Total. Target: stay under 100%.'},
+          {n:'05',head:'Update weekly',body:'Every Monday: enter actual spend from invoices/receipts. Any row turning amber gets a note. Any row turning red gets escalated that day — not at month-end.'},
+          {n:'06',head:'Review the flag',body:'The channel that goes over repeatedly is the one to question — not the invoice, the strategy. The tracker is a decision tool, not just accounting. Save as .xlsx. Share with Finance monthly.'}],
+ tools:'LibreOffice Calc (free) · Invoice/receipt data · Chart of accounts · Annual budget allocation',
+ output:'XLSX tracker: variance formulas, colour-coded status per channel, bar chart. Total row showing budget utilisation %. Channels >10% over budget flagged red.',
+ close:'A budget without a tracker is just a wish list.',
+ caption:`Your budget was approved in January. It's April. Check the math.
+
+A marketing budget tracker built in LibreOffice Calc — with planned vs actual, variance formulas, and conditional formatting — means overruns are visible the week they happen, not at quarter-end.
+
+Formula: (Actual − Planned) ÷ Planned. Over 10% = flag red. AT RISK = amber. ON TRACK = green. Update every Monday. The channel turning red every month is the one to question — not the invoice, the strategy.
+
+A budget without a tracker is just a wish list.
+
+#marketingbudget #marketingops #budgetmanagement #libreoffice #marketingstrategy #businessgrowth #foundermarketing`},
+
+{day:12, type:'task', defPal:'cr', taskIds:[9,26], pills:['A/B TESTING','AI COPY'],
+ cover:{hook:'You sent one subject line.',sub:'TO 4,000 PEOPLE.',tag:''},
+ why:'Subject line A/B testing combined with AI copy generation is one of the highest-leverage tasks in email marketing. A 5% lift in open rate across 4,000 contacts is 200 more people entering your funnel — from a 2-hour test.',
+ stepsA:[{n:'01',head:'Split your segment 50/50',body:'Mautic → Contacts → Segments. Duplicate your send list into "Promo A" (50%) and "Promo B" (50%) using random filter. Both groups must be isolated before you build the campaigns.'},
+          {n:'02',head:'Generate 10 subject line variants with AI',body:'Prompt: "Write 10 email subject line variants for [product/offer]. Each uses a different approach: curiosity, FOMO, social proof, numbers, direct benefit, question, authority, simplicity, challenge status quo, outcome. Under 50 chars each."'},
+          {n:'03',head:'Score variants + pick top 2',body:'Run a second AI prompt to score all 10 on clarity, specificity, and CTA strength (out of 10). Combine AI scores with your own review. Select top 2. Identical body copy — subject line is the only variable.'}],
+ stepsB:[{n:'04',head:'Deploy simultaneously',body:'Mautic: create two campaigns from Promo A and Promo B. Both publish at the same time. Same day, same hour. Wait 24–48 hours before reading results.'},
+          {n:'05',head:'Analyse + declare winner',body:'Mautic → Email Statistics. Record open rate and click rate per variant. Calculate lift: (Higher Rate − Lower Rate) / Lower Rate. Run 2-proportion z-test (free calculator online) for statistical significance.'},
+          {n:'06',head:'Document + save the prompt',body:'Record: variant, emails sent, opens, open rate, clicks, % lift, significance. Declare winner. Save the winning AI prompt as a reusable template in your "Prompt Library" document.'}],
+ tools:'Mautic (free, min 200 contacts per segment) · Claude.ai or Gemini (free tier) · LibreOffice Calc · Free online z-test calculator',
+ output:'A/B results table: open rate, click rate, % lift, z-score, significance. Winner declared + queued for full send. Reusable AI prompt saved to prompt library.',
+ close:'The subject line is the only copy your audience definitely reads.',
+ caption:`You sent one subject line to 4,000 people. You'll never know if a better one existed.
+
+A/B testing subject lines with AI generation: split segment 50/50 in Mautic → generate 10 variants using AI (curiosity, FOMO, social proof, numbers, direct benefit — one per approach) → score with AI → deploy top 2 simultaneously → declare winner at 24 hours.
+
+A 5% open rate lift on 4,000 contacts = 200 more people entering your funnel. From a 2-hour test.
+
+The subject line is the only copy your audience definitely reads.
+
+#emailmarketing #abtesting #aimarketing #mautic #emailstrategy #marketingautomation #digitalmarketing`},
+
+{day:14, type:'task', defPal:'bk', taskIds:[10], pills:['SUITECM','PIPELINE'],
+ cover:{hook:'Marketing counts leads.',sub:'SALES COUNTS CONVERSATIONS.',tag:'The gap is the report.'},
+ why:'A marketing-to-sales pipeline handoff report built from SuiteCRM data makes the invisible visible: how many MQLs became SQLs, how long conversion took, and where leads are dying between departments.',
+ stepsA:[{n:'01',head:'Define MQL and SQL',body:'MQL: Lead Source = website/form + Status ≠ Dead. SQL: Converted = true + rep confirmed BANT within 48h. These definitions must be agreed before you pull a single number.'},
+          {n:'02',head:'Export leads from SuiteCRM',body:'SuiteCRM → Reports → Create Report. Module: Leads. Fields: First Name, Last Name, Lead Source, Status, Created Date, Converted Date, Assigned User. Filter: current quarter. Export CSV.'},
+          {n:'03',head:'Build the conversion table',body:'LibreOffice Calc: count MQLs (website + form source, not Dead). Count SQLs (Converted = true). MQL→SQL Conv. Rate = SQLs / MQLs. Add "Days to Convert" = Converted Date − Created Date.'}],
+ stepsB:[{n:'04',head:'Calculate averages',body:'AVERAGEIF formula for Days to Convert — only for converted leads. Add MoM comparison if prior quarter data is available. Flag any stage where >30% of leads are dying.'},
+          {n:'05',head:'Build summary table',body:'Q MQLs · Q SQLs · MQL→SQL Conv. Rate · Avg Days to Convert · Prior Quarter Comparison. One row per quarter, stacked for trend view over time.'},
+          {n:'06',head:'Share + schedule review',body:'Export PDF. Deliver to Sales Manager and Marketing Manager simultaneously. Schedule a 30-min monthly review. The goal: make the gap undeniable, then agree on what closes it.'}],
+ tools:'SuiteCRM (free, open source) · LibreOffice Calc · Agreed MQL/SQL definitions · Current quarter date range',
+ output:'SuiteCRM CSV export. LibreOffice Calc report: MQL count, SQL count, MQL→SQL rate, avg days to convert, MoM comparison. PDF delivered to Sales Manager within 2 hours.',
+ close:'The report doesn\'t fix the handoff. It makes the problem too visible to ignore.',
+ caption:`Marketing counts leads. Sales counts conversations. The gap between those two numbers is where revenue disappears.
+
+A marketing-to-sales pipeline handoff report from SuiteCRM makes it visible: MQL count, SQL count, MQL→SQL conversion rate, average days to convert. Pull once a month. Share with both managers at the same time.
+
+The report doesn't fix the handoff. It makes the problem too visible to ignore.
+
+#salesmarketing #pipelinemanagement #suitecrm #revenueoperations #b2bmarketing #gtm #marketingstrategy`},
+
+{day:16, type:'task', defPal:'cr', taskIds:[11], pills:['COMPETITIVE ANALYSIS','STRATEGY'],
+ cover:{hook:'You know your product.',sub:'DO YOU KNOW YOUR COMPETITORS\' POSITIONING?',tag:''},
+ why:'A structured competitive market analysis gives you the data to answer the question every board meeting eventually asks: why should someone choose us? Most brands answer with instinct. This task answers with evidence.',
+ stepsA:[{n:'01',head:'Identify 5 competitors',body:'2 direct (same product, same audience), 2 indirect (different product, same problem), 1 emerging (new entrant with traction). Use Google, Crunchbase free tier, LinkedIn. Write a 1-page scope brief first.'},
+          {n:'02',head:'Build the comparison matrix',body:'LibreOffice Calc. Rows = competitors + your brand. Columns = Pricing Tier, Key Value Prop, Target Segment, Primary Channel, Brand Tone, Unique Feature, Homepage Headline, Primary CTA.'},
+          {n:'03',head:'Visit each competitor\'s site',body:'Note homepage headline, primary CTA, pricing page structure, 3 key differentiators. Check their LinkedIn: follower count, posting frequency, avg engagement on last 10 posts.'}],
+ stepsB:[{n:'04',head:'Run SEO benchmark',body:'Screaming Frog: crawl your site, export page count. Google: search primary category keyword. Note competitor positions vs yours. GSC: export your queries at Position 11–30 — these are gaps.'},
+          {n:'05',head:'Build the SWOT',body:'Strengths and weaknesses from your matrix data. Opportunities: 3 gaps competitors aren\'t addressing. Threats: 2 competitor advantages that could hurt you. Each item needs evidence from the data, not opinion.'},
+          {n:'06',head:'Build 10-slide deck',body:'LibreOffice Impress: Executive Summary · Competitive Landscape · 5 Competitor Profiles · Feature/Pricing Matrix · SWOT · 3 Strategic Recommendations. Export PDF + PPTX. Deliver within 3 working days.'}],
+ tools:'LibreOffice Calc + Impress · Screaming Frog (free ≤500 URLs) · Google Search Console · LinkedIn (free) · Web browser',
+ output:'10-slide PDF deck: competitive landscape, feature/pricing matrix, SWOT, 3 recommendations. LibreOffice Calc workbook with raw competitor data. Completed within 3 working days.',
+ close:'You can\'t differentiate from a competitor you haven\'t studied.',
+ caption:`You know your product. Do you know your competitors' positioning?
+
+A structured competitive market analysis — 5 competitors, comparison matrix, SEO benchmark, SWOT — answers the question every board meeting asks: why should someone choose us?
+
+2 direct, 2 indirect, 1 emerging. Comparison matrix across pricing, value prop, target segment, channel, tone, headline. Screaming Frog + GSC for SEO gaps. LinkedIn for share of voice. 10-slide deck delivered within 3 working days.
+
+You can't differentiate from a competitor you haven't studied.
+
+#competitiveanalysis #marketstrategy #marketresearch #businessstrategy #marketingstrategy #founderlessons #gtm`},
+
+{day:18, type:'task', defPal:'bk', taskIds:[12], pills:['PRODUCT LAUNCH','CAMPAIGN MGMT'],
+ cover:{hook:'Launch day is set.',sub:'THE SYSTEM ISN\'T READY.',tag:''},
+ why:'A multi-channel product launch campaign — when built properly — doesn\'t rely on any single channel. It layers email, social, landing page, and conversion tracking so that even if one channel underperforms, the others carry the result.',
+ stepsA:[{n:'01',head:'Write the campaign strategy brief',body:'LibreOffice Writer: objective, audience, key message, offer, CTA, timeline. This single doc aligns every channel. If it can\'t fit on 2 pages, the campaign isn\'t focused enough.'},
+          {n:'02',head:'Define UTM taxonomy + set up GA4',body:'Agree UTM naming convention. Document in LibreOffice Calc "UTM Registry". Set up GA4 conversion event for form submission. Confirm in DebugView before day one — not on launch day.'},
+          {n:'03',head:'Build the landing page brief',body:'Headline · Subheadline · 3 benefit bullets · Social proof element · Form fields (minimum: name + email) · CTA button text. Brief the developer or build in WordPress.'}],
+ stepsB:[{n:'04',head:'Build 5-email Mautic sequence',body:'Day 0: Announcement. Day 2: Value proof. Day 5: FAQ/Objection handler. Day 8: Social proof/testimonial. Day 12: Last chance. All UTM-tagged. Segment: "Launch Campaign — Email List".'},
+          {n:'05',head:'Schedule 12 social posts in Buffer',body:'Teaser ×3, Launch ×2, Proof ×3, Reminder ×2, Close ×2. Spread over 14 days. Platform-specific copy. Create master campaign checklist: asset, owner, deadline, live/not-live status.'},
+          {n:'06',head:'Launch day + 7-day check',body:'Publish LP. Activate Mautic. Confirm Buffer queue. Post manually on LinkedIn. After 7 days: pull GA4 + Mautic stats. Record against targets. What worked and what didn\'t — document before you move on.'}],
+ tools:'Mautic · Buffer (free tier) · Google Analytics 4 · WordPress · LibreOffice Writer + Calc · Brand assets',
+ output:'Campaign strategy brief (PDF). UTM Registry (XLSX). Mautic 5-email sequence active. Buffer: 12 posts over 14 days. GA4 conversion event confirmed. 7-day report vs targets.',
+ close:'A launch without a system is just an announcement.',
+ caption:`Launch day is set. The system isn't ready.
+
+A multi-channel product launch isn't about the day — it's about the infrastructure before it. Campaign strategy brief → UTM registry → landing page → 5-email Mautic sequence (Days 0, 2, 5, 8, 12) → 12 Buffer posts over 14 days → GA4 conversion event confirmed before go-live.
+
+Every element tracked. Every channel aligned. 7-day report pulled before you move to the next thing.
+
+A launch without a system is just an announcement.
+
+#productlaunch #campaignmanagement #emailmarketing #digitalmarketing #marketingstrategy #gtm #foundermarketing`},
+
+{day:20, type:'task', defPal:'cr', taskIds:[13,32], pills:['CONTENT STRATEGY','AI BRIEFS'],
+ cover:{hook:'52 topics.',sub:'ZERO GUESSWORK.',tag:''},
+ why:'A 6-month content strategy built on data — not intuition — means every piece published serves a pillar, targets a keyword, and links to the pieces around it. The AI brief generator then turns strategy into executable briefs in under 3 hours.',
+ stepsA:[{n:'01',head:'Audit + define content pillars',body:'Export GSC data (last 6 months). Identify top 10 traffic-driving posts. From those patterns + business objectives: define 3–4 content pillars. Each pillar = one problem your audience cares about.'},
+          {n:'02',head:'Build topic clusters',body:'Per pillar: 1 cornerstone piece (2,000+ words) + 5–8 supporting articles. Keyword viability: use GSC near-miss data (Position 11–30). Each supporting piece links back to the cornerstone.'},
+          {n:'03',head:'Build 52-topic editorial calendar',body:'LibreOffice Calc. Columns: Publish Date · Pillar · Topic/Title · Target Keyword · Format · Writer · Status · Target Organic Traffic. 2 posts/week = 52 topics over 6 months.'}],
+ stepsB:[{n:'04',head:'Generate AI content briefs',body:'Claude.ai prompt: "Create a content brief for keyword [KEYWORD]. Include: secondary keywords (5–8), search intent, recommended word count, H1 title, 5–7 H2 subheadings, 3 internal link suggestions, 3 tips to outperform competing URLs. Output as JSON."'},
+          {n:'05',head:'Test + refine the prompt',body:'Run on 3 topics first. Check: are headings logical? Are secondary keywords relevant? Refine until output passes your quality bar. Then run for all 10 near-miss priority keywords. Save the final prompt.'},
+          {n:'06',head:'Set KPIs + governance',body:'KPIs per pillar: organic traffic target, avg time on page, backlink target. Governance doc: brief template, review checklist, approval stages, publishing SOP. Assign briefs to writers in Trello.'}],
+ tools:'Google Search Console (free) · Claude.ai / Gemini (free tier) · LibreOffice Calc + Writer · Trello (free)',
+ output:'6-month editorial calendar XLSX (52 topics). Topic cluster map per pillar. KPI table. AI content brief generator prompt saved. 10 briefs generated + assigned in Trello.',
+ close:'Strategy without a calendar is a document. A calendar without a strategy is a schedule.',
+ caption:`52 topics. Zero guesswork.
+
+A 6-month content strategy built on data: GSC audit → 3–4 content pillars → topic clusters (1 cornerstone + 5–8 supporting articles per pillar) → 52-topic editorial calendar. Then pair it with an AI SEO brief generator — Claude.ai turns each near-miss keyword into a full content brief in under 3 minutes.
+
+Result: every piece published serves a pillar, targets a proven keyword, and links to the pieces around it.
+
+Strategy without a calendar is a document. A calendar without a strategy is a schedule.
+
+#contentstrategy #seo #contentmarketing #aimarketing #contentplanning #googleSearchConsole #digitalmarketing`},
+
+{day:22, type:'task', defPal:'bk', taskIds:[14], pills:['ANNUAL BUDGET','ROI MODEL'],
+ cover:{hook:'Next year\'s budget is due.',sub:'LAST YEAR\'S NUMBERS WON\'T CUT IT.',tag:''},
+ why:'An annual marketing budget built with a 3-scenario ROI model gives you something most marketing teams don\'t have: a credible answer to "what do we get for this?" before the money is spent, not after.',
+ stepsA:[{n:'01',head:'Gather inputs',body:'Prior year actual spend by channel. Revenue generated per channel (from UTMs + CRM). Conversion rates per channel. Next year revenue target. These four inputs determine everything else.'},
+          {n:'02',head:'Build channel allocation table',body:'LibreOffice Calc. Rows = channels. Columns = Allocated Budget · Est. Leads · Est. CPL · Est. Conversion to Customer · Est. Revenue Contribution. Every number needs a source or an assumption label.'},
+          {n:'03',head:'Build the 3-scenario model',body:'Bear = −20% budget. Base = approved budget. Bull = +20% budget. Use input cell multipliers so scenarios update automatically. ROI formula per channel: =(Revenue Contribution − Channel Spend) / Channel Spend. Flag ROI < 1.0 in red.'}],
+ stepsB:[{n:'04',head:'Add benchmarks',body:'Research industry-average CPL and marketing-to-revenue ratios for your category. Document sources. Any channel benchmarking above industry average should have a justification — not just a higher number.'},
+          {n:'05',head:'Build summary: blended marketing ROI',body:'Total Spend row. Total Revenue Attributed row. Blended Marketing ROI = (Total Revenue − Total Spend) / Total Spend. This single number is what the board actually wants to know.'},
+          {n:'06',head:'Build 8-slide board deck',body:'LibreOffice Impress: Cover · Objectives · Budget Summary · Channel Allocation (pie chart) · ROI by Channel · 3 Scenarios · Risks & Assumptions · Recommended Approval. Export PDF + PPTX.'}],
+ tools:'LibreOffice Calc + Impress · Google Analytics 4 · SuiteCRM or Odoo CRM · Industry benchmark sources',
+ output:'LibreOffice Calc: 3-scenario ROI model, zero formula errors. 8-slide board deck (PDF) with charts. All assumptions documented. Delivered 2 weeks before fiscal year-end.',
+ close:'The board doesn\'t want a budget. They want to know what the budget buys.',
+ caption:`Next year's budget is due. Last year's numbers won't be enough.
+
+A 3-scenario marketing ROI model gives you a credible answer before the money is spent: Bear (−20%), Base, Bull (+20%). ROI formula per channel: (Revenue − Spend) ÷ Spend. Any channel under 1.0× gets questioned. Blended marketing ROI ties it all together for the board.
+
+8-slide deck: objectives, channel allocation, ROI by channel, 3 scenarios, risks and assumptions, recommendation.
+
+The board doesn't want a budget. They want to know what it buys.
+
+#marketingbudget #marketingroi #boarddeck #annualplanning #marketingstrategy #b2bmarketing #businessgrowth`},
+
+{day:24, type:'task', defPal:'cr', taskIds:[15], pills:['NPS SURVEY','CUSTOMER RESEARCH'],
+ cover:{hook:'You think you know what customers think.',sub:'YOU HAVEN\'T ASKED.',tag:''},
+ why:'A properly structured customer survey — with NPS, brand perception ratings, and product satisfaction questions — gives you data that no analytics tool can: the reason behind the number. The NPS score tells you there\'s a problem. The open-ended questions tell you what it is.',
+ stepsA:[{n:'01',head:'Define objectives + write questions',body:'Objective first: what decisions will this data inform? 15–20 questions: 1 NPS (0–10), 3–5 brand perception ratings (1–5), 3–5 product satisfaction questions, 2–3 open-ended, demographic questions. Sequence matters.'},
+          {n:'02',head:'Build + test in Google Forms',body:'Logic: NPS first (warm-up), satisfaction questions in the middle, open-ended last (when trust is established). Test internally with 5 people before sending. Check for ambiguous questions — if anyone asks what a question means, rewrite it.'},
+          {n:'03',head:'Send + collect responses',body:'Send via Mautic or Gmail to customer list. Target: minimum 50 responses. Keep survey open 5–10 days. Send one reminder at Day 3. Clear subject line: "2 minutes — we want to know what you actually think."'}],
+ stepsB:[{n:'04',head:'Calculate NPS',body:'NPS = % Promoters (9–10) − % Detractors (0–6). Segment: Promoters (leverage), Passives (convert), Detractors (call within 48h). Average each rating question by customer tenure and type.'},
+          {n:'05',head:'Analyse open-ended responses',body:'Read all. Categorise into themes. Count frequency. Top 3 positive themes = what you\'re doing right. Top 3 negative themes = your next product sprint. This takes 2 hours and is worth more than any dashboard.'},
+          {n:'06',head:'Write strategic recommendations report',body:'LibreOffice Writer: Methodology · Key Findings (charts) · NPS Breakdown · Open-Ended Themes · 5 Strategic Recommendations (prioritised by impact + ease). Export PDF. Present to Product and CS teams.'}],
+ tools:'Google Forms (free) · LibreOffice Calc + Writer · Mautic or Gmail · Minimum 50 responses · Customer email list',
+ output:'Google Form (15–20 questions) live. Cleaned CSV in LibreOffice Calc. NPS score with segment breakdown. PDF strategic report (8–10 pages) with 5 recommendations.',
+ close:'The customer who gives you a 6 is trying to tell you something. Are you listening?',
+ caption:`You think you know what customers think. You haven't asked.
+
+A structured customer survey — 1 NPS, 3–5 brand perception ratings, 3–5 product satisfaction questions, 2–3 open-ended — gives you data no analytics tool can: the reason behind the number.
+
+Minimum 50 responses. 5–10 days open. NPS calculated: % Promoters − % Detractors. Open-ended themes categorised and counted. Top 3 negative themes = your next product sprint. Strategic recommendations report delivered to Product and CS teams.
+
+The customer who gives you a 6 is trying to tell you something.
+
+#nps #customerresearch #productmarketing #customerexperience #marketresearch #founderlessons #businessgrowth`},
+
+{day:26, type:'task', defPal:'bk', taskIds:[16,21], pills:['SUITECRM','PIPELINE REVIEW'],
+ cover:{hook:'Your pipeline has 140 deals.',sub:'HALF OF THEM SHOULDN\'T BE THERE.',tag:''},
+ why:'A CRM full of stale deals produces a forecast full of false confidence. Cleaning the pipeline and running a deal health scorecard gives you a number you can actually stand behind — and a list of the 10 deals most likely to slip before quarter-end.',
+ stepsA:[{n:'01',head:'Export full pipeline',body:'SuiteCRM → Opportunities → All Users → All Time. Export CSV: Name, Account, Stage, Amount, Close Date, Assigned User, Last Modified. Add "Days Since Last Modified" formula in LibreOffice Calc.'},
+          {n:'02',head:'Flag stale + overdue deals',body:'Days Since Modified >90 = "Stale" flag. Close Date past + Status still Open = "Overdue" flag. For each stale deal: open in SuiteCRM, update Stage or mark "Closed Lost" with reason. Re-assign orphaned records via Mass Update.'},
+          {n:'03',head:'Build deal health scorecard',body:'6 binary criteria (0/1): Last activity >14 days ago · Close date <30 days · Stage matches timeline · Decision maker engaged · Competitor mentioned · Proposal sent. Total: 0–2 = At Risk (red), 3–4 = Uncertain (amber), 5–6 = Healthy (green).'}],
+ stepsB:[{n:'04',head:'Calculate health-weighted forecast',body:'EoQ close probability = Base Stage Probability × Health Multiplier (At Risk ×0.5, Uncertain ×0.75, Healthy ×1.0). Sum weighted values = your honest EoQ forecast number.'},
+          {n:'05',head:'Identify top 10 at-risk deals',body:'Sort by (Amount × Base Probability) where Health Score ≤2. These are your highest-value deals most likely to slip. Document recommended action per deal: call, escalate, re-qualify, or close lost.'},
+          {n:'06',head:'Build QBR deck (8 slides)',body:'Pipeline Overview · Health Distribution (pie chart) · EoQ Forecast vs Target · Top 10 At-Risk with actions · Interventions · Team Performance · Q+1 Outlook. Export PDF. Present at QBR.'}],
+ tools:'SuiteCRM (free, admin access) · LibreOffice Calc + Impress · Agreed stage probability table · Quarterly revenue target',
+ output:'SuiteCRM: zero stale or orphaned records. LibreOffice Calc: all deals scored 0–6, EoQ weighted forecast. Top 10 at-risk with actions. QBR PDF deck (8 slides).',
+ close:'A clean pipeline is not an optimistic pipeline. It\'s an honest one.',
+ caption:`Your pipeline has 140 deals. Half of them shouldn't be there.
+
+Pipeline cleanup + QBR deal health scoring: export → flag stale (>90 days no activity) and overdue → update or close lost → score remaining deals on 6 criteria (last activity, close date alignment, DM engaged, competitor, proposal sent, next step) → calculate health-weighted EoQ forecast → identify top 10 at-risk deals → build 8-slide QBR deck.
+
+A clean pipeline isn't an optimistic one. It's an honest one.
+
+#salesmanagement #pipelinemanagement #suitecrm #qbr #revenueoperations #b2bsales #salesstrategy`},
+
+{day:28, type:'task', defPal:'cr', taskIds:[17,18], pills:['SALES DASHBOARD','FORECASTING'],
+ cover:{hook:'Your sales meeting starts in 10 minutes.',sub:'WHAT ARE YOU GOING TO SAY?',tag:''},
+ why:'A weekly sales dashboard + a weighted quarterly forecast model are the two outputs that separate a sales manager who manages by intuition from one who manages by data. Built once, they run every week.',
+ stepsA:[{n:'01',head:'Export SuiteCRM data (3 reports)',body:'(a) Closed Won Opportunities current period. (b) Open Pipeline with Stage. (c) Activity report: Calls, Meetings, Emails per rep, current week. These three exports are the raw material for everything below.'},
+          {n:'02',head:'Build rep dashboard',body:'LibreOffice Calc Sheet 2. Rows = each rep. Columns = Quota · Closed Won (Rs.) · Quota Attainment (%) · Open Pipeline (Rs.) · Pipeline Coverage (×) · Calls · Meetings. Conditional: <60% = red, 60–89% = amber, ≥90% = green.'},
+          {n:'03',head:'Add team summary + bar chart',body:'Sheet 3: Total team quota, closed won, blended attainment %, top performer, deals needed to hit target. Bar chart: Quota vs Closed Won per rep. This is the slide for the Monday meeting.'}],
+ stepsB:[{n:'04',head:'Build quarterly forecast model',body:'Separate sheet or workbook. Stage probability table: Prospecting=10%, Qualification=25%, Proposal=50%, Negotiation=75%, Verbal=90%. Weighted Value = Amount × Probability. Sum for current quarter = your weighted forecast.'},
+          {n:'05',head:'Build 3-scenario forecast',body:'Bear = stage probabilities −10%. Base = as-is. Bull = all Verbal/Negotiation deals close. Summary table: Scenario · Weighted Forecast · vs Target (Rs.) · vs Target (%). Highlights the range of outcomes honestly.'},
+          {n:'06',head:'Flag top 5 risk deals',body:'Highest-value deals by weighted amount with close date <30 days. Add rep comment field. These are the ones to discuss in the Monday meeting — not the ones already closed.'}],
+ tools:'SuiteCRM (data export) · LibreOffice Calc · Rep quota list · Email client for sharing',
+ output:'LibreOffice Calc dashboard (3 sheets): raw data, per-rep dashboard (colour-coded), team summary with bar chart. Quarterly forecast with 3 scenarios. Delivered every Monday before 9 AM.',
+ close:'The number you present on Monday was built on Friday. Make sure it deserves the room.',
+ caption:`Your sales meeting starts in 10 minutes. What are you going to say?
+
+Weekly sales dashboard + quarterly forecast model, both built from SuiteCRM exports. Dashboard: per-rep quota attainment, pipeline coverage (×), calls and meetings — colour-coded (red/amber/green). Forecast: weighted pipeline by stage probability, 3 scenarios (Bear/Base/Bull), top 5 risk deals flagged.
+
+Both delivered every Monday before 9 AM. Built once, runs every week.
+
+The number you present on Monday was built on Friday. Make sure it deserves the room.
+
+#salesmanagement #salesforecasting #salesops #suitecrm #revenueoperations #b2bsales #salesstrategy`},
+
+{day:30, type:'task', defPal:'bk', taskIds:[19,22], pills:['TEAM LEADERSHIP','SALES OPS'],
+ cover:{hook:'Your rep is underperforming.',sub:'HAVE YOU TOLD THEM CLEARLY?',tag:''},
+ why:'A structured monthly 1:1 with SMART goals — paired with a data-backed annual quota-setting process — means every rep knows exactly what\'s expected, why, and how their performance is being tracked. Most underperformance is a clarity problem, not a talent problem.',
+ stepsA:[{n:'01',head:'Prepare 1:1 data before the meeting',body:'SuiteCRM: pull Closed Won (Rs.), Pipeline Value, Activities, Deals Lost with reasons, Stage conversion rate for the rep. Pre-fill Section 1 of the 1:1 template. Never go into a performance review without the numbers.'},
+          {n:'02',head:'Run the structured 1:1',body:'5 sections: (1) KPIs vs Targets · (2) What Went Well · (3) Challenges & Blockers · (4) Deal Review (top 3 open deals) · (5) SMART Goals for next 30 days. Type notes in real time. Save as "[Rep Name] — [Month] Review.docx."'},
+          {n:'03',head:'Set SMART goals per rep',body:'Specific + Measurable + Achievable + Relevant + Time-bound. Example: "Book 10 discovery calls with manufacturing prospects by month-end to add Rs. 4,00,000 to pipeline." Vague goals = vague results.'}],
+ stepsB:[{n:'04',head:'Annual quota: pull 3 years of data',body:'SuiteCRM: export closed-won data by rep, quarter, product line — last 3 years. Calculate YoY revenue growth. Identify seasonality patterns. This is your baseline for top-down modelling.'},
+          {n:'05',head:'Run top-down + bottom-up models',body:'Top-Down: (Historical Revenue × Growth Rate) + Market Expansion = Total Target. Bottom-Up: reps submit pipeline-based estimates. Reconcile gap with blended model (e.g. 60/40). Final quota = blended output.'},
+          {n:'06',head:'Communicate individually',body:'Build quota summary: Rep · Territory · Annual Quota · Q1–Q4 Split · OTE Reference. Write 1-page rationale memo per rep. Hold individual communication meetings. Enter final quotas into SuiteCRM.'}],
+ tools:'SuiteCRM · LibreOffice Writer + Calc · Email + video conferencing · 1:1 template (.docx) · Quota rationale memo template',
+ output:'Completed 1:1 review per rep with SMART goals documented. Annual quota model: 3-year historical analysis, top-down + bottom-up, blended per-rep quotas with Q1–Q4 splits. All entered in SuiteCRM.',
+ close:'Clarity is not a management style. It\'s the minimum.',
+ caption:`Your rep is underperforming. Have you told them clearly what good looks like?
+
+Structured monthly 1:1 (5 sections: KPIs → what went well → blockers → deal review → SMART goals) paired with a data-backed annual quota-setting process (3 years historical → top-down + bottom-up → blended quota per rep with Q1–Q4 splits).
+
+Most underperformance is a clarity problem, not a talent problem.
+
+#salesleadership #salesmanagement #teamleadership #salescoaching #revenueoperations #b2bsales #founderlessons`},
+];
+
+// ---- MERGED ALL_DATA (insight + task interleaved by day) ----
+const ALL_DATA = [...DATA.map(c=>({...c,type:'insight'})), ...TASK_DATA]
+  .sort((a,b)=>a.day-b.day);
+
 function pal(c){ return curPal || c.defPal; }
 
 function arcSVG(p){
@@ -760,6 +1181,38 @@ function buildCover(c){
         <span class="pill" style="position:relative;transform:rotate(2deg);">${c.pills[1]}</span>
       </div>
     </div>
+  </div>`;
+}
+
+function buildCoverBleed(c){
+  const p=pal(c);
+  // Ghost word = first meaningful word from cvBebas
+  const ghost = c.cvBebas.replace(/[^A-Z0-9]/g,'').slice(0,6) || c.pills[0].split(' ')[0];
+  const tp  = p==='cr' ? '#0F0C08' : '#F2E8D5';
+  const ts  = p==='cr' ? '#3D3020' : '#C4B49A';
+  const tm  = p==='cr' ? '#7A6A55' : '#5A4E40';
+  const ghostOp = p==='cr' ? '0.05' : '0.04';
+  const lbarOp  = p==='cr' ? '0.45' : '0.35';
+  const fs1 = c.cvScript.length > 14 ? 52 : c.cvScript.length > 10 ? 62 : 74;
+  const fs2 = c.cvBebas.length  > 16 ? 68 : c.cvBebas.length  > 12 ? 80 : 96;
+  return `<div class="slide ${p} s-cover on" style="display:flex;position:relative;overflow:hidden;">
+    <!-- ghost word bleed -->
+    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:220px;line-height:1;opacity:${ghostOp};top:-18px;left:-8px;pointer-events:none;z-index:1;white-space:nowrap;color:${tp};">${ghost}</div>
+    <!-- left accent bar -->
+    <div style="position:absolute;top:0;left:0;width:5px;height:100%;background:${tp};opacity:${lbarOp};z-index:2;"></div>
+    <!-- handle top-left -->
+    <div style="position:absolute;top:22px;left:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.6;z-index:4;">${H}</div>
+    <!-- pill top-right -->
+    <div style="position:absolute;top:20px;right:20px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;z-index:5;color:${tp};background:${p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)'};border:1.5px solid ${p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)'};">${c.pills[0]}</div>
+    <!-- main type -->
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 28px 28px 22px;position:relative;z-index:3;">
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:16px;display:block;">${c.subniche.split('·')[0].trim()}</span>
+      <span style="font-family:'Playfair Display',serif;font-style:italic;font-weight:900;font-size:${fs1}px;line-height:.93;letter-spacing:-.02em;color:${tp};display:block;">${c.cvScript}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;margin-top:6px;color:${tp};display:block;">${c.cvBebas}</span>
+      ${c.cvTag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-top:16px;display:block;">${c.cvTag}</span>`:''}
+    </div>
+    <!-- bottom: day label -->
+    <div style="position:absolute;bottom:22px;right:24px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.45;z-index:4;">DAY ${String(c.day).padStart(2,'0')} / 30</div>
   </div>`;
 }
 
@@ -810,27 +1263,225 @@ function buildShift(c,n,tot){
 
 function buildClose(c,n,tot){
   const p=pal(c);
-  return `<div class="slide ${p} s-int" style="position:relative;">
+  const tp  = p==='cr' ? '#0F0C08' : '#F2E8D5';
+  const tm  = p==='cr' ? '#7A6A55' : '#5A4E40';
+  const lineClr = p==='cr' ? 'rgba(15,12,8,.14)' : 'rgba(242,232,213,.14)';
+  const fs = c.close.prin.length > 60 ? 20 : c.close.prin.length > 40 ? 23 : 26;
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;justify-content:center;align-items:center;text-align:center;">
     ${cornerSVG(p)}${brandBtm(p)}
-    <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:23px;line-height:1.45;margin-bottom:26px;position:relative;z-index:2;" class="tp">${c.close.prin}</p>
-    <div style="height:1px;width:40px;margin-bottom:18px;position:relative;z-index:2;" class="hline"></div>
-    <p style="font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:.04em;position:relative;z-index:2;" class="tm">${c.close.cta}</p>
+    <div style="position:absolute;font-family:'Playfair Display',serif;font-style:italic;font-size:300px;line-height:1;opacity:${p==='cr'?'0.045':'0.035'};top:-60px;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;color:${tp};">"</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 40px;">
+      <div style="width:36px;height:1px;background:${lineClr};margin-bottom:22px;"></div>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:${fs}px;line-height:1.48;color:${tp};margin-bottom:22px;">"${c.close.prin}"</p>
+      <div style="width:36px;height:1px;background:${lineClr};margin-bottom:18px;"></div>
+      <p style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:${tm};opacity:.55;">${c.close.cta}</p>
+    </div>
   </div>`;
 }
 
-function buildSlides(c){
-  const slides = [
-    buildCover(c),
-    buildSetup(c,2,6),
-    buildProb(c,3,6),
-    buildStat(c,4,6),
-    buildShift(c,5,6),
-    buildClose(c,6,6)
-  ];
-  // Mark only first as active
+function buildCoverPullQuote(c){
+  const p=pal(c);
+  const tp      = p==='cr' ? '#0F0C08' : '#F2E8D5';
+  const ts      = p==='cr' ? '#3D3020' : '#C4B49A';
+  const tm      = p==='cr' ? '#7A6A55' : '#5A4E40';
+  const lineClr = p==='cr' ? 'rgba(15,12,8,.14)' : 'rgba(242,232,213,.14)';
+  const ghostOp = p==='cr' ? '0.045' : '0.035';
+  const pillBg  = p==='cr' ? 'rgba(15,12,8,.07)'  : 'rgba(242,232,213,.08)';
+  const pillBd  = p==='cr' ? 'rgba(15,12,8,.18)'  : 'rgba(242,232,213,.2)';
+  const quoteText = c.pullQuote || `${c.cvScript} ${c.cvBebas}${c.cvTag ? ' ' + c.cvTag : ''}`;
+  const fs = quoteText.length > 90 ? 16 : quoteText.length > 65 ? 18 : quoteText.length > 45 ? 21 : 25;
+  return `<div class="slide ${p} s-cover on" style="display:flex;position:relative;justify-content:center;align-items:center;text-align:center;overflow:hidden;">
+    <div style="position:absolute;font-family:'Playfair Display',serif;font-style:italic;font-size:320px;line-height:1;opacity:${ghostOp};top:-70px;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;color:${tp};">"</div>
+    ${cornerSVG(p)}
+    <div style="position:absolute;top:22px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.55;z-index:4;white-space:nowrap;">${H}</div>
+    <div style="position:absolute;top:20px;right:20px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;z-index:5;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};transform:rotate(2deg);">${c.pills[1]}</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 38px;">
+      <div style="width:36px;height:1px;background:${lineClr};margin-bottom:20px;"></div>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:${fs}px;line-height:1.52;color:${tp};margin-bottom:20px;">"${quoteText}"</p>
+      <div style="width:36px;height:1px;background:${lineClr};margin-bottom:14px;"></div>
+      <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:${tm};opacity:.6;">${c.subniche.split('·')[0].trim()}</span>
+    </div>
+    <div style="position:absolute;bottom:22px;right:24px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;">DAY ${String(c.day).padStart(2,'0')} / 30</div>
+  </div>`;
+}
+
+function buildReality(c,n,tot){
+  const p=pal(c);
+  const tp=p==='cr'?'#0F0C08':'#F2E8D5';
+  const ts=p==='cr'?'#3D3020':'#C4B49A';
+  const tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const pillBg=p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)';
+  const pillBd=p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:14px;display:block;">WHAT THIS LOOKS LIKE</span>
+    <div style="position:absolute;top:30px;left:44px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};">${c.pills[1]||c.pills[0]}</div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.72;position:relative;z-index:2;color:${ts};">${c.reality}</p>
+  </div>`;
+}
+
+function buildMistake(c,n,tot){
+  const p=pal(c);
+  const tp=p==='cr'?'#0F0C08':'#F2E8D5';
+  const ts=p==='cr'?'#3D3020':'#C4B49A';
+  const tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const hlineClr=p==='cr'?'rgba(15,12,8,.1)':'rgba(242,232,213,.08)';
+  const fs=c.mistake.head.length>30?38:46;
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:14px;display:block;">WHAT BREAKS HERE</span>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:${fs}px;line-height:.93;letter-spacing:.01em;position:relative;z-index:2;margin-bottom:16px;color:${tp};">${c.mistake.head}</h2>
+    <div style="height:1px;width:48px;margin-bottom:16px;background:${hlineClr};position:relative;z-index:2;"></div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;position:relative;z-index:2;color:${ts};">${c.mistake.body}</p>
+  </div>`;
+}
+
+function buildFix(c,n,tot){
+  const p=pal(c);
+  const tp=p==='cr'?'#0F0C08':'#F2E8D5';
+  const ts=p==='cr'?'#3D3020':'#C4B49A';
+  const tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const bg2=p==='cr'?'rgba(15,12,8,.04)':'rgba(242,232,213,.04)';
+  const steps=c.fix.steps||[];
+  const stepsHTML=steps.map((s,i)=>`
+    <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:${i<steps.length-1?'14':'0'}px;">
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:.92;color:${tp};opacity:.22;flex-shrink:0;">${String(i+1).padStart(2,'0')}</span>
+      <p style="font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.6;color:${ts};padding-top:2px;">${s}</p>
+    </div>`).join('');
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:16px;display:block;">${c.fix.label||'THE FIX'}</span>
+    <div style="position:relative;z-index:2;">${stepsHTML}</div>
+  </div>`;
+}
+
+function buildAction(c,n,tot){
+  const p=pal(c);
+  const tp=p==='cr'?'#0F0C08':'#F2E8D5';
+  const ts=p==='cr'?'#3D3020':'#C4B49A';
+  const tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const hlineClr=p==='cr'?'rgba(15,12,8,.1)':'rgba(242,232,213,.08)';
+  const bgNumOp=p==='cr'?'0.04':'0.035';
+  const fs=c.action.head.length>28?38:46;
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;">
+    ${slideNum(n,tot,p)}${brandBtm(p)}
+    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:180px;line-height:1;right:-8px;bottom:-22px;pointer-events:none;z-index:1;color:${tp};opacity:${bgNumOp};">NOW</div>
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:14px;display:block;">ONE MOVE</span>
+    <h2 style="font-family:'Bebas Neue',sans-serif;font-size:${fs}px;line-height:.93;letter-spacing:.01em;position:relative;z-index:2;margin-bottom:16px;color:${tp};">${c.action.head}</h2>
+    <div style="height:1px;width:48px;margin-bottom:16px;background:${hlineClr};position:relative;z-index:2;"></div>
+    <p style="font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.65;position:relative;z-index:2;color:${ts};">${c.action.body}</p>
+  </div>`;
+}
+
+// ===== TASK SLIDE BUILDERS =====
+function buildTaskCover(c){
+  const p=pal(c);
+  const tp=p==='cr'?'#0F0C08':'#F2E8D5', ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const pillBg=p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)', pillBd=p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
+  const ghost=c.cover.sub.replace(/[^A-Z0-9]/g,'').slice(0,5);
+  const fs2=c.cover.sub.length>20?66:88;
+  return `<div class="slide ${p} s-cover on" style="display:flex;position:relative;overflow:hidden;">
+    <div style="position:absolute;font-family:'Bebas Neue',sans-serif;font-size:200px;line-height:1;opacity:${p==='cr'?'0.04':'0.035'};top:-10px;right:-15px;pointer-events:none;z-index:1;color:${tp};">${ghost}</div>
+    <div style="position:absolute;top:0;left:0;width:5px;height:100%;background:${tp};opacity:${p==='cr'?'.45':'.35'};z-index:2;"></div>
+    <div style="position:absolute;top:16px;left:22px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:${tm};opacity:.55;z-index:4;">${H}</div>
+    <div style="position:absolute;top:16px;left:50%;transform:translateX(-50%);font-family:'Space Mono',monospace;font-size:8px;letter-spacing:.14em;color:${tm};opacity:.6;background:${pillBg};border:1px solid ${pillBd};padding:3px 10px;border-radius:2px;z-index:4;white-space:nowrap;">TASK ${c.taskIds.join(' + ')}</div>
+    <div style="position:absolute;top:18px;right:18px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;padding:5px 11px;border-radius:100px;z-index:5;color:${tp};background:${pillBg};border:1.5px solid ${pillBd};">${c.pills[0]}</div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:56px 26px 28px 22px;position:relative;z-index:3;">
+      <span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-bottom:14px;display:block;opacity:.7;">${c.cover.hook}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:${fs2}px;line-height:.88;letter-spacing:.02em;color:${tp};display:block;">${c.cover.sub}</span>
+      ${c.cover.tag?`<span style="font-family:'DM Sans',sans-serif;font-weight:500;font-size:13px;color:${ts};margin-top:16px;display:block;">${c.cover.tag}</span>`:''}
+    </div>
+    <div style="position:absolute;bottom:20px;right:22px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;color:${tm};opacity:.4;z-index:4;">DAY ${String(c.day).padStart(2,'0')}</div>
+  </div>`;
+}
+function buildTaskWhy(c){
+  const p=pal(c), ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
+  return `<div class="slide ${p} s-int" style="display:flex;">
+    ${slideNum(2,6,p)}${brandBtm(p)}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:16px;display:block;">WHY THIS MATTERS</span>
+    <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.72;color:${ts};position:relative;z-index:2;">${c.why}</p>
+  </div>`;
+}
+function buildTaskSteps(c,set,n){
+  const p=pal(c), tp=p==='cr'?'#0F0C08':'#F2E8D5', ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const hline=p==='cr'?'rgba(15,12,8,.1)':'rgba(242,232,213,.08)';
+  const steps=set==='A'?c.stepsA:c.stepsB;
+  return `<div class="slide ${p}" style="display:flex;flex-direction:column;padding:38px 42px;justify-content:center;position:relative;overflow:hidden;">
+    ${slideNum(n,6,p)}${brandBtm(p)}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:18px;display:block;">THE PROCESS</span>
+    <div style="display:flex;flex-direction:column;gap:14px;position:relative;z-index:2;">
+      ${steps.map((s,i)=>`<div style="display:flex;align-items:flex-start;gap:14px;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:.88;color:${tp};opacity:.2;flex-shrink:0;width:34px;">${s.n}</span>
+        <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:${tp};margin-bottom:3px;line-height:1.2;">${s.head}</div>
+        <div style="font-family:'DM Sans',sans-serif;font-size:11.5px;line-height:1.58;color:${ts};">${s.body}</div></div>
+      </div>${i<steps.length-1?`<div style="height:1px;background:${hline};margin-left:48px;"></div>`:''}`).join('')}
+    </div>
+  </div>`;
+}
+function buildTaskTools(c){
+  const p=pal(c), tp=p==='cr'?'#0F0C08':'#F2E8D5', ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const pillBg=p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)', pillBd=p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
+  const hline=p==='cr'?'rgba(15,12,8,.1)':'rgba(242,232,213,.08)';
+  const tools=c.tools.split('·').map(t=>t.trim()).filter(Boolean);
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;">
+    ${slideNum(5,6,p)}${brandBtm(p)}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:14px;display:block;">TOOLS + INPUTS</span>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;position:relative;z-index:2;">
+      ${tools.map(t=>`<span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.06em;padding:5px 11px;border-radius:2px;color:${tp};background:${pillBg};border:1px solid ${pillBd};">${t}</span>`).join('')}
+    </div>
+    <div style="height:1px;width:40px;background:${hline};margin:2px 0 14px;position:relative;z-index:2;"></div>
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:10px;display:block;position:relative;z-index:2;">EXPECTED OUTPUT</span>
+    <p style="font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.65;color:${ts};position:relative;z-index:2;">${c.output}</p>
+  </div>`;
+}
+function buildTaskClose(c){
+  const p=pal(c), tp=p==='cr'?'#0F0C08':'#F2E8D5', tm=p==='cr'?'#7A6A55':'#5A4E40';
+  const lineClr=p==='cr'?'rgba(15,12,8,.14)':'rgba(242,232,213,.14)';
+  const fs=c.close.length>60?20:c.close.length>40?23:26;
+  return `<div class="slide ${p} s-int" style="display:flex;position:relative;justify-content:center;align-items:center;text-align:center;">
+    ${cornerSVG(p)}${brandBtm(p)}
+    <div style="position:absolute;font-family:'Playfair Display',serif;font-style:italic;font-size:300px;line-height:1;opacity:${p==='cr'?'0.045':'0.035'};top:-60px;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;color:${tp};">"</div>
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 40px;">
+      <div style="width:36px;height:1px;background:${lineClr};margin-bottom:22px;"></div>
+      <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:${fs}px;line-height:1.48;color:${tp};margin-bottom:22px;">"${c.close}"</p>
+      <div style="width:36px;height:1px;background:${lineClr};margin-bottom:18px;"></div>
+      <p style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:${tm};opacity:.55;">Follow if you like thinking like this.</p>
+    </div>
+  </div>`;
+}
+function buildTaskSlides(c){
+  const slides=[buildTaskCover(c),buildTaskWhy(c),buildTaskSteps(c,'A',3),buildTaskSteps(c,'B',4),buildTaskTools(c),buildTaskClose(c)];
   return slides.map((s,i)=>{
-    if(i===0) return s; // already has 'on'
-    return s.replace('display:flex;','display:none;');
+    if(i===0) return s;
+    return s.replace(/(<div class="slide [^"]*"[^>]*style=")(display:flex;)/,'$1display:none;');
+  }).join('');
+}
+
+function buildSlides(c){
+  if(c.type==='task') return buildTaskSlides(c);
+
+  const TOT = 10;
+  let coverFn;
+  if(c.day % 3 === 0)      coverFn = buildCoverPullQuote;
+  else if(c.day % 2 === 0) coverFn = buildCoverBleed;
+  else                      coverFn = buildCover;
+
+  const slides = [
+    coverFn(c),                  // 1 — Cover
+    buildSetup(c,2,TOT),         // 2 — Setup
+    buildProb(c,3,TOT),          // 3 — Problem
+    buildReality(c,4,TOT),       // 4 — Reality (NEW)
+    buildStat(c,5,TOT),          // 5 — Stat
+    buildMistake(c,6,TOT),       // 6 — Mistake (NEW)
+    buildFix(c,7,TOT),           // 7 — Fix / Steps (NEW)
+    buildShift(c,8,TOT),         // 8 — Shift
+    buildAction(c,9,TOT),        // 9 — One Move (NEW)
+    buildClose(c,10,TOT)         // 10 — Close
+  ];
+
+  return slides.map((s,i) => {
+    if(i===0) return s;
+    return s.replace(/(<div class="slide [^"]*"[^>]*style=")(display:flex;)/, '$1display:none;');
   }).join('');
 }
 
@@ -1138,8 +1789,9 @@ The SLA does not create alignment. It creates accountability.
 ];
 
 function showCaption(i){
+  const c = ALL_DATA[i];
   const el = document.getElementById('captext');
-  if(el) el.textContent = CAPTIONS[i] || '';
+  if(el) el.textContent = c ? (c.caption || '') : '';
 }
 
 function copyCaption(){
@@ -1154,38 +1806,87 @@ function copyCaption(){
 // ---- INDEX ----
 function buildIndex(){
   const g=document.getElementById('grid');
-  g.innerHTML=DATA.map((c,i)=>{
-    const pCls = c.defPal==='bk'?'pal-b':'pal-c';
-    return `<div class="card" onclick="openCarousel(${i})">
-      <div class="card-day">DAY ${c.day < 10 ? '0'+c.day : c.day} / 30 &nbsp;<span class="card-pal ${pCls}"></span></div>
-      <div class="card-hl">${c.cvScript} ${c.cvBebas}${c.cvTag?' '+c.cvTag:''}</div>
-      <div class="card-sub">${c.subniche}</div>
+  // We need to render after DOM is ready so we can measure card size
+  g.innerHTML=ALL_DATA.map((c,i)=>{
+    const pCls=c.defPal==='bk'?'pal-b':'pal-c';
+    const isTask=c.type==='task';
+    const headline=isTask
+      ? c.cover.hook+' '+c.cover.sub
+      : (c.cvScript+' '+c.cvBebas+(c.cvTag?' '+c.cvTag:''));
+    const sub=isTask
+      ? `T${c.taskIds.join('+T')} · ${c.pills.join(' · ')}`
+      : c.subniche;
+
+    // Build the cover HTML for thumbnail (temporarily set active)
+    const saved=curC; curC=i;
+    const savedPal=curPal; curPal=null;
+    let coverHTML='';
+    try{
+      if(isTask) coverHTML=buildTaskCover(c);
+      else{
+        if(c.day%3===0)      coverHTML=buildCoverPullQuote(c);
+        else if(c.day%2===0) coverHTML=buildCoverBleed(c);
+        else                 coverHTML=buildCover(c);
+      }
+    } catch(e){ coverHTML=`<div style="background:#0A0907;width:100%;height:100%;"></div>`; }
+    curC=saved; curPal=savedPal;
+
+    // Strip the 'on' class from cover so it renders as flex
+    coverHTML=coverHTML.replace(/class="slide ([^"]*) on"/, 'class="slide $1"')
+                       .replace(/style="display:none;/g,'style="display:flex;');
+
+    return `<div class="card" onclick="openCarousel(${i})" data-idx="${i}">
+      <div class="thumb-wrap">
+        <div class="thumb-sizer" id="ts-${i}">${coverHTML}</div>
+      </div>
+      <div class="card-overlay">
+        <div class="card-day">DAY ${String(c.day).padStart(2,'0')} / ${ALL_DATA.length} &nbsp;<span class="card-pal ${pCls}"></span></div>
+        <span class="card-type ${isTask?'ct-task':'ct-ins'}">${isTask?'TASK':'INSIGHT'}</span>
+        <div class="card-hl">${headline}</div>
+        <div class="card-sub">${sub}</div>
+      </div>
     </div>`;
   }).join('');
+
+  // After render, scale each thumb-sizer to fit its card
+  requestAnimationFrame(()=>{
+    g.querySelectorAll('.card').forEach(card=>{
+      const w=card.offsetWidth;
+      const scale=w/540;
+      const sizer=card.querySelector('.thumb-sizer');
+      if(sizer) sizer.style.transform=`scale(${scale})`;
+    });
+  });
 }
 
 // ---- OPEN / NAVIGATE ----
 function openCarousel(i){
   curC=i; curS=0; curPal=null;
-  const c=DATA[i];
+  const c=ALL_DATA[i];
   document.getElementById('idx').style.display='none';
   const v=document.getElementById('vwr');
   v.style.display='flex';
 
-  document.getElementById('vday').textContent=`DAY ${c.day < 10 ? '0'+c.day : c.day} / 30`;
-  document.getElementById('vtitle').textContent=`${c.cvScript} ${c.cvBebas}`;
+  const isTask=c.type==='task';
+  const title=isTask?c.cover.hook+' '+c.cover.sub:c.cvScript+' '+c.cvBebas;
+  document.getElementById('vday').textContent=`DAY ${String(c.day).padStart(2,'0')} / ${ALL_DATA.length}`;
+  document.getElementById('vtitle').textContent=title;
 
-  // Set palette buttons
   const p=c.defPal;
   document.getElementById('pbk').classList.toggle('on',p==='bk');
   document.getElementById('pcr').classList.toggle('on',p==='cr');
 
-  // Build slides
   document.getElementById('sw').innerHTML=buildSlides(c);
-  buildDots(6);
+  const slideCount=document.getElementById('sw').querySelectorAll('.slide').length;
+  buildDots(slideCount);
   updateCtrl();
-  renderCaption(i);
-  showCaption(i);
+  // Caption: task carousels use c.caption directly; insight use renderCaption/showCaption
+  if(isTask){
+    document.getElementById('captext').textContent=c.caption||'';
+  } else {
+    renderCaption(i);
+    showCaption(i);
+  }
 }
 
 function setPal(p){
@@ -1202,23 +1903,34 @@ function goToSlide(n){
   const sw=document.getElementById('sw');
   const slides=sw.querySelectorAll('.slide');
   slides.forEach((s,i)=>{
-    s.style.display=i===n?'flex':'none';
-    s.classList.toggle('on',i===n);
+    if(i===n){
+      s.style.display='flex';
+      s.classList.add('on');
+    } else {
+      s.style.display='none';
+      s.classList.remove('on');
+    }
   });
   curS=n;
   updateDots();
   updateCtrl();
 }
 
-function nextS(){ if(curS<5) goToSlide(curS+1); }
+function nextS(){ const tot=document.getElementById('sw').querySelectorAll('.slide').length; if(curS<tot-1) goToSlide(curS+1); }
 function prevS(){ if(curS>0) goToSlide(curS-1); }
 function updateCtrl(){
+  const tot=document.getElementById('sw') ? document.getElementById('sw').querySelectorAll('.slide').length : 6;
   document.getElementById('bp').disabled=curS===0;
-  document.getElementById('bn').disabled=curS===5;
+  document.getElementById('bn').disabled=curS===tot-1;
   document.getElementById('cpb').disabled=curC===0;
-  document.getElementById('cnb').disabled=curC===DATA.length-1;
-  document.getElementById('ccount').textContent=`${curC+1} / ${DATA.length}`;
+  document.getElementById('cnb').disabled=curC===ALL_DATA.length-1;
+  document.getElementById('ccount').textContent=`${curC+1} / ${ALL_DATA.length}`;
   if(document.getElementById('img-filename')) updateFilename();
+}
+
+function renderCaption(i){
+  const c=ALL_DATA[i];
+  document.getElementById('captext').textContent=c.caption||'';
 }
 function buildDots(n){
   document.getElementById('dots').innerHTML=[...Array(n)].map((_,i)=>`<div class="dot ${i===0?'on':''}" onclick="goToSlide(${i})"></div>`).join('');
@@ -1227,21 +1939,18 @@ function updateDots(){
   document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===curS));
 }
 function prevC(){ if(curC>0) openCarousel(curC-1); }
-function nextC(){ if(curC<DATA.length-1) openCarousel(curC+1); }
+function nextC(){ if(curC<ALL_DATA.length-1) openCarousel(curC+1); }
 function showIdx(){
   document.getElementById('idx').style.display='block';
   document.getElementById('vwr').style.display='none';
   curPal=null;
 }
 
-function renderCaption(i){
-  const c=DATA[i];
-  document.getElementById('captext').textContent=c.caption||'';
-}
+// Caption functions consolidated above
 
 function copyCaption(){
-  const c=DATA[curC];
-  if(!c.caption) return;
+  const c=ALL_DATA[curC];
+  if(!c || !c.caption) return;
   navigator.clipboard.writeText(c.caption).then(()=>{
     const el=document.getElementById('capcopied');
     el.classList.add('show');
@@ -1258,15 +1967,28 @@ document.addEventListener('keydown',e=>{
   }
 });
 
+// Rescale thumbnails on resize
+window.addEventListener('resize',()=>{
+  document.querySelectorAll('.card').forEach(card=>{
+    const w=card.offsetWidth;
+    const scale=w/540;
+    const sizer=card.querySelector('.thumb-sizer');
+    if(sizer) sizer.style.transform=`scale(${scale})`;
+  });
+});
+
 // ===== SLIDE NAMES =====
-const SLIDE_NAMES = ['cover','setup','problem','stat','shift','close'];
+const INSIGHT_SLIDE_NAMES = ['cover','setup','problem','reality','stat','mistake','fix','shift','action','close'];
+const TASK_SLIDE_NAMES    = ['cover','why','steps-a','steps-b','tools','close'];
 
 function getFilename(ext){
-  const c = DATA[curC];
+  const c = ALL_DATA[curC];
   const day = String(c.day).padStart(2,'0');
   const slideNum = String(curS+1);
-  const slideName = SLIDE_NAMES[curS];
-  return `haseebch49_day${day}_slide${slideNum}_${slideName}.${ext}`;
+  const names = c && c.type==='task' ? TASK_SLIDE_NAMES : INSIGHT_SLIDE_NAMES;
+  const slideName = names[curS] || 'slide'+slideNum;
+  const prefix = c && c.type==='task' ? 'task' : 'insight';
+  return `haseebch49_day${day}_${prefix}_slide${slideNum}_${slideName}.${ext}`;
 }
 
 function updateFilename(){
