@@ -2011,49 +2011,58 @@ function getAllCSS(){
 }
 
 async function captureSlide(){
+  await document.fonts.ready;
+
   const sw = document.getElementById('sw');
   const activeSlide = sw.querySelector('.slide.on');
   if(!activeSlide) return null;
 
-  // Wait for all fonts to be ready
-  await document.fonts.ready;
+  // Temporarily make the sw visible at full size offscreen,
+  // capture it directly — no cloning, no style stripping.
+  const swRect = sw.getBoundingClientRect();
 
-  // Build an isolated render div positioned offscreen
-  const wrap = document.createElement('div');
-  wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:540px;height:540px;overflow:hidden;pointer-events:none;z-index:-1;';
-  
-  // Clone the slide and reset positioning so html2canvas sees it as a normal block
-  const clone = activeSlide.cloneNode(true);
-  clone.style.cssText = [
-    'display:flex !important',
-    'position:relative !important',
-    'top:0 !important',
-    'left:0 !important',
-    'width:540px !important',
-    'height:540px !important',
-    'overflow:hidden !important',
-    'flex-direction:column !important'
-  ].join(';');
+  // Store original sw styles
+  const origPos   = sw.style.position;
+  const origLeft  = sw.style.left;
+  const origTop   = sw.style.top;
+  const origZ     = sw.style.zIndex;
+  const origW     = sw.style.width;
+  const origH     = sw.style.height;
 
-  wrap.appendChild(clone);
-  document.body.appendChild(wrap);
+  // Move sw to a fixed offscreen position at natural 540×540 size
+  // so html2canvas captures it at 1:1 with no scaling artifacts
+  sw.style.position = 'fixed';
+  sw.style.left     = '-9999px';
+  sw.style.top      = '0px';
+  sw.style.width    = '540px';
+  sw.style.height   = '540px';
+  sw.style.zIndex   = '-1';
 
-  // Short settle time for layout + fonts
-  await new Promise(r => setTimeout(r, 120));
+  // Give browser one frame to reflow at the new position
+  await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+  await new Promise(r => setTimeout(r, 80));
 
   let canvas;
   try {
-    canvas = await html2canvas(clone, {
-      width: 540,
-      height: 540,
-      scale: 2,
-      useCORS: true,
-      allowTaint: true,
-      logging: false,
-      removeContainer: true
+    canvas = await html2canvas(sw, {
+      width:       540,
+      height:      540,
+      x:           0,
+      y:           0,
+      scale:       2,
+      useCORS:     true,
+      allowTaint:  true,
+      logging:     false,
+      backgroundColor: null
     });
   } finally {
-    document.body.removeChild(wrap);
+    // Restore sw to original position
+    sw.style.position = origPos;
+    sw.style.left     = origLeft;
+    sw.style.top      = origTop;
+    sw.style.zIndex   = origZ;
+    sw.style.width    = origW;
+    sw.style.height   = origH;
   }
   return canvas;
 }
