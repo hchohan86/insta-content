@@ -1396,25 +1396,28 @@ function buildTaskCover(c){
 }
 function buildTaskWhy(c){
   const p=pal(c), ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
-  return `<div class="slide ${p} s-int" style="display:flex;">
+  return `<div class="slide ${p}" style="display:flex;flex-direction:column;width:540px;height:540px;padding:44px;box-sizing:border-box;justify-content:center;position:relative;overflow:hidden;">
     ${slideNum(2,6,p)}${brandBtm(p)}
-    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:16px;display:block;">WHY THIS MATTERS</span>
-    <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.72;color:${ts};position:relative;z-index:2;">${c.why}</p>
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:20px;display:block;flex-shrink:0;">WHY THIS MATTERS</span>
+    <p style="font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.75;color:${ts};position:relative;z-index:2;word-wrap:break-word;">${c.why}</p>
   </div>`;
 }
 function buildTaskSteps(c,set,n){
   const p=pal(c), tp=p==='cr'?'#0F0C08':'#F2E8D5', ts=p==='cr'?'#3D3020':'#C4B49A', tm=p==='cr'?'#7A6A55':'#5A4E40';
   const hline=p==='cr'?'rgba(15,12,8,.1)':'rgba(242,232,213,.08)';
   const steps=set==='A'?c.stepsA:c.stepsB;
-  return `<div class="slide ${p}" style="display:flex;flex-direction:column;padding:38px 42px;justify-content:center;position:relative;overflow:hidden;">
+  return `<div class="slide ${p}" style="display:flex;flex-direction:column;width:540px;height:540px;padding:36px 40px 44px;box-sizing:border-box;position:relative;overflow:hidden;">
     ${slideNum(n,6,p)}${brandBtm(p)}
-    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:18px;display:block;">THE PROCESS</span>
-    <div style="display:flex;flex-direction:column;gap:14px;position:relative;z-index:2;">
-      ${steps.map((s,i)=>`<div style="display:flex;align-items:flex-start;gap:14px;">
-        <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:.88;color:${tp};opacity:.2;flex-shrink:0;width:34px;">${s.n}</span>
-        <div><div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:13px;color:${tp};margin-bottom:3px;line-height:1.2;">${s.head}</div>
-        <div style="font-family:'DM Sans',sans-serif;font-size:11.5px;line-height:1.58;color:${ts};">${s.body}</div></div>
-      </div>${i<steps.length-1?`<div style="height:1px;background:${hline};margin-left:48px;"></div>`:''}`).join('')}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:20px;display:block;flex-shrink:0;">THE PROCESS</span>
+    <div style="display:flex;flex-direction:column;flex:1;justify-content:space-between;position:relative;z-index:2;">
+      ${steps.map((s,i)=>`
+        <div style="display:flex;align-items:flex-start;gap:16px;flex:1;${i<steps.length-1?'padding-bottom:14px;border-bottom:1px solid '+hline+';margin-bottom:14px;':''}">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:42px;line-height:.88;color:${tp};opacity:.18;flex-shrink:0;width:42px;text-align:right;">${s.n}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:'Poppins',sans-serif;font-weight:800;font-size:14px;color:${tp};margin-bottom:5px;line-height:1.2;word-wrap:break-word;">${s.head}</div>
+            <div style="font-family:'DM Sans',sans-serif;font-size:12.5px;line-height:1.6;color:${ts};word-wrap:break-word;">${s.body}</div>
+          </div>
+        </div>`).join('')}
     </div>
   </div>`;
 }
@@ -1423,25 +1426,25 @@ function buildTaskTools(c){
   const pillBg=p==='cr'?'rgba(15,12,8,.07)':'rgba(242,232,213,.08)', pillBd=p==='cr'?'rgba(15,12,8,.18)':'rgba(242,232,213,.2)';
   const hline=p==='cr'?'rgba(15,12,8,.1)':'rgba(242,232,213,.08)';
   const tools=c.tools.split('·').map(t=>t.trim()).filter(Boolean);
-  return `<div class="slide ${p} s-int" style="display:flex;position:relative;">
+  return `<div class="slide ${p}" style="display:flex;flex-direction:column;width:540px;height:540px;padding:44px;box-sizing:border-box;justify-content:center;position:relative;overflow:hidden;">
     ${slideNum(5,6,p)}${brandBtm(p)}
-    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:14px;display:block;">TOOLS + INPUTS</span>
-    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;position:relative;z-index:2;">
-      ${tools.map(t=>`<span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.06em;padding:5px 11px;border-radius:2px;color:${tp};background:${pillBg};border:1px solid ${pillBd};">${t}</span>`).join('')}
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:16px;display:block;flex-shrink:0;">TOOLS + INPUTS</span>
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px;position:relative;z-index:2;">
+      ${tools.map(t=>`<span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.06em;padding:5px 11px;border-radius:2px;color:${tp};background:${pillBg};border:1px solid ${pillBd};white-space:nowrap;">${t}</span>`).join('')}
     </div>
-    <div style="height:1px;width:40px;background:${hline};margin:2px 0 14px;position:relative;z-index:2;"></div>
-    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:10px;display:block;position:relative;z-index:2;">EXPECTED OUTPUT</span>
-    <p style="font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.65;color:${ts};position:relative;z-index:2;">${c.output}</p>
+    <div style="height:1px;width:40px;background:${hline};margin-bottom:20px;position:relative;z-index:2;flex-shrink:0;"></div>
+    <span style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:${tm};opacity:.55;margin-bottom:12px;display:block;position:relative;z-index:2;flex-shrink:0;">EXPECTED OUTPUT</span>
+    <p style="font-family:'DM Sans',sans-serif;font-size:13px;line-height:1.7;color:${ts};position:relative;z-index:2;word-wrap:break-word;">${c.output}</p>
   </div>`;
 }
 function buildTaskClose(c){
   const p=pal(c), tp=p==='cr'?'#0F0C08':'#F2E8D5', tm=p==='cr'?'#7A6A55':'#5A4E40';
   const lineClr=p==='cr'?'rgba(15,12,8,.14)':'rgba(242,232,213,.14)';
   const fs=c.close.length>60?20:c.close.length>40?23:26;
-  return `<div class="slide ${p} s-int" style="display:flex;position:relative;justify-content:center;align-items:center;text-align:center;">
+  return `<div class="slide ${p}" style="display:flex;flex-direction:column;width:540px;height:540px;box-sizing:border-box;padding:44px;position:relative;justify-content:center;align-items:center;text-align:center;overflow:hidden;">
     ${cornerSVG(p)}${brandBtm(p)}
     <div style="position:absolute;font-family:'Playfair Display',serif;font-style:italic;font-size:300px;line-height:1;opacity:${p==='cr'?'0.045':'0.035'};top:-60px;left:50%;transform:translateX(-50%);z-index:1;pointer-events:none;color:${tp};">"</div>
-    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 40px;">
+    <div style="position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;padding:0 20px;">
       <div style="width:36px;height:1px;background:${lineClr};margin-bottom:22px;"></div>
       <p style="font-family:'Playfair Display',serif;font-style:italic;font-weight:700;font-size:${fs}px;line-height:1.48;color:${tp};margin-bottom:22px;">"${c.close}"</p>
       <div style="width:36px;height:1px;background:${lineClr};margin-bottom:18px;"></div>
